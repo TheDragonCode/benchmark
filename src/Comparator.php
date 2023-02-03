@@ -8,6 +8,7 @@ use DragonCode\RuntimeComparison\Exceptions\ValueIsNotCallableException;
 use DragonCode\RuntimeComparison\Services\Runner;
 use DragonCode\RuntimeComparison\Services\View;
 use DragonCode\RuntimeComparison\Transformers\Transformer;
+use Symfony\Component\Console\Helper\ProgressBar as ProgressBarService;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -21,7 +22,7 @@ class Comparator
     protected array $result = [];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
+        protected Runner      $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(
@@ -41,16 +42,32 @@ class Comparator
     {
         $values = is_array($callbacks[0]) ? $callbacks[0] : func_get_args();
 
-        $this->each($values);
+        $this->withProgress($values, $this->stepsCount($values));
         $this->show();
     }
 
-    protected function each(array $callbacks): void
+    protected function withProgress(array $callbacks, int $count): void
+    {
+        $bar = $this->view->progressBar()->create($count);
+
+        $this->each($callbacks, $bar);
+
+        $bar->finish();
+    }
+
+    protected function stepsCount(array $callbacks): int
+    {
+        return count($callbacks) * $this->iterations;
+    }
+
+    protected function each(array $callbacks, ProgressBarService $progressBar): void
     {
         foreach ($callbacks as $name => $callback) {
             $this->validate($callback);
 
             $this->run($name, $callback);
+
+            $progressBar->advance();
         }
     }
 
