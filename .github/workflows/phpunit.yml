@@ -27,7 +27,10 @@ jobs:
                     coverage: none
 
             -   name: Install dependencies
-                run: composer require symfony/console:^${{ matrix.symfony }} --prefer-${{ matrix.prefer }}
+                run: |
+                    composer require --prefer-${{ matrix.prefer }} \
+                        symfony/console:^${{ matrix.symfony }} \
+                        symfony/var-dumper:^${{ matrix.symfony }} \
 
             -   name: Execute tests
                 run: sudo vendor/bin/phpunit
