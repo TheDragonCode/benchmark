@@ -21,7 +21,7 @@ class Comparator
     protected array $result = [];
 
     public function __construct(
-        protected Runner      $runner = new Runner(),
+        protected Runner $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(
@@ -56,7 +56,7 @@ class Comparator
 
     protected function run(mixed $name, callable $callback): void
     {
-        for ($i = 1; $i <= $this->iterations; $i++) {
+        for ($i = 1; $i <= $this->iterations; ++$i) {
             $time = $this->call($callback);
 
             $this->push($name, $i, $time);
