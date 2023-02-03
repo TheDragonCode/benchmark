@@ -28,7 +28,7 @@ jobs:
 
             -   name: Install dependencies
                 run: |
-                    composer require --prefer-${{ matrix.prefer }} \
+                    composer require --no-interaction --prefer-${{ matrix.prefer }} \
                         symfony/console:^${{ matrix.symfony }} \
                         symfony/var-dumper:^${{ matrix.symfony }} \
 
