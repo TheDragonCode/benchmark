@@ -75,18 +75,18 @@ class Comparator
         foreach ($callbacks as $name => $callback) {
             $this->validate($callback);
 
-            $this->run($name, $callback);
-
-            $progressBar->advance();
+            $this->run($name, $callback, $progressBar);
         }
     }
 
-    protected function run(mixed $name, callable $callback): void
+    protected function run(mixed $name, callable $callback, ProgressBarService $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; ++$i) {
             $time = $this->call($callback);
 
             $this->push($name, $i, $time);
+
+            $progressBar->advance();
         }
     }
 
