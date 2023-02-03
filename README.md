@@ -10,7 +10,7 @@
 
 ## Installation
 
-To get the latest version of Laravel Actions, simply require the project using [Composer](https://getcomposer.org):
+To get the latest version of `Runtime Comparison`, simply require the project using [Composer](https://getcomposer.org):
 
 ```bash
 composer require dragon-code/runtime-comparison --dev
