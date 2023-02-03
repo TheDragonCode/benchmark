@@ -6,8 +6,6 @@ namespace DragonCode\RuntimeComparison\Services;
 
 class Runner
 {
-    protected int $precision = 3;
-
     public function call(callable $callback): float
     {
         $startAt = $this->time();
@@ -19,7 +17,7 @@ class Runner
 
     protected function diff(float $startAt): float
     {
-        return round($this->time() - $startAt, $this->precision);
+        return $this->time() - $startAt;
     }
 
     protected function time(): float

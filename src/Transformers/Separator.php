@@ -8,7 +8,7 @@ use Symfony\Component\Console\Helper\TableSeparator;
 
 class Separator extends Base
 {
-    public function transform(array $data): array
+    public function transform(array $data, ?int $roundPrecision): array
     {
         return [new TableSeparator()];
     }

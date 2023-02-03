@@ -6,7 +6,7 @@ namespace DragonCode\RuntimeComparison\Transformers;
 
 class Winner extends Base
 {
-    public function transform(array $data): array
+    public function transform(array $data, ?int $roundPrecision): array
     {
         $values = $data['avg'];
 

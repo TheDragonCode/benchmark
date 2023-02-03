@@ -12,18 +12,18 @@ class Stats extends Base
         'avg',
     ];
 
-    public function transform(array $data): array
+    public function transform(array $data, ?int $roundPrecision): array
     {
-        return $this->calculate($data);
+        return $this->calculate($data, $roundPrecision);
     }
 
-    protected function calculate(array $data): array
+    protected function calculate(array $data, ?int $roundPrecision): array
     {
         $items = [];
 
         foreach ($data as $name => $iterations) {
             foreach ($this->methods as $method) {
-                $this->put($items, $method, $name, fn () => $this->{$method}($iterations));
+                $this->put($items, $method, $name, fn () => $this->round(call_user_func([$this, $method], $iterations), $roundPrecision));
             }
         }
 
@@ -42,6 +42,6 @@ class Stats extends Base
 
     protected function avg(array $values): float
     {
-        return round(array_sum($values) / count($values), 3);
+        return array_sum($values) / count($values);
     }
 }

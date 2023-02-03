@@ -24,7 +24,7 @@ class Comparator
     protected array $result = [];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
+        protected Runner      $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(
@@ -36,6 +36,13 @@ class Comparator
     public function iterations(int $count): self
     {
         $this->iterations = max(1, $count);
+
+        return $this;
+    }
+
+    public function roundPrecision(?int $precision): self
+    {
+        $this->transformer->setRoundPrecision($precision);
 
         return $this;
     }

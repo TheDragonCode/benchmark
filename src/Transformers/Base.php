@@ -13,4 +13,9 @@ abstract class Base implements TransformerContract
         $items[$key]['#']   = $key;
         $items[$key][$name] = $callback();
     }
+
+    protected function round(float $value, ?int $precision): float
+    {
+        return is_numeric($precision) ? round($value, $precision) : $value;
+    }
 }

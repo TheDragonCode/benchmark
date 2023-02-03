@@ -8,6 +8,13 @@ use DragonCode\RuntimeComparison\Contracts\Transformer as TransformerContract;
 
 class Transformer
 {
+    protected ?int $roundPrecision = null;
+
+    public function setRoundPrecision(?int $precision): void
+    {
+        $this->roundPrecision = $precision;
+    }
+
     public function forTime(array $data): array
     {
         return $this->resolve(Times::class, $data);
@@ -50,6 +57,6 @@ class Transformer
 
     protected function resolve(TransformerContract|string $transformer, array $data): array
     {
-        return (new $transformer())->transform($data);
+        return (new $transformer())->transform($data, $this->roundPrecision);
     }
 }
