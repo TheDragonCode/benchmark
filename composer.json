@@ -1,0 +1,66 @@
+{
+    "name": "dragon-code/runtime-comparison",
+    "description": "Simple comparison of execution time of different code",
+    "license": "MIT",
+    "type": "library",
+    "keywords": [
+        "runtime",
+        "comparison",
+        "time",
+        "comparator",
+        "speed"
+    ],
+    "authors": [
+        {
+            "name": "Andrey Helldar",
+            "email": "helldar@dragon-code.pro",
+            "homepage": "https://github.com/andrey-helldar"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/TheDragonCode/runtime-comparison/issues",
+        "source": "https://github.com/TheDragonCode/runtime-comparison"
+    },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/TheDragonCode"
+        },
+        {
+            "type": "open_collective",
+            "url": "https://opencollective.com/dragon-code"
+        },
+        {
+            "type": "boosty",
+            "url": "https://boosty.to/dragon-code"
+        },
+        {
+            "type": "yoomoney",
+            "url": "https://yoomoney.ru/to/410012608840929"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "illuminate/console": "^9.50",
+        "symfony/console": "^5.3|^6.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "DragonCode\\RuntimeComparison\\": "src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "dragon-code/codestyler": true,
+            "ergebnis/composer-normalize": true,
+            "friendsofphp/php-cs-fixer": true
+        },
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
+}
