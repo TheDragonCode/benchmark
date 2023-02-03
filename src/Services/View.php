@@ -6,7 +6,7 @@ namespace DragonCode\RuntimeComparison\Services;
 
 use DragonCode\RuntimeComparison\View\Info;
 use DragonCode\RuntimeComparison\View\Table;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class View
 {
@@ -15,25 +15,15 @@ class View
     protected Info $info;
 
     public function __construct(
-        OutputInterface $output
+        SymfonyStyle $io
     ) {
-        $this->table = new Table($output);
-        $this->info  = new Info($output);
+        $this->table = new Table($io);
+        $this->info  = new Info($io);
     }
 
     public function table(array $data): void
     {
         $this->table->show($data);
-    }
-
-    public function stats(array $data): void
-    {
-        $this->table->show($data);
-    }
-
-    public function emptyLine(): void
-    {
-        $this->info->emptyLine();
     }
 
     public function info(string $message): void

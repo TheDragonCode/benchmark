@@ -4,24 +4,17 @@ declare(strict_types=1);
 
 namespace DragonCode\RuntimeComparison\View;
 
-use Symfony\Component\Console\Helper\Table as TableHelper;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class Table
 {
-    protected TableHelper $table;
-
     public function __construct(
-        OutputInterface $output
+        protected SymfonyStyle $io
     ) {
-        $this->table = new TableHelper($output);
     }
 
     public function show(array $data): void
     {
-        $this->table
-            ->setHeaders(array_keys($data))
-            ->setRows($data)
-            ->render();
+        $this->io->table(array_keys($data[0]), $data);
     }
 }

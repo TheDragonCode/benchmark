@@ -4,22 +4,17 @@ declare(strict_types=1);
 
 namespace DragonCode\RuntimeComparison\View;
 
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class Info
 {
     public function __construct(
-        protected OutputInterface $output
+        protected SymfonyStyle $io
     ) {
     }
 
     public function show(string $message): void
     {
-        $this->output->writeln($message);
-    }
-
-    public function emptyLine(): void
-    {
-        $this->output->writeln('');
+        $this->io->info($message);
     }
 }

@@ -4,21 +4,30 @@ declare(strict_types=1);
 
 namespace DragonCode\RuntimeComparison;
 
-use DragonCode\RuntimeComparison\Services\Math;
+use DragonCode\RuntimeComparison\Exceptions\ValueIsNotCallableException;
 use DragonCode\RuntimeComparison\Services\Runner;
 use DragonCode\RuntimeComparison\Services\View;
+use DragonCode\RuntimeComparison\Transformers\Transformer;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class Comparator
 {
+    protected View $view;
+
     protected int $iterations = 10;
 
     protected array $result = [];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
-        protected View   $view = new View(),
-        protected Math   $math = new Math()
+        protected Runner      $runner = new Runner(),
+        protected Transformer $transformer = new Transformer()
     ) {
+        $this->view = new View(new SymfonyStyle(
+            new ArgvInput(),
+            new ConsoleOutput()
+        ));
     }
 
     public function iterations(int $count): self
@@ -39,6 +48,8 @@ class Comparator
     protected function each(array $callbacks): void
     {
         foreach ($callbacks as $name => $callback) {
+            $this->validate($callback);
+
             $this->run($name, $callback);
         }
     }
@@ -64,13 +75,17 @@ class Comparator
 
     protected function show(): void
     {
-        $this->view->table($this->result);
-        $this->view->stats($this->math->stats($this->result));
+        $table  = $this->transformer->forTime($this->result);
+        $stats  = $this->transformer->forStats($this->result);
+        $winner = $this->transformer->forWinners($stats);
 
-        $this->view->emptyLine();
+        $this->view->table($this->transformer->merge($table, $stats, $winner));
+    }
 
-        $this->view->info($this->math->winnerBy('min', $this->result));
-        $this->view->info($this->math->winnerBy('max', $this->result));
-        $this->view->info($this->math->winnerBy('avg', $this->result));
+    protected function validate(mixed $callback): void
+    {
+        if (! is_callable($callback)) {
+            throw new ValueIsNotCallableException(gettype($callback));
+        }
     }
 }
