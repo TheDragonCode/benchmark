@@ -24,7 +24,7 @@ class Comparator
     protected array $result = [];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
+        protected Runner      $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(
@@ -109,12 +109,17 @@ class Comparator
 
     protected function show(): void
     {
-        $table = $this->withData ? $this->transformer->forTime($this->result) : [];
+        $table = $this->withData() ? $this->transformer->forTime($this->result) : [];
 
         $stats  = $this->transformer->forStats($this->result);
         $winner = $this->transformer->forWinners($stats);
 
         $this->view->table($this->transformer->merge($table, $stats, $winner));
+    }
+
+    protected function withData(): bool
+    {
+        return $this->withData && $this->iterations <= 1000;
     }
 
     protected function validate(mixed $callback): void
