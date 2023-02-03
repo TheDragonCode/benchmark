@@ -40,7 +40,7 @@ class Transformer
                 ? array_merge($result, $array, $this->separator($arrays[0]))
                 : array_merge($result, $array);
 
-            $index++;
+            ++$index;
         }
 
         return $result;
