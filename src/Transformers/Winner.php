@@ -6,11 +6,21 @@ namespace DragonCode\RuntimeComparison\Transformers;
 
 class Winner extends Base
 {
+    protected array $order = ['avg', 'max', 'min'];
+
     public function transform(array $data, ?int $roundPrecision): array
     {
-        $values = $data['avg'];
+        foreach ($this->order as $key) {
+            $values = $data[$key];
 
-        return $this->winner($values, $this->find($values));
+            $names = $this->find($values);
+
+            if (count($names) !== count($values) - 1) {
+                return $this->winner($values, $names);
+            }
+        }
+
+        return [];
     }
 
     protected function winner(array $data, array $names): array
