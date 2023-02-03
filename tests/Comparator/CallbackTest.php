@@ -27,4 +27,24 @@ class CallbackTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    public function testAsPropertiesWithIterations(): void
+    {
+        $this->comparator()->iterations(5)->compare(
+            fn () => $this->work(),
+            fn () => $this->work(),
+        );
+
+        $this->assertTrue(true);
+    }
+
+    public function testAsArrayWithIterations(): void
+    {
+        $this->comparator()->iterations(5)->compare([
+            fn () => $this->work(),
+            fn () => $this->work(),
+        ]);
+
+        $this->assertTrue(true);
+    }
 }

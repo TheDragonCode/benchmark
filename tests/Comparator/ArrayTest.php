@@ -17,4 +17,14 @@ class ArrayTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    public function testAsArrayWithIterations(): void
+    {
+        $this->comparator()->iterations(5)->compare([
+            'first'  => fn () => $this->work(),
+            'second' => fn () => $this->work(),
+        ]);
+
+        $this->assertTrue(true);
+    }
 }
