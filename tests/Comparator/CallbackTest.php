@@ -11,8 +11,8 @@ class CallbackTest extends TestCase
     public function testAsProperties(): void
     {
         $this->comparator()->compare(
-            fn () => usleep(50),
-            fn () => usleep(50),
+            fn () => $this->work(),
+            fn () => $this->work(),
         );
 
         $this->assertTrue(true);
@@ -21,8 +21,8 @@ class CallbackTest extends TestCase
     public function testAsArray(): void
     {
         $this->comparator()->compare([
-            fn () => usleep(50),
-            fn () => usleep(50),
+            fn () => $this->work(),
+            fn () => $this->work(),
         ]);
 
         $this->assertTrue(true);

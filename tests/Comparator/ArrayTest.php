@@ -11,8 +11,8 @@ class ArrayTest extends TestCase
     public function testAsArray(): void
     {
         $this->comparator()->compare([
-            'first'  => fn () => usleep(50),
-            'second' => fn () => usleep(50),
+            'first'  => fn () => $this->work(),
+            'second' => fn () => $this->work(),
         ]);
 
         $this->assertTrue(true);

@@ -13,4 +13,13 @@ abstract class TestCase extends BaseTestCase
     {
         return new Comparator();
     }
+
+    protected function work(): void
+    {
+        $string = implode(',', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+        $array  = explode(',', $string);
+        $string = implode(',', $array);
+        $array  = explode(',', $string);
+    }
 }
