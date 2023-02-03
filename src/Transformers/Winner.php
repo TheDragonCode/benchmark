@@ -11,16 +11,23 @@ class Winner extends Base
     public function transform(array $data, ?int $roundPrecision): array
     {
         foreach ($this->order as $key) {
-            $values = $data[$key];
-
-            $names = $this->find($values);
-
-            if (count($names) !== count($values) - 1) {
-                return $this->winner($values, $names);
+            if ($winner = $this->detectWinner($data[$key])) {
+                return $winner;
             }
         }
 
-        return [];
+        return $this->detectWinner($data['avg']);
+    }
+
+    protected function detectWinner(array $values): ?array
+    {
+        $names = $this->find($values);
+
+        if (count($names) !== count($values) - 1) {
+            return $this->winner($values, $names);
+        }
+
+        return null;
     }
 
     protected function winner(array $data, array $names): array
