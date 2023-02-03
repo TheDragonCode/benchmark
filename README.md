@@ -8,7 +8,29 @@
 [![Github Workflow Status][badge_build]][link_build]
 [![License][badge_license]][link_license]
 
+## Installation
+
+To get the latest version of Laravel Actions, simply require the project using [Composer](https://getcomposer.org):
+
+```bash
+composer require dragon-code/runtime-comparison --dev
+```
+
+Or manually update `require-dev` block of `composer.json` and run `composer update` console command:
+
+```json
+{
+    "require": {
+        "dragon-code/runtime-comparison": "^1.0"
+    }
+}
+```
+
 ## Using
+
+> Note
+> 
+> The result of the execution is printed to the console, so make sure you call the code from the console.
 
 ```php
 use DragonCode\RuntimeComparison\Comparator;
@@ -28,6 +50,28 @@ use DragonCode\RuntimeComparison\Comparator;
     'bar' => fn () => sleep(1),
 ]);
 ```
+
+Result example:
+
+```
+----- -------- -------- 
+ #     foo      bar  
+----- -------- -------- 
+ 1     0.014    0.016   
+ 2     0.015    0.016   
+ 3     0.015    0.016   
+ 4     0.015    0.015   
+ 5     0.015    0.015   
+----- -------- -------- 
+ min   0.014    0.015   
+ max   0.015    0.016   
+ avg   0.015    0.016   
+----- -------- -------- 
+       winner   loser   
+----- -------- -------- 
+```
+
+The time is specified in seconds rounded to the third decimal place.
 
 ### Iterations Count
 
