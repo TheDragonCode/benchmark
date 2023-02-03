@@ -16,14 +16,14 @@ class Winner extends Base
             }
         }
 
-        return $this->detectWinner($data['avg']);
+        return $this->detectWinner($data['avg'], true);
     }
 
-    protected function detectWinner(array $values): ?array
+    protected function detectWinner(array $values, bool $force = false): ?array
     {
         $names = $this->find($values);
 
-        if (count($names) !== count($values) - 1) {
+        if ($force || count($names) !== count($values) - 1) {
             return $this->winner($values, $names);
         }
 

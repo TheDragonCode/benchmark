@@ -70,7 +70,7 @@ class CallbackTest extends TestCase
 
     public function testAsPropertiesRound(): void
     {
-        $this->comparator()->roundPrecision(4)->compare(
+        $this->comparator()->roundPrecision(1)->compare(
             fn () => $this->work(),
             fn () => $this->work(),
         );
@@ -80,7 +80,7 @@ class CallbackTest extends TestCase
 
     public function testAsArrayRound(): void
     {
-        $this->comparator()->roundPrecision(4)->compare([
+        $this->comparator()->roundPrecision(1)->compare([
             fn () => $this->work(),
             fn () => $this->work(),
         ]);
