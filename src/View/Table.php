@@ -15,6 +15,11 @@ class Table
 
     public function show(array $data): void
     {
-        $this->io->table(array_keys($data[0]), $data);
+        $this->io->table($this->headers($data), $data);
+    }
+
+    protected function headers(array $data): array
+    {
+        return array_keys(array_values($data)[0]);
     }
 }

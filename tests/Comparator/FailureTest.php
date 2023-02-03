@@ -47,4 +47,23 @@ class FailureTest extends TestCase
             'second' => 123,
         ]);
     }
+
+    public function testAsPropertiesWithoutData(): void
+    {
+        $this->expectException(TypeError::class);
+        $this->expectExceptionMessage('must be of type callable|array, int given');
+
+        $this->comparator()->withoutData()->compare(123);
+    }
+
+    public function testAsArrayWithoutData(): void
+    {
+        $this->expectException(ValueIsNotCallableException::class);
+        $this->expectExceptionMessage('The array value must be of type callable, integer given.');
+
+        $this->comparator()->withoutData()->compare([
+            'first'  => 123,
+            'second' => 123,
+        ]);
+    }
 }

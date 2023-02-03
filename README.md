@@ -29,7 +29,7 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ## Using
 
 > Note
-> 
+>
 > The result of the execution is printed to the console, so make sure you call the code from the console.
 
 ```php
@@ -89,6 +89,36 @@ use DragonCode\RuntimeComparison\Comparator;
 ```
 
 If the passed value is less than 1, then one iteration will be performed for each callback.
+
+### Without Data
+
+If you want to see only the summary result of the run time without detailed information for each iteration, then you can call the `withoutData` method, which will display only the
+summary information:
+
+```php
+use DragonCode\RuntimeComparison\Comparator;
+
+(new Comparator())
+    ->withoutData()
+    ->compare([
+        'foo' => fn () => sleep(1),
+        'bar' => fn () => sleep(1),
+    ]);
+```
+
+Result example:
+
+```
+----- -------- ------- 
+ #     foo      bar
+----- -------- ------- 
+ min   0.011    0.015  
+ max   0.015    0.016  
+ avg   0.014    0.015  
+----- -------- ------- 
+       winner   loser  
+----- -------- -------
+```
 
 ## License
 

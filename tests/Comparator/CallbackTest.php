@@ -47,4 +47,24 @@ class CallbackTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    public function testAsPropertiesWithoutData(): void
+    {
+        $this->comparator()->withoutData()->compare(
+            fn () => $this->work(),
+            fn () => $this->work(),
+        );
+
+        $this->assertTrue(true);
+    }
+
+    public function testAsArrayWithoutData(): void
+    {
+        $this->comparator()->withoutData()->compare([
+            fn () => $this->work(),
+            fn () => $this->work(),
+        ]);
+
+        $this->assertTrue(true);
+    }
 }

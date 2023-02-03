@@ -27,4 +27,14 @@ class ArrayTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    public function testAsArrayWithoutData(): void
+    {
+        $this->comparator()->withoutData()->compare([
+            'first'  => fn () => $this->work(),
+            'second' => fn () => $this->work(),
+        ]);
+
+        $this->assertTrue(true);
+    }
 }

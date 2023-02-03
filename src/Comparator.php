@@ -19,10 +19,12 @@ class Comparator
 
     protected int $iterations = 10;
 
+    protected bool $withData = true;
+
     protected array $result = [];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
+        protected Runner      $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(
@@ -34,6 +36,13 @@ class Comparator
     public function iterations(int $count): self
     {
         $this->iterations = max(1, $count);
+
+        return $this;
+    }
+
+    public function withoutData(): self
+    {
+        $this->withData = false;
 
         return $this;
     }
@@ -92,7 +101,8 @@ class Comparator
 
     protected function show(): void
     {
-        $table  = $this->transformer->forTime($this->result);
+        $table = $this->withData ? $this->transformer->forTime($this->result) : [];
+
         $stats  = $this->transformer->forStats($this->result);
         $winner = $this->transformer->forWinners($stats);
 

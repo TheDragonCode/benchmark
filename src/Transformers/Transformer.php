@@ -36,9 +36,11 @@ class Transformer
         $index = 1;
 
         foreach ($arrays as $array) {
-            $result = $index < $count
-                ? array_merge($result, $array, $this->separator($arrays[0]))
-                : array_merge($result, $array);
+            if (! empty($array)) {
+                $result = $index < $count
+                    ? array_merge($result, $array, $this->separator($arrays[0]))
+                    : array_merge($result, $array);
+            }
 
             ++$index;
         }
