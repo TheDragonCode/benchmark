@@ -24,7 +24,7 @@ class Comparator
     protected array $result = [];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
+        protected Runner      $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(
@@ -62,6 +62,7 @@ class Comparator
         $this->each($callbacks, $bar);
 
         $bar->finish();
+        $this->view->emptyLine(2);
     }
 
     protected function stepsCount(array $callbacks): int

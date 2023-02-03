@@ -15,10 +15,10 @@ class View
     protected ProgressBar $progressBar;
 
     public function __construct(
-        SymfonyStyle $io
+        protected SymfonyStyle $io
     ) {
-        $this->table       = new Table($io);
-        $this->progressBar = new ProgressBar($io);
+        $this->table       = new Table($this->io);
+        $this->progressBar = new ProgressBar($this->io);
     }
 
     public function table(array $data): void
@@ -29,5 +29,10 @@ class View
     public function progressBar(): ProgressBar
     {
         return $this->progressBar;
+    }
+
+    public function emptyLine(int $count = 1): void
+    {
+        $this->io->newLine($count);
     }
 }
