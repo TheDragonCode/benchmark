@@ -125,6 +125,11 @@ Result example:
 ----- ------------------- -------------------
 ```
 
+> Note
+>
+> If the option to display detailed information is enabled (without using the `withoutData` method) and more than 1000 iterations are requested, then the output of detailed
+> information will be forcibly disabled, since there will be absolutely no point in it with a significantly increasing load on the computer.
+
 ### Round Precision
 
 By default, the script does not round measurement results, but you can specify the number of decimal places to which rounding can be performed.
