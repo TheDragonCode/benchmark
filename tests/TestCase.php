@@ -21,5 +21,7 @@ abstract class TestCase extends BaseTestCase
         $array  = explode(',', $string);
         $string = implode(',', $array);
         $array  = explode(',', $string);
+
+        usleep(50);
     }
 }
