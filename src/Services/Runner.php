@@ -8,6 +8,18 @@ class Runner
 {
     public function call(callable $callback): float
     {
+        $this->clean();
+
+        return $this->run($callback);
+    }
+
+    protected function clean(): void
+    {
+        gc_collect_cycles();
+    }
+
+    protected function run(callable $callback): float
+    {
         $startAt = hrtime(true);
 
         $callback();
