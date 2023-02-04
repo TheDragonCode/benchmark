@@ -17,7 +17,7 @@ class Comparator
 {
     protected View $view;
 
-    protected int $iterations = 10;
+    protected int $iterations = 100;
 
     protected bool $withData = true;
 

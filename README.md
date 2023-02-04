@@ -66,7 +66,8 @@ Result example:
   7       14.6678 ms    14.0797 ms   
   8       14.7602 ms    14.613 ms    
   9       14.9372 ms    15.6712 ms   
-  10      15.2036 ms    14.6706 ms   
+               ...   
+  100     15.2036 ms    14.6706 ms   
  ------- ------------- ------------- 
   min     11.3845 ms    14.0797 ms   
   max     15.3918 ms    15.6712 ms   
@@ -81,7 +82,7 @@ When measuring the average value among the results, when more than 10 iterations
 
 ### Iterations Count
 
-By default, the comparator performs 10 iterations per callback, but you can change this number by calling the `iterations` method:
+By default, the comparator performs 100 iterations per callback, but you can change this number by calling the `iterations` method:
 
 ```php
 use DragonCode\RuntimeComparison\Comparator;
