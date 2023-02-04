@@ -4,33 +4,33 @@ declare(strict_types=1);
 
 namespace DragonCode\RuntimeComparison\Transformers;
 
+use DragonCode\RuntimeComparison\Services\Arr;
+
 class Winner extends Base
 {
-    protected array $order = ['avg', 'max', 'min'];
+    protected string $key = 'avg';
+
+    protected array $orders = [
+        1 => '<fg=green>- %d -</>',
+        2 => '<fg=yellow>- %d -</>',
+        3 => '<fg=blue>- %d -</>',
+    ];
+
+    public function __construct(
+        protected Arr $arr = new Arr()
+    ) {
+    }
 
     public function transform(array $data): array
     {
-        foreach ($this->order as $key) {
-            if ($winner = $this->detectWinner($data[$key])) {
-                return $winner;
-            }
-        }
+        $values = $data[$this->key];
 
-        return $this->detectWinner($data['avg'], true);
+        $names = $this->prepare($values);
+
+        return $this->order($values, $names);
     }
 
-    protected function detectWinner(array $values, bool $force = false): ?array
-    {
-        $names = $this->find($values);
-
-        if ($force || count($names) !== count($values) - 1) {
-            return $this->winner($values, $names);
-        }
-
-        return null;
-    }
-
-    protected function winner(array $data, array $names): array
+    protected function order(array $data, array $names): array
     {
         $items = [];
 
@@ -39,36 +39,30 @@ class Winner extends Base
                 continue;
             }
 
-            in_array($key, $names, true)
-                ? $this->put($items, '', $key, fn () => '<fg=green>winner</>')
-                : $this->put($items, '', $key, fn () => '<fg=yellow>loser</>');
+            $position = $names[$key] + 1;
+
+            $this->put($items, 'Order', $key, fn () => $this->color($position));
         }
 
         return $items;
     }
 
-    protected function find(array $data): array
+    protected function prepare(array $data): array
     {
-        $value = null;
-        $name  = [];
+        $data = $this->arr->forget($data, '#');
+        $data = $this->arr->map($data, fn (float $time, mixed $name) => compact('name', 'time'));
+        $data = $this->arr->sort($data, 'time');
+        $data = $this->arr->pluck($data, 'name');
 
-        foreach ($data as $key => $time) {
-            if ($key === '#') {
-                continue;
-            }
+        return $this->arr->flip($data);
+    }
 
-            if (is_null($value) || $time < $value) {
-                $value = $time;
-                $name  = [$key];
-
-                continue;
-            }
-
-            if ($time === $value) {
-                $name[] = $key;
-            }
+    protected function color(int $order): string
+    {
+        if ($template = $this->orders[$order] ?? null) {
+            return sprintf($template, $order);
         }
 
-        return array_unique($name);
+        return sprintf('- %d -', $order);
     }
 }
