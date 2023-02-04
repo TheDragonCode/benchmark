@@ -25,6 +25,11 @@ class AsCallbackTest extends TestCase
             fn () => $this->work(),
         );
 
+        $this->comparator()->iterations(500)->withoutData()->compare(
+            fn () => $this->work(),
+            fn () => $this->work(),
+        );
+
         $this->assertTrue(true);
     }
 

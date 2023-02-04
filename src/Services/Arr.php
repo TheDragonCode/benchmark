@@ -18,11 +18,11 @@ class Arr
         return array_map($callback, array_values($data), array_keys($data));
     }
 
-    public function sort(array $data, string $key): array
+    public function sort(array $data, ?string $key = null): array
     {
-        usort($data, function (array $a, array $b) use ($key) {
-            $a = $a[$key];
-            $b = $b[$key];
+        usort($data, function (array|float $a, array|float $b) use ($key) {
+            $a = is_array($a) ? $a[$key] : $a;
+            $b = is_array($b) ? $b[$key] : $b;
 
             if ($a === $b) {
                 return 0;

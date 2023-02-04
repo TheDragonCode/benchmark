@@ -76,7 +76,8 @@ Result example:
  ------- ------------- ------------- 
 ```
 
-The time is specified in seconds rounded to the third decimal place.
+When measuring the average value among the results, when more than 10 iterations are used, the final data is filtered by peak values. The calculation of the 10% of the lowest and
+10% of the highest values is excluded from the total result, thus the final data becomes cleaner and less dependent on any external factors.
 
 ### Iterations Count
 

@@ -25,6 +25,11 @@ class AsArrayTest extends TestCase
             'bar' => fn () => $this->work(),
         ]);
 
+        $this->comparator()->iterations(500)->withoutData()->compare([
+            'foo' => fn () => $this->work(),
+            'bar' => fn () => $this->work(),
+        ]);
+
         $this->assertTrue(true);
     }
 

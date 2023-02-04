@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DragonCode\RuntimeComparison\Transformers;
 
+use DragonCode\RuntimeComparison\Services\MeasurementError;
+
 class Stats extends Base
 {
     protected array $methods = [
@@ -11,6 +13,11 @@ class Stats extends Base
         'max',
         'avg',
     ];
+
+    public function __construct(
+        protected MeasurementError $measurementError = new MeasurementError()
+    ) {
+    }
 
     public function transform(array $data): array
     {
@@ -42,6 +49,13 @@ class Stats extends Base
 
     protected function avg(array $values): float
     {
+        $values = $this->filter($values);
+
         return array_sum($values) / count($values);
+    }
+
+    protected function filter(array $values): array
+    {
+        return $this->measurementError->filter($values);
     }
 }
