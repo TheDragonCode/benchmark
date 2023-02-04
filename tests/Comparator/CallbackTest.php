@@ -67,4 +67,14 @@ class CallbackTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    public function testAsArrayRound(): void
+    {
+        $this->comparator()->round(2)->compare([
+            fn () => $this->work(),
+            fn () => $this->work(),
+        ]);
+
+        $this->assertTrue(true);
+    }
 }

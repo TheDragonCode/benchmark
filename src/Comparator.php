@@ -40,6 +40,13 @@ class Comparator
         return $this;
     }
 
+    public function round(?int $precision): self
+    {
+        $this->view->setRound($precision);
+
+        return $this;
+    }
+
     public function withoutData(): self
     {
         $this->withData = false;

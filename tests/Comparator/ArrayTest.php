@@ -37,4 +37,14 @@ class ArrayTest extends TestCase
 
         $this->assertTrue(true);
     }
+
+    public function testAsArrayRound(): void
+    {
+        $this->comparator()->round(2)->compare([
+            'first'  => fn () => $this->work(),
+            'second' => fn () => $this->work(),
+        ]);
+
+        $this->assertTrue(true);
+    }
 }

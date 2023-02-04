@@ -150,6 +150,44 @@ Result example:
  ------- ------------- ------------- 
 ```
 
+### Round Precision
+
+By default, the script does not round measurement results, but you can specify the number of decimal places to which rounding can be performed.
+
+For example:
+
+```php
+use DragonCode\RuntimeComparison\Comparator;
+
+(new Comparator())
+    ->iterations(5)
+    ->round(2)
+    ->compare(
+        fn () => /* some code */,
+        fn () => /* some code */,
+    );
+```
+
+Result example:
+
+```
+ ------- ---------- ---------- 
+  #       0          1    
+ ------- ---------- ---------- 
+  1 ms    11.47 ms   15.28 ms  
+  2 ms    14.89 ms   15.21 ms  
+  3 ms    15.11 ms   15.13 ms  
+  4 ms    15.62 ms   15.41 ms  
+  5 ms    15.27 ms   14.99 ms  
+ ------- ---------- ---------- 
+  min     11.47 ms   14.99 ms  
+  max     15.62 ms   15.41 ms  
+  avg     14.47 ms   15.21 ms  
+ ------- ---------- ---------- 
+  Order   - 1 -      - 2 -     
+ ------- ---------- ----------
+```
+
 ## License
 
 This package is licensed under the [MIT License](LICENSE).

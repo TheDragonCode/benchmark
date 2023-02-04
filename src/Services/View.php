@@ -14,11 +14,18 @@ class View
 
     protected ProgressBar $progressBar;
 
+    protected ?int $roundPrecision = null;
+
     public function __construct(
         protected SymfonyStyle $io
     ) {
         $this->table       = new Table($this->io);
         $this->progressBar = new ProgressBar($this->io);
+    }
+
+    public function setRound(?int $precision): void
+    {
+        $this->roundPrecision = $precision;
     }
 
     public function table(array $data): void
@@ -48,10 +55,19 @@ class View
             }
 
             if (is_numeric($value)) {
-                $value = round($value, 10) . ' ms';
+                $value = $this->round($value) . ' ms';
             }
         }
 
         return $data;
+    }
+
+    protected function round(float $value): float
+    {
+        if (is_numeric($this->roundPrecision)) {
+            return round($value, $this->roundPrecision);
+        }
+
+        return $value;
     }
 }
