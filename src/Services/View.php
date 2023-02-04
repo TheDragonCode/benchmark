@@ -47,14 +47,14 @@ class View
 
     protected function appendMs(array $data): array
     {
-        foreach ($data as &$value) {
+        foreach ($data as $key => &$value) {
             if (is_array($value)) {
                 $value = $this->appendMs($value);
 
                 continue;
             }
 
-            if (is_numeric($value)) {
+            if ($key !== '#' && is_numeric($value)) {
                 $value = $this->round($value) . ' ms';
             }
         }
