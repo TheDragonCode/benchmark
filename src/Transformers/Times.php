@@ -6,14 +6,14 @@ namespace DragonCode\RuntimeComparison\Transformers;
 
 class Times extends Base
 {
-    public function transform(array $data, ?int $roundPrecision): array
+    public function transform(array $data): array
     {
         $items = [];
 
         foreach ($data as $name => $values) {
             foreach ($values as $iteration => $time) {
                 $items[$iteration]['#']   = $iteration;
-                $items[$iteration][$name] = $this->round($time, $roundPrecision);
+                $items[$iteration][$name] = $time;
             }
         }
 

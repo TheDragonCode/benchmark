@@ -54,26 +54,26 @@ use DragonCode\RuntimeComparison\Comparator;
 Result example:
 
 ```
------ ------------------- ------------------- 
- #     0                   1                  
------ ------------------- ------------------- 
- 1     0.011713027954102   0.015522003173828  
- 2     0.014931917190552   0.015424013137817  
- 3     0.015513896942139   0.014975070953369  
- 4     0.015083789825439   0.014898061752319  
- 5     0.014750003814697   0.014961004257202  
- 6     0.015435934066772   0.015391111373901  
- 7     0.015177965164185   0.014806985855103  
- 8     0.014681816101074   0.01552677154541   
- 9     0.014717102050781   0.015773057937622  
- 10    0.015694856643677   0.014908075332642  
------ ------------------- ------------------- 
- min   0.011713027954102   0.014806985855103  
- max   0.015694856643677   0.015773057937622  
- avg   0.014770030975342   0.015218615531921  
------ ------------------- ------------------- 
-       winner              loser              
------ ------------------- ------------------- 
+ ------- ------------- ------------- 
+  #       0             1       
+ ------- ------------- ------------- 
+  1 ms    12.1293 ms    15.2864 ms   
+  2 ms    15.0713 ms    15.4331 ms   
+  3 ms    15.2663 ms    14.6884 ms   
+  4 ms    14.9315 ms    14.6972 ms   
+  5 ms    14.5321 ms    15.0651 ms   
+  6 ms    15.4832 ms    15.2158 ms   
+  7 ms    15.9021 ms    14.6001 ms   
+  8 ms    15.2042 ms    15.2389 ms   
+  9 ms    14.0094 ms    14.7566 ms   
+  10 ms   15.029 ms     15.3531 ms   
+ ------- ------------- ------------- 
+  min     12.1293 ms    14.6001 ms   
+  max     15.9021 ms    15.4331 ms   
+  avg     14.75584 ms   15.03347 ms  
+ ------- ------------- ------------- 
+          winner        loser        
+ ------- ------------- ------------- 
 ```
 
 The time is specified in seconds rounded to the third decimal place.
@@ -114,15 +114,15 @@ use DragonCode\RuntimeComparison\Comparator;
 Result example:
 
 ```
------ ------------------- ------------------- 
- #     0                   1                  
------ ------------------- ------------------- 
- min   0.01220703125       0.014835119247437  
- max   0.015632152557373   0.015995979309082  
- avg   0.014835715293884   0.01535861492157   
------ ------------------- ------------------- 
-       winner              loser              
------ ------------------- -------------------
+ ------ ------------- ------------- 
+  #      foo           bar       
+ ------ ------------- ------------- 
+  min    7.598 ms      14.665 ms    
+  max    15.6512 ms    15.5594 ms   
+  avg    13.62838 ms   15.21404 ms  
+ ------ ------------- ------------- 
+         winner        loser        
+ ------ ------------- -------------
 ```
 
 > Note
@@ -130,42 +130,24 @@ Result example:
 > If the option to display detailed information is enabled (without using the `withoutData` method) and more than 1000 iterations are requested, then the output of detailed
 > information will be forcibly disabled, since there will be absolutely no point in it with a significantly increasing load on the computer.
 
-### Round Precision
-
-By default, the script does not round measurement results, but you can specify the number of decimal places to which rounding can be performed.
-
-For example:
-
-```php
-use DragonCode\RuntimeComparison\Comparator;
-
-(new Comparator())
-    ->iterations(5)
-    ->roundPrecision(4)
-    ->compare(
-        fn () => /* some code */,
-        fn () => /* some code */,
-    );
-```
-
 Result example:
 
 ```
------ -------- -------- 
- #     0        1       
------ -------- -------- 
- 1     0.0112   0.015   
- 2     0.0147   0.0155  
- 3     0.0153   0.0153  
- 4     0.0157   0.015   
- 5     0.0154   0.0158  
------ -------- -------- 
- min   0.0112   0.015   
- max   0.0157   0.0158  
- avg   0.0144   0.0153  
------ -------- -------- 
-       winner   loser   
------ -------- -------- 
+ ------ ------------- ------------- 
+  #      0             1       
+ ------ ------------- ------------- 
+  1 ms   7.598 ms      14.665 ms    
+  2 ms   15.323 ms     15.3995 ms   
+  3 ms   15.6512 ms    15.0711 ms   
+  4 ms   15.1066 ms    15.3752 ms   
+  5 ms   14.4631 ms    15.5594 ms   
+ ------ ------------- ------------- 
+  min    7.598 ms      14.665 ms    
+  max    15.6512 ms    15.5594 ms   
+  avg    13.62838 ms   15.21404 ms  
+ ------ ------------- ------------- 
+         winner        loser        
+ ------ ------------- -------------
 ```
 
 ## License

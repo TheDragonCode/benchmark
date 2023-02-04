@@ -37,14 +37,4 @@ class ArrayTest extends TestCase
 
         $this->assertTrue(true);
     }
-
-    public function testAsArrayRoundPrecision(): void
-    {
-        $this->comparator()->roundPrecision(4)->compare([
-            'first'  => fn () => $this->work(),
-            'second' => fn () => $this->work(),
-        ]);
-
-        $this->assertTrue(true);
-    }
 }

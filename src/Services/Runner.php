@@ -8,20 +8,15 @@ class Runner
 {
     public function call(callable $callback): float
     {
-        $startAt = $this->time();
+        $startAt = hrtime(true);
 
         $callback();
 
-        return $this->diff($startAt);
+        return $this->diff(hrtime(true), $startAt);
     }
 
-    protected function diff(float $startAt): float
+    protected function diff(float $now, float $startAt): float
     {
-        return $this->time() - $startAt;
-    }
-
-    protected function time(): float
-    {
-        return microtime(true);
+        return ($now - $startAt) / 1e+6;
     }
 }

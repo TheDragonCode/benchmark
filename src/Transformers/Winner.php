@@ -8,7 +8,7 @@ class Winner extends Base
 {
     protected array $order = ['avg', 'max', 'min'];
 
-    public function transform(array $data, ?int $roundPrecision): array
+    public function transform(array $data): array
     {
         foreach ($this->order as $key) {
             if ($winner = $this->detectWinner($data[$key])) {

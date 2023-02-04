@@ -6,5 +6,5 @@ namespace DragonCode\RuntimeComparison\Contracts;
 
 interface Transformer
 {
-    public function transform(array $data, ?int $roundPrecision): array;
+    public function transform(array $data): array;
 }

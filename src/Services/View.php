@@ -23,7 +23,9 @@ class View
 
     public function table(array $data): void
     {
-        $this->table->show($data);
+        $this->table->show(
+            $this->appendMs($data)
+        );
     }
 
     public function progressBar(): ProgressBar
@@ -34,5 +36,22 @@ class View
     public function emptyLine(int $count = 1): void
     {
         $this->io->newLine($count);
+    }
+
+    protected function appendMs(array $data): array
+    {
+        foreach ($data as &$value) {
+            if (is_array($value)) {
+                $value = $this->appendMs($value);
+
+                continue;
+            }
+
+            if (is_numeric($value)) {
+                $value = round($value, 10) . ' ms';
+            }
+        }
+
+        return $data;
     }
 }
