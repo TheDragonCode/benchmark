@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DragonCode\RuntimeComparison\Services;
+namespace DragonCode\Benchmark\Services;
 
-use DragonCode\RuntimeComparison\View\ProgressBar;
-use DragonCode\RuntimeComparison\View\Table;
+use DragonCode\Benchmark\View\ProgressBar;
+use DragonCode\Benchmark\View\Table;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class View

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DragonCode\RuntimeComparison\Exceptions;
+namespace DragonCode\Benchmark\Exceptions;
 
 use TypeError;
 

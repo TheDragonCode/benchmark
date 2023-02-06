@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DragonCode\RuntimeComparison\Contracts;
+namespace DragonCode\Benchmark\Contracts;
 
 interface Transformer
 {

@@ -1,6 +1,6 @@
-# Runtime Comparison
+# Benchmark
 
-![the dragon code runtime comparison](https://preview.dragon-code.pro/the-dragon-code/runtime-comparison.svg?brand=php)
+![the dragon code benchmark](https://preview.dragon-code.pro/the-dragon-code/benchmark.svg?brand=php)
 
 [![Stable Version][badge_stable]][link_packagist]
 [![Unstable Version][badge_unstable]][link_packagist]
@@ -10,10 +10,10 @@
 
 ## Installation
 
-To get the latest version of `Runtime Comparison`, simply require the project using [Composer](https://getcomposer.org):
+To get the latest version of `The Dragon Code: Benchmark`, simply require the project using [Composer](https://getcomposer.org):
 
 ```bash
-composer require dragon-code/runtime-comparison --dev
+composer require dragon-code/benchmark --dev
 ```
 
 Or manually update `require-dev` block of `composer.json` and run `composer update` console command:
@@ -21,7 +21,7 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ```json
 {
     "require-dev": {
-        "dragon-code/runtime-comparison": "^1.0"
+        "dragon-code/benchmark": "^1.0"
     }
 }
 ```
@@ -33,19 +33,19 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 > The result of the execution is printed to the console, so make sure you call the code from the console.
 
 ```php
-use DragonCode\RuntimeComparison\Comparator;
+use DragonCode\Benchmark\Benchmark;
 
-(new Comparator())->compare(
+(new Benchmark())->compare(
     fn () => /* some code */,
     fn () => /* some code */,
 );
 
-(new Comparator())->compare([
+(new Benchmark())->compare([
     fn () => /* some code */,
     fn () => /* some code */,
 ]);
 
-(new Comparator())->compare([
+(new Benchmark())->compare([
     'foo' => fn () => /* some code */,
     'bar' => fn () => /* some code */,
 ]);
@@ -82,12 +82,12 @@ When measuring the average value among the results, when more than 10 iterations
 
 ### Iterations Count
 
-By default, the comparator performs 100 iterations per callback, but you can change this number by calling the `iterations` method:
+By default, the benchmark performs 100 iterations per callback, but you can change this number by calling the `iterations` method:
 
 ```php
-use DragonCode\RuntimeComparison\Comparator;
+use DragonCode\Benchmark\Benchmark;
 
-(new Comparator())
+(new Benchmark())
     ->iterations(5)
     ->compare(
         fn () => /* some code */,
@@ -103,9 +103,9 @@ If you want to see only the summary result of the run time without detailed info
 summary information:
 
 ```php
-use DragonCode\RuntimeComparison\Comparator;
+use DragonCode\Benchmark\Benchmark;
 
-(new Comparator())
+(new Benchmark())
     ->withoutData()
     ->compare([
         'foo' => fn () => /* some code */,
@@ -139,9 +139,9 @@ By default, the script does not round measurement results, but you can specify t
 For example:
 
 ```php
-use DragonCode\RuntimeComparison\Comparator;
+use DragonCode\Benchmark\Benchmark;
 
-(new Comparator())
+(new Benchmark())
     ->iterations(5)
     ->round(2)
     ->compare(
@@ -175,18 +175,18 @@ Result example:
 This package is licensed under the [MIT License](LICENSE).
 
 
-[badge_build]:          https://img.shields.io/github/actions/workflow/status/TheDragonCode/runtime-comparison/phpunit.yml?style=flat-square
+[badge_build]:          https://img.shields.io/github/actions/workflow/status/TheDragonCode/benchmark/phpunit.yml?style=flat-square
 
-[badge_downloads]:      https://img.shields.io/packagist/dt/dragon-code/runtime-comparison.svg?style=flat-square
+[badge_downloads]:      https://img.shields.io/packagist/dt/dragon-code/benchmark.svg?style=flat-square
 
-[badge_license]:        https://img.shields.io/packagist/l/dragon-code/runtime-comparison.svg?style=flat-square
+[badge_license]:        https://img.shields.io/packagist/l/dragon-code/benchmark.svg?style=flat-square
 
-[badge_stable]:         https://img.shields.io/github/v/release/TheDragonCode/runtime-comparison?label=stable&style=flat-square
+[badge_stable]:         https://img.shields.io/github/v/release/TheDragonCode/benchmark?label=stable&style=flat-square
 
 [badge_unstable]:       https://img.shields.io/badge/unstable-dev--main-orange?style=flat-square
 
-[link_build]:           https://github.com/TheDragonCode/runtime-comparison/actions
+[link_build]:           https://github.com/TheDragonCode/benchmark/actions
 
 [link_license]:         LICENSE
 
-[link_packagist]:       https://packagist.org/packages/dragon-code/runtime-comparison
+[link_packagist]:       https://packagist.org/packages/dragon-code/benchmark

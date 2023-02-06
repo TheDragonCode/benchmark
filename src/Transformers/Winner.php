@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DragonCode\RuntimeComparison\Transformers;
+namespace DragonCode\Benchmark\Transformers;
 
-use DragonCode\RuntimeComparison\Services\Arr;
+use DragonCode\Benchmark\Services\Arr;
 
 class Winner extends Base
 {

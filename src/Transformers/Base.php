@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DragonCode\RuntimeComparison\Transformers;
+namespace DragonCode\Benchmark\Transformers;
 
-use DragonCode\RuntimeComparison\Contracts\Transformer as TransformerContract;
+use DragonCode\Benchmark\Contracts\Transformer as TransformerContract;
 
 abstract class Base implements TransformerContract
 {

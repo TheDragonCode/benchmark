@@ -14,11 +14,11 @@ body:
         attributes:
             label: Environment
             description: |
-                Tip: Use the `composer info dragon-code/runtime-comparison` command to get information for Laravel Lang.
+                Tip: Use the `composer info dragon-code/benchmark` command to get information for Laravel Lang.
                 Tip: Use the `php -v` command to get information for PHP.
             value: |
                 - PHP Version:
-                - Runtime Comparison Version:
+                - Benchmark Version:
         validations:
             required: true
 

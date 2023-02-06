@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Comparator;
+namespace Tests\Benchmark;
 
 use Tests\TestCase;
 
@@ -10,7 +10,7 @@ class AsArrayTest extends TestCase
 {
     public function testDefault(): void
     {
-        $this->comparator()->compare([
+        $this->benchmark()->compare([
             'foo' => fn () => $this->work(),
             'bar' => fn () => $this->work(),
         ]);
@@ -20,12 +20,12 @@ class AsArrayTest extends TestCase
 
     public function testIterations(): void
     {
-        $this->comparator()->iterations(5)->compare([
+        $this->benchmark()->iterations(5)->compare([
             'foo' => fn () => $this->work(),
             'bar' => fn () => $this->work(),
         ]);
 
-        $this->comparator()->iterations(500)->withoutData()->compare([
+        $this->benchmark()->iterations(500)->withoutData()->compare([
             'foo' => fn () => $this->work(),
             'bar' => fn () => $this->work(),
         ]);
@@ -35,7 +35,7 @@ class AsArrayTest extends TestCase
 
     public function testWithoutData(): void
     {
-        $this->comparator()->withoutData()->compare([
+        $this->benchmark()->withoutData()->compare([
             'foo' => fn () => $this->work(),
             'bar' => fn () => $this->work(),
         ]);
@@ -45,7 +45,7 @@ class AsArrayTest extends TestCase
 
     public function testRound(): void
     {
-        $this->comparator()->round(2)->compare([
+        $this->benchmark()->round(2)->compare([
             'foo' => fn () => $this->work(),
             'bar' => fn () => $this->work(),
         ]);

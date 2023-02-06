@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace DragonCode\RuntimeComparison;
+namespace DragonCode\Benchmark;
 
-use DragonCode\RuntimeComparison\Exceptions\ValueIsNotCallableException;
-use DragonCode\RuntimeComparison\Services\Runner;
-use DragonCode\RuntimeComparison\Services\View;
-use DragonCode\RuntimeComparison\Transformers\Transformer;
+use DragonCode\Benchmark\Exceptions\ValueIsNotCallableException;
+use DragonCode\Benchmark\Services\Runner;
+use DragonCode\Benchmark\Services\View;
+use DragonCode\Benchmark\Transformers\Transformer;
 use Symfony\Component\Console\Helper\ProgressBar as ProgressBarService;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class Comparator
+class Benchmark
 {
     protected View $view;
 
@@ -24,7 +24,7 @@ class Comparator
     protected array $result = [];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
+        protected Runner      $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(

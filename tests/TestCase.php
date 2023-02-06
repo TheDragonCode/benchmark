@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use DragonCode\RuntimeComparison\Comparator;
+use DragonCode\Benchmark\Benchmark;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected function comparator(): Comparator
+    protected function benchmark(): Benchmark
     {
-        return new Comparator();
+        return new Benchmark();
     }
 
     protected function work(): void

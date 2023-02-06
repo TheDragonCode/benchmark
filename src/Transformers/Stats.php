@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DragonCode\RuntimeComparison\Transformers;
+namespace DragonCode\Benchmark\Transformers;
 
-use DragonCode\RuntimeComparison\Services\MeasurementError;
+use DragonCode\Benchmark\Services\MeasurementError;
 
 class Stats extends Base
 {

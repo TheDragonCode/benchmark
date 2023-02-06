@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DragonCode\RuntimeComparison\View;
+namespace DragonCode\Benchmark\View;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 

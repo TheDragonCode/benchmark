@@ -1,9 +1,10 @@
 {
-    "name": "dragon-code/runtime-comparison",
-    "description": "Simple comparison of execution time of different code",
+    "name": "dragon-code/benchmark",
+    "description": "Simple comparison of code execution speed between different options",
     "license": "MIT",
     "type": "library",
     "keywords": [
+        "benchmark",
         "runtime",
         "comparison",
         "comparison-tool",
@@ -22,8 +23,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/TheDragonCode/runtime-comparison/issues",
-        "source": "https://github.com/TheDragonCode/runtime-comparison"
+        "issues": "https://github.com/TheDragonCode/benchmark/issues",
+        "source": "https://github.com/TheDragonCode/benchmark"
     },
     "funding": [
         {
@@ -55,7 +56,7 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "DragonCode\\RuntimeComparison\\": "src/"
+            "DragonCode\\Benchmark\\": "src/"
         }
     },
     "autoload-dev": {

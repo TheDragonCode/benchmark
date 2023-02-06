@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DragonCode\RuntimeComparison\Transformers;
+namespace DragonCode\Benchmark\Transformers;
 
 class Times extends Base
 {
