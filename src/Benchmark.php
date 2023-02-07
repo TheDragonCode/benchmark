@@ -21,10 +21,13 @@ class Benchmark
 
     protected bool $withData = true;
 
-    protected array $result = [];
+    protected array $result = [
+        'each'  => [],
+        'total' => [],
+    ];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
+        protected Runner      $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(
@@ -66,7 +69,7 @@ class Benchmark
     {
         $bar = $this->view->progressBar()->create($count);
 
-        $this->each($callbacks, $bar);
+        $this->chunks($callbacks, $bar);
 
         $bar->finish();
         $this->view->emptyLine(2);
@@ -77,13 +80,20 @@ class Benchmark
         return count($callbacks) * $this->iterations;
     }
 
-    protected function each(array $callbacks, ProgressBarService $progressBar): void
+    protected function chunks(array $callbacks, ProgressBarService $progressBar): void
     {
         foreach ($callbacks as $name => $callback) {
             $this->validate($callback);
 
-            $this->run($name, $callback, $progressBar);
+            $this->each($name, $callback, $progressBar);
         }
+    }
+
+    protected function each(mixed $name, callable $callback, ProgressBarService $progressBar): void
+    {
+        $this->result['total'][$name] = $this->call(
+            fn () => $this->run($name, $callback, $progressBar)
+        );
     }
 
     protected function run(mixed $name, callable $callback, ProgressBarService $progressBar): void
@@ -104,12 +114,12 @@ class Benchmark
 
     protected function push(mixed $name, int $iteration, float $time): void
     {
-        $this->result[$name][$iteration] = $time;
+        $this->result['each'][$name][$iteration] = $time;
     }
 
     protected function show(): void
     {
-        $table = $this->withData() ? $this->transformer->forTime($this->result) : [];
+        $table = $this->withData() ? $this->transformer->forTime($this->result['each']) : [];
 
         $stats  = $this->transformer->forStats($this->result);
         $winner = $this->transformer->forWinners($stats);

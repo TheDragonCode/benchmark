@@ -28,10 +28,14 @@ class Stats extends Base
     {
         $items = [];
 
-        foreach ($data as $name => $iterations) {
+        foreach ($data['each'] as $name => $iterations) {
             foreach ($this->methods as $method) {
                 $this->put($items, $method, $name, fn () => call_user_func([$this, $method], $iterations));
             }
+        }
+
+        foreach ($data['total'] as $name => $time) {
+            $this->put($items, 'total', $name, fn () => $time);
         }
 
         return $items;
