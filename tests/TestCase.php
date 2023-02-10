@@ -16,6 +16,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function work(): void
     {
-        random_int(0, PHP_INT_MAX);
+        usleep(50);
     }
 }
