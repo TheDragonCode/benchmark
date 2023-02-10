@@ -27,7 +27,7 @@ class Benchmark
     ];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
+        protected Runner      $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(
@@ -99,22 +99,23 @@ class Benchmark
     protected function run(mixed $name, callable $callback, ProgressBarService $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; ++$i) {
-            $time = $this->call($callback);
+            [$time, $ram] = $this->call($callback);
 
-            $this->push($name, $i, $time);
+            $this->push($name, $i, $time, $ram);
 
             $progressBar->advance();
         }
     }
 
-    protected function call(callable $callback): float
+    protected function call(callable $callback): array
     {
         return $this->runner->call($callback);
     }
 
-    protected function push(mixed $name, int $iteration, float $time): void
+    protected function push(mixed $name, int $iteration, float $time, float $ram): void
     {
-        $this->result['each'][$name][$iteration] = $time;
+        $this->result['each'][$name][$iteration]['time'] = $time;
+        $this->result['each'][$name][$iteration]['ram']  = $ram;
     }
 
     protected function show(): void

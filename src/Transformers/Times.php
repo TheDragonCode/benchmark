@@ -11,9 +11,11 @@ class Times extends Base
         $items = [];
 
         foreach ($data as $name => $values) {
-            foreach ($values as $iteration => $time) {
-                $items[$iteration]['#']   = $iteration;
-                $items[$iteration][$name] = $time;
+            foreach ($values as $iteration => $value) {
+                $items[$iteration]['#'] = $iteration;
+
+                $items[$iteration][$name]['time'] = $value['time'];
+                $items[$iteration][$name]['ram']  = $value['ram'];
             }
         }
 

@@ -4,8 +4,15 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use DragonCode\Support\Facades\Helpers\Arr as DragonArray;
+
 class Arr
 {
+    public function get(array $data, string $key): mixed
+    {
+        return DragonArray::get($data, $key);
+    }
+
     public function forget(array $data, mixed $key): array
     {
         unset($data[$key]);
@@ -18,11 +25,11 @@ class Arr
         return array_map($callback, array_values($data), array_keys($data));
     }
 
-    public function sort(array $data, ?string $key = null): array
+    public function sort(array $data, string $key = 'time'): array
     {
         usort($data, function (array|float $a, array|float $b) use ($key) {
-            $a = is_array($a) ? $a[$key] : $a;
-            $b = is_array($b) ? $b[$key] : $b;
+            $a = is_array($a) ? $this->get($a, $key) : $a;
+            $b = is_array($b) ? $this->get($b, $key) : $b;
 
             if ($a === $b) {
                 return 0;

@@ -50,8 +50,8 @@ class Winner extends Base
     protected function prepare(array $data): array
     {
         $data = $this->arr->forget($data, '#');
-        $data = $this->arr->map($data, fn (float $time, mixed $name) => compact('name', 'time'));
-        $data = $this->arr->sort($data, 'time');
+        $data = $this->arr->map($data, fn (array $values, mixed $name) => compact('name', 'values'));
+        $data = $this->arr->sort($data, 'values.time');
         $data = $this->arr->pluck($data, 'name');
 
         return $this->arr->flip($data);

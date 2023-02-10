@@ -6,6 +6,7 @@ namespace DragonCode\Benchmark\Services;
 
 use DragonCode\Benchmark\View\ProgressBar;
 use DragonCode\Benchmark\View\Table;
+use DragonCode\Support\Facades\Helpers\Digit;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class View
@@ -47,27 +48,30 @@ class View
 
     protected function appendMs(array $data): array
     {
-        foreach ($data as $key => &$value) {
-            if (is_array($value)) {
-                $value = $this->appendMs($value);
+        foreach ($data as &$values) {
+            foreach ($values as $key => &$value) {
+                if ($key === '#' || ! is_array($value)) {
+                    continue;
+                }
 
-                continue;
-            }
-
-            if ($key !== '#' && is_numeric($value)) {
-                $value = $this->round($value) . ' ms';
+                $value = sprintf('%s ms - %sb', $this->roundTime($value['time']), $this->roundRam($value['ram']));
             }
         }
 
         return $data;
     }
 
-    protected function round(float $value): float
+    protected function roundTime(float $value): float
     {
         if (is_numeric($this->roundPrecision)) {
             return round($value, $this->roundPrecision);
         }
 
         return $value;
+    }
+
+    protected function roundRam(float $value): string
+    {
+        return Digit::toShort($value);
     }
 }

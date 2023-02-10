@@ -6,7 +6,7 @@ namespace DragonCode\Benchmark\Services;
 
 class Runner
 {
-    public function call(callable $callback): float
+    public function call(callable $callback): array
     {
         $this->clean();
 
@@ -18,13 +18,17 @@ class Runner
         gc_collect_cycles();
     }
 
-    protected function run(callable $callback): float
+    protected function run(callable $callback): array
     {
+        $ramFrom = memory_get_usage();
         $startAt = hrtime(true);
 
         $callback();
 
-        return $this->diff(hrtime(true), $startAt);
+        $time = $this->diff(hrtime(true), $startAt);
+        $ram = memory_get_usage() - $ramFrom;
+
+        return [$time, $ram];
     }
 
     protected function diff(float $now, float $startAt): float

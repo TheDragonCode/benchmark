@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Transformers;
 
+use DragonCode\Benchmark\Services\Arr;
 use DragonCode\Benchmark\Services\MeasurementError;
 
 class Stats extends Base
@@ -15,7 +16,8 @@ class Stats extends Base
     ];
 
     public function __construct(
-        protected MeasurementError $measurementError = new MeasurementError()
+        protected MeasurementError $measurementError = new MeasurementError(),
+        protected Arr              $arr = new Arr()
     ) {
     }
 
@@ -34,28 +36,37 @@ class Stats extends Base
             }
         }
 
-        foreach ($data['total'] as $name => $time) {
-            $this->put($items, 'total', $name, fn () => $time);
+        foreach ($data['total'] as $name => $value) {
+            $this->put($items, 'total', $name, fn () => ['time' => $value[0], 'ram' => $value[1]]);
         }
 
         return $items;
     }
 
-    protected function min(array $values): float
+    protected function min(array $values): array
     {
-        return min($values);
+        return [
+            'time' => min($this->arr->pluck($values, 'time')),
+            'ram'  => min($this->arr->pluck($values, 'ram')),
+        ];
     }
 
-    protected function max(array $values): float
+    protected function max(array $values): array
     {
-        return max($values);
+        return [
+            'time' => max($this->arr->pluck($values, 'time')),
+            'ram'  => max($this->arr->pluck($values, 'ram')),
+        ];
     }
 
-    protected function avg(array $values): float
+    protected function avg(array $values): array
     {
         $values = $this->filter($values);
 
-        return array_sum($values) / count($values);
+        return [
+            'time' => array_sum($this->arr->pluck($values, 'time')) / count($values),
+            'ram'  => array_sum($this->arr->pluck($values, 'ram')) / count($values),
+        ];
     }
 
     protected function filter(array $values): array

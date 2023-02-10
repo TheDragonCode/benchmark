@@ -45,7 +45,7 @@ class AsCallbackTest extends TestCase
 
     public function testRound(): void
     {
-        $this->benchmark()->round(2)->compare(
+        $this->benchmark()->round(2)->iterations(5)->compare(
             fn () => $this->work(),
             fn () => $this->work(),
         );
