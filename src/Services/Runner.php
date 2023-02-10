@@ -26,7 +26,7 @@ class Runner
         $callback();
 
         $time = $this->diff(hrtime(true), $startAt);
-        $ram = memory_get_usage() - $ramFrom;
+        $ram  = memory_get_usage() - $ramFrom;
 
         return [$time, $ram];
     }

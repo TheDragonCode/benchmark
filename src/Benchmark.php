@@ -27,7 +27,7 @@ class Benchmark
     ];
 
     public function __construct(
-        protected Runner      $runner = new Runner(),
+        protected Runner $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
         $this->view = new View(new SymfonyStyle(
