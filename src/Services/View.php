@@ -6,7 +6,6 @@ namespace DragonCode\Benchmark\Services;
 
 use DragonCode\Benchmark\View\ProgressBar;
 use DragonCode\Benchmark\View\Table;
-use DragonCode\Support\Facades\Helpers\Digit;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class View
@@ -18,7 +17,8 @@ class View
     protected ?int $roundPrecision = null;
 
     public function __construct(
-        protected SymfonyStyle $io
+        protected SymfonyStyle $io,
+        protected Memory       $memory = new Memory()
     ) {
         $this->table       = new Table($this->io);
         $this->progressBar = new ProgressBar($this->io);
@@ -54,7 +54,7 @@ class View
                     continue;
                 }
 
-                $value = sprintf('%s ms - %sb', $this->roundTime($value['time']), $this->roundRam($value['ram']));
+                $value = sprintf('%s ms - %s', $this->roundTime($value['time']), $this->roundRam($value['ram']));
             }
         }
 
@@ -70,8 +70,8 @@ class View
         return $value;
     }
 
-    protected function roundRam(float $value): string
+    protected function roundRam(int|float $bytes): string
     {
-        return Digit::toShort($value);
+        return $this->memory->format((int) $bytes);
     }
 }
