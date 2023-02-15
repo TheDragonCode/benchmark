@@ -25,7 +25,7 @@ class Runner
 
     protected function run(callable $callback): array
     {
-        $ramFrom = $this->memory->start();
+        $ramFrom = $this->memory->now();
         $startAt = hrtime(true);
 
         $callback();

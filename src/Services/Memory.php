@@ -12,14 +12,14 @@ class Memory
         'KB' => 1024,
     ];
 
-    public function start(): int
+    public function now(): int
     {
-        return memory_get_usage(true);
+        return memory_get_peak_usage(true);
     }
 
     public function diff(int $memory): int
     {
-        return memory_get_peak_usage(true) - $memory;
+        return $this->now() - $memory;
     }
 
     public function format(int $bytes): string
