@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
-         beStrictAboutCoverageMetadata="false"
-         beStrictAboutOutputDuringTests="true"
          bootstrap="vendor/autoload.php"
          cacheDirectory=".phpunit.cache"
          executionOrder="depends,defects"
          colors="true"
          failOnRisky="true"
          failOnWarning="true"
-         requireCoverageMetadata="false"
 >
     <coverage>
         <include>
             <directory suffix=".php">src</directory>
         </include>
-        <report>
-            <clover outputFile="build/logs/clover.xml" />
-            <html outputDirectory="build/logs/coverage" />
-            <text outputFile="build/logs/coverage.txt" />
-        </report>
     </coverage>
     <testsuites>
         <testsuite name="default">
