@@ -7,8 +7,8 @@ namespace DragonCode\Benchmark\Services;
 class Memory
 {
     protected array $sizes = [
-        'GB' => 1073741824,
-        'MB' => 1048576,
+        'GB' => 1024 * 1024 * 1024,
+        'MB' => 1024 * 1024,
         'KB' => 1024,
     ];
 
