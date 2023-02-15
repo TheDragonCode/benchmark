@@ -6,6 +6,11 @@ namespace DragonCode\Benchmark\Services;
 
 class Runner
 {
+    public function __construct(
+        protected readonly Memory $memory = new Memory()
+    ) {
+    }
+
     public function call(callable $callback): array
     {
         $this->clean();
@@ -20,13 +25,13 @@ class Runner
 
     protected function run(callable $callback): array
     {
-        $ramFrom = memory_get_usage();
+        $ramFrom = $this->memory->now();
         $startAt = hrtime(true);
 
         $callback();
 
         $time = $this->diff(hrtime(true), $startAt);
-        $ram  = memory_get_peak_usage() - $ramFrom;
+        $ram  = $this->memory->diff($ramFrom);
 
         return [$time, $ram];
     }
