@@ -14,7 +14,7 @@ class HardTest extends TestCase
 
     public function testMemory(): void
     {
-        $this->benchmark()->compare(
+        $this->benchmark()->iterations(10)->compare(
             fn () => $this->process(),
             fn () => $this->process()
         );
