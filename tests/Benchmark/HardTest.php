@@ -26,7 +26,7 @@ class HardTest extends TestCase
     {
         $result = [];
 
-        for ($i = 0; $i < $this->count; $i++) {
+        for ($i = 0; $i < $this->count; ++$i) {
             $result[] = $this->lorem;
         }
 
