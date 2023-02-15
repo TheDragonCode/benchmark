@@ -11,7 +11,6 @@ jobs:
             matrix:
                 php: [ "8.1", "8.2" ]
                 symfony: [ "5.3", "6.0" ]
-                prefer: [ "stable", "lowest" ]
 
         name: PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }} ${{ matrix.prefer }}
 
@@ -28,7 +27,7 @@ jobs:
 
             -   name: Install dependencies
                 run: |
-                    composer require --no-interaction --prefer-${{ matrix.prefer }} \
+                    composer require --no-interaction \
                         symfony/console:^${{ matrix.symfony }} \
                         symfony/var-dumper:^${{ matrix.symfony }} \
 
