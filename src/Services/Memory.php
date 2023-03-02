@@ -14,7 +14,7 @@ class Memory
 
     public function now(): int
     {
-        return memory_get_usage(true);
+        return memory_get_peak_usage(true);
     }
 
     public function diff(int $memory): int
