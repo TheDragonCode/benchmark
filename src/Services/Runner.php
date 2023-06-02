@@ -11,11 +11,11 @@ class Runner
     ) {
     }
 
-    public function call(callable $callback): array
+    public function call(callable $callback, array $parameters = []): array
     {
         $this->clean();
 
-        return $this->run($callback);
+        return $this->run($callback, $parameters);
     }
 
     protected function clean(): void
@@ -23,12 +23,12 @@ class Runner
         gc_collect_cycles();
     }
 
-    protected function run(callable $callback): array
+    protected function run(callable $callback, array $parameters = []): array
     {
         $ramFrom = $this->memory->now();
         $startAt = hrtime(true);
 
-        $callback();
+        $callback(...$parameters);
 
         $time = $this->diff(hrtime(true), $startAt);
         $ram  = $this->memory->diff($ramFrom);
