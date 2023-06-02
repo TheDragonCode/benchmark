@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark;
 
+use Closure;
 use DragonCode\Benchmark\Exceptions\ValueIsNotCallableException;
 use DragonCode\Benchmark\Services\Runner;
 use DragonCode\Benchmark\Services\View;
@@ -21,6 +22,8 @@ class Benchmark
 
     protected bool $withData = true;
 
+    protected ?Closure $prepare = null;
+
     protected array $result = [
         'each'  => [],
         'total' => [],
@@ -34,6 +37,13 @@ class Benchmark
             new ArgvInput(),
             new ConsoleOutput()
         ));
+    }
+
+    public function prepare(callable $callback): self
+    {
+        $this->prepare = $callback;
+
+        return $this;
     }
 
     public function iterations(int $count): self
@@ -99,6 +109,8 @@ class Benchmark
     protected function run(mixed $name, callable $callback, ProgressBarService $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; ++$i) {
+            $this->runPrepare($name, $i);
+
             [$time, $ram] = $this->call($callback);
 
             $this->push($name, $i, $time, $ram);
@@ -107,9 +119,16 @@ class Benchmark
         }
     }
 
-    protected function call(callable $callback): array
+    protected function runPrepare(mixed $name, int $iteration): void
     {
-        return $this->runner->call($callback);
+        if ($callback = $this->prepare) {
+            $this->call($callback, [$name, $iteration]);
+        }
+    }
+
+    protected function call(callable $callback, array $parameters = []): array
+    {
+        return $this->runner->call($callback, $parameters);
     }
 
     protected function push(mixed $name, int $iteration, float $time, float $ram): void

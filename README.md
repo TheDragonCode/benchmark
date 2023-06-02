@@ -192,6 +192,35 @@ Result example:
  ------- ------------------ ------------------ 
 ```
 
+### Prepare Data
+
+In some cases, it becomes necessary to call some action before starting each check cycle so that its time does not fall into the result of the runtime check.
+There is a `prepare` method for this:
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+(new Benchmark())
+    ->prepare(fn () => /* some code */)
+    ->compare(
+        fn () => /* some code */,
+        fn () => /* some code */,
+    );
+```
+
+When calling a callback, the name and iteration parameters are passed to it. If necessary, you can use this information inside the callback function.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+(new Benchmark())
+    ->prepare(fn (mixed $name, int $iteration) => /* some code */)
+    ->compare(
+        fn () => /* some code */,
+        fn () => /* some code */,
+    );
+```
+
 ## Information
 
 ```
