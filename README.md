@@ -10,7 +10,8 @@
 
 ## Installation
 
-To get the latest version of `The Dragon Code: Benchmark`, simply require the project using [Composer](https://getcomposer.org):
+To get the latest version of `The Dragon Code: Benchmark`, simply require the project
+using [Composer](https://getcomposer.org):
 
 ```bash
 composer require dragon-code/benchmark --dev
@@ -78,12 +79,15 @@ Result example:
  ------- --------------------- -------------------- 
 ```
 
-When measuring the average value among the results, when more than 10 iterations are used, the final data is filtered by peak values. The calculation of the 10% of the lowest and
-10% of the highest values is excluded from the total result, thus the final data becomes cleaner and less dependent on any external factors.
+When measuring the average value among the results, when more than 10 iterations are used, the final data is filtered by
+peak values. The calculation of the 10% of the lowest and
+10% of the highest values is excluded from the total result, thus the final data becomes cleaner and less dependent on
+any external factors.
 
 ### Iterations Count
 
-By default, the benchmark performs 100 iterations per callback, but you can change this number by calling the `iterations` method:
+By default, the benchmark performs 100 iterations per callback, but you can change this number by calling
+the `iterations` method:
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -117,9 +121,23 @@ If the passed value is less than 1, then one iteration will be performed for eac
  ------- --------------------- --------------------- 
 ```
 
+You can also get the number of the current execution iteration from the input parameter:
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+(new Benchmark())
+    ->iterations(5)
+    ->compare(
+        fn (int $iteration) => /* some code */,
+        fn (int $iteration) => /* some code */,
+    );
+```
+
 ### Without Data
 
-If you want to see only the summary result of the run time without detailed information for each iteration, then you can call the `withoutData` method, which will display only the
+If you want to see only the summary result of the run time without detailed information for each iteration, then you can
+call the `withoutData` method, which will display only the
 summary information:
 
 ```php
@@ -150,12 +168,15 @@ Result example:
 
 > Note
 >
-> If the option to display detailed information is enabled (without using the `withoutData` method) and more than 1000 iterations are requested, then the output of detailed
-> information will be forcibly disabled, since there will be absolutely no point in it with a significantly increasing load on the computer.
+> If the option to display detailed information is enabled (without using the `withoutData` method) and more than 1000
+> iterations are requested, then the output of detailed
+> information will be forcibly disabled, since there will be absolutely no point in it with a significantly increasing
+> load on the computer.
 
 ### Round Precision
 
-By default, the script does not round measurement results, but you can specify the number of decimal places to which rounding can be performed.
+By default, the script does not round measurement results, but you can specify the number of decimal places to which
+rounding can be performed.
 
 For example:
 
@@ -194,7 +215,8 @@ Result example:
 
 ### Prepare Data
 
-In some cases, it becomes necessary to call some action before starting each check cycle so that its time does not fall into the result of the runtime check.
+In some cases, it becomes necessary to call some action before starting each check cycle so that its time does not fall
+into the result of the runtime check.
 There is a `prepare` method for this:
 
 ```php
@@ -208,7 +230,8 @@ use DragonCode\Benchmark\Benchmark;
     );
 ```
 
-When calling a callback, the name and iteration parameters are passed to it. If necessary, you can use this information inside the callback function.
+When calling a callback, the name and iteration parameters are passed to it. If necessary, you can use this information
+inside the callback function.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -218,6 +241,20 @@ use DragonCode\Benchmark\Benchmark;
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
+    );
+```
+
+You can also get the number of the current iteration and the result of the execution of the preliminary function from
+the input parameter:
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+(new Benchmark())
+    ->prepare(fn (mixed $name, int $iteration) => /* some code */)
+    ->compare(
+        fn (int $iteration, mixed $prepareResult) => /* some code */,
+        fn (int $iteration, mixed $prepareResult) => /* some code */,
     );
 ```
 
@@ -242,13 +279,15 @@ use DragonCode\Benchmark\Benchmark;
  ------- ------------------ ------------------ 
 ```
 
-* `foo`, `bar` - The names of the columns in the passed array. Needed for identification. By default, the array index is used, starting from zero. For example, `1, 2, 3,.. N+1`.
+* `foo`, `bar` - The names of the columns in the passed array. Needed for identification. By default, the array index is
+  used, starting from zero. For example, `1, 2, 3,.. N+1`.
 * `1`, `2`, `3`, ..., `N+1` - Verification iteration sequence number.
 * `11.33 ms` - Execution time of the checked code in one iteration.
 * `0b`, `6.8Kb`, etc. - The amount of RAM used by the checked code.
 * `min` - Minimum code processing time.
 * `max` - Maximum code processing time.
-* `avg` - The arithmetic mean value among all iterations, taking into account the elimination of 10% of the smallest and 10% of the largest values to obtain a more accurate value
+* `avg` - The arithmetic mean value among all iterations, taking into account the elimination of 10% of the smallest and
+  10% of the largest values to obtain a more accurate value
   through the possible intervention of external factors.
 * `total` - The total time and RAM spent on checking all iterations of the code.
 

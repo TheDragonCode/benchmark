@@ -33,10 +33,12 @@ class Benchmark
         protected Runner $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
-        $this->view = new View(new SymfonyStyle(
-            new ArgvInput(),
-            new ConsoleOutput()
-        ));
+        $this->view = new View(
+            new SymfonyStyle(
+                new ArgvInput(),
+                new ConsoleOutput()
+            )
+        );
     }
 
     public function prepare(callable $callback): self
@@ -109,9 +111,9 @@ class Benchmark
     protected function run(mixed $name, callable $callback, ProgressBarService $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; ++$i) {
-            $this->runPrepare($name, $i);
+            $result = $this->runPrepare($name, $i);
 
-            [$time, $ram] = $this->call($callback);
+            [$time, $ram] = $this->call($callback, [$i, $result]);
 
             $this->push($name, $i, $time, $ram);
 
@@ -119,11 +121,13 @@ class Benchmark
         }
     }
 
-    protected function runPrepare(mixed $name, int $iteration): void
+    protected function runPrepare(mixed $name, int $iteration): mixed
     {
         if ($callback = $this->prepare) {
-            $this->call($callback, [$name, $iteration]);
+            return $callback($name, $iteration);
         }
+
+        return null;
     }
 
     protected function call(callable $callback, array $parameters = []): array
