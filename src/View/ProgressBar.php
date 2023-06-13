@@ -11,8 +11,7 @@ class ProgressBar
 {
     public function __construct(
         protected SymfonyStyle $io
-    ) {
-    }
+    ) {}
 
     public function create(int $count): ProgressBarService
     {

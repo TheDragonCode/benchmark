@@ -18,8 +18,7 @@ class Stats extends Base
     public function __construct(
         protected MeasurementError $measurementError = new MeasurementError(),
         protected Arr $arr = new Arr()
-    ) {
-    }
+    ) {}
 
     public function transform(array $data): array
     {

@@ -8,8 +8,7 @@ class Runner
 {
     public function __construct(
         protected readonly Memory $memory = new Memory()
-    ) {
-    }
+    ) {}
 
     public function call(callable $callback, array $parameters = []): array
     {
