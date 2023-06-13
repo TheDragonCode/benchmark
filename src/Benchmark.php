@@ -41,6 +41,11 @@ class Benchmark
         );
     }
 
+    public static function start(): static
+    {
+        return new static();
+    }
+
     public function prepare(callable $callback): self
     {
         $this->prepare = $callback;

@@ -36,17 +36,17 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-(new Benchmark())->compare(
+Benchmark::start()->compare(
     fn () => /* some code */,
     fn () => /* some code */,
 );
 
-(new Benchmark())->compare([
+Benchmark::start()->compare([
     fn () => /* some code */,
     fn () => /* some code */,
 ]);
 
-(new Benchmark())->compare([
+Benchmark::start()->compare([
     'foo' => fn () => /* some code */,
     'bar' => fn () => /* some code */,
 ]);
@@ -92,7 +92,7 @@ the `iterations` method:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-(new Benchmark())
+Benchmark::start()
     ->iterations(5)
     ->compare(
         fn () => /* some code */,
@@ -126,7 +126,7 @@ You can also get the number of the current execution iteration from the input pa
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-(new Benchmark())
+Benchmark::start()
     ->iterations(5)
     ->compare(
         fn (int $iteration) => /* some code */,
@@ -143,7 +143,7 @@ summary information:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-(new Benchmark())
+Benchmark::start()
     ->withoutData()
     ->compare([
         'foo' => fn () => /* some code */,
@@ -183,7 +183,7 @@ For example:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-(new Benchmark())
+Benchmark::start()
     ->iterations(5)
     ->round(2)
     ->compare(
@@ -222,7 +222,7 @@ There is a `prepare` method for this:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-(new Benchmark())
+Benchmark::start()
     ->prepare(fn () => /* some code */)
     ->compare(
         fn () => /* some code */,
@@ -236,7 +236,7 @@ inside the callback function.
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-(new Benchmark())
+Benchmark::start()
     ->prepare(fn (mixed $name, int $iteration) => /* some code */)
     ->compare(
         fn () => /* some code */,
@@ -250,7 +250,7 @@ the input parameter:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-(new Benchmark())
+Benchmark::start()
     ->prepare(fn (mixed $name, int $iteration) => /* some code */)
     ->compare(
         fn (int $iteration, mixed $prepareResult) => /* some code */,
