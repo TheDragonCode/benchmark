@@ -79,4 +79,18 @@ class PrepareTest extends TestCase
             'bar',
         ], $result);
     }
+
+    public function testPrepareResult(): void
+    {
+        $this->benchmark()
+            ->iterations(3)
+            ->withoutData()
+            ->prepare(
+                fn (mixed $name, int $iteration) => sprintf('%s:%d', $name, $iteration)
+            )
+            ->compare([
+                'foo' => fn (int $iteration, string $result) => $this->assertSame('foo:' . $iteration, $result),
+                'bar' => fn (int $iteration, string $result) => $this->assertSame('bar:' . $iteration, $result),
+            ]);
+    }
 }
