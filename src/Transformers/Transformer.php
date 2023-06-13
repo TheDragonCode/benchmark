@@ -48,7 +48,7 @@ class Transformer
         return $result;
     }
 
-    protected function resolve(TransformerContract|string $transformer, array $data): array
+    protected function resolve(string|TransformerContract $transformer, array $data): array
     {
         return (new $transformer())->transform($data);
     }

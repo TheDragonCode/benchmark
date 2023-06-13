@@ -10,8 +10,7 @@ class Table
 {
     public function __construct(
         protected SymfonyStyle $io
-    ) {
-    }
+    ) {}
 
     public function show(array $data): void
     {

@@ -12,8 +12,7 @@ class MeasurementError
 
     public function __construct(
         protected Arr $arr = new Arr()
-    ) {
-    }
+    ) {}
 
     public function filter(array $data): array
     {

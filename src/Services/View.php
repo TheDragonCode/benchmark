@@ -70,7 +70,7 @@ class View
         return $value;
     }
 
-    protected function roundRam(int|float $bytes): string
+    protected function roundRam(float|int $bytes): string
     {
         return $this->memory->format((int) $bytes);
     }
