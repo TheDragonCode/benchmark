@@ -33,10 +33,12 @@ class Benchmark
         protected Runner $runner = new Runner(),
         protected Transformer $transformer = new Transformer()
     ) {
-        $this->view = new View(new SymfonyStyle(
-            new ArgvInput(),
-            new ConsoleOutput()
-        ));
+        $this->view = new View(
+            new SymfonyStyle(
+                new ArgvInput(),
+                new ConsoleOutput()
+            )
+        );
     }
 
     public function prepare(callable $callback): self
