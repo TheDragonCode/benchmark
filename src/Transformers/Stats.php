@@ -7,6 +7,12 @@ namespace DragonCode\Benchmark\Transformers;
 use DragonCode\Benchmark\Services\Arr;
 use DragonCode\Benchmark\Services\MeasurementError;
 
+use function array_sum;
+use function call_user_func;
+use function count;
+use function max;
+use function min;
+
 class Stats extends Base
 {
     protected array $methods = [

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Transformers;
 
+use function array_values;
+
 class Times extends Base
 {
     public function transform(array $data): array

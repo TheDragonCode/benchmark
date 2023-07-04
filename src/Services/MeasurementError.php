@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use function array_slice;
+use function count;
+
 class MeasurementError
 {
     protected float $percent = 0.1;

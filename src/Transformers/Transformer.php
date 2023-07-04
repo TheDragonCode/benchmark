@@ -6,6 +6,9 @@ namespace DragonCode\Benchmark\Transformers;
 
 use DragonCode\Benchmark\Contracts\Transformer as TransformerContract;
 
+use function array_merge;
+use function count;
+
 class Transformer
 {
     public function forTime(array $data): array

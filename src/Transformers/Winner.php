@@ -6,6 +6,10 @@ namespace DragonCode\Benchmark\Transformers;
 
 use DragonCode\Benchmark\Services\Arr;
 
+use function array_keys;
+use function compact;
+use function sprintf;
+
 class Winner extends Base
 {
     protected string $key = 'avg';

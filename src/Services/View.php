@@ -8,6 +8,11 @@ use DragonCode\Benchmark\View\ProgressBar;
 use DragonCode\Benchmark\View\Table;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use function is_array;
+use function is_numeric;
+use function round;
+use function sprintf;
+
 class View
 {
     protected Table $table;

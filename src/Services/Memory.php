@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use function memory_get_peak_usage;
+
 class Memory
 {
     protected array $sizes = [

@@ -6,6 +6,9 @@ namespace DragonCode\Benchmark\View;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use function array_keys;
+use function array_values;
+
 class Table
 {
     public function __construct(
