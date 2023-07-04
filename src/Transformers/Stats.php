@@ -70,7 +70,7 @@ class Stats extends Base
 
         return [
             'time' => array_sum($this->arr->pluck($values, 'time')) / count($values),
-            'ram'  => array_sum($this->arr->pluck($values, 'ram')) / count($values),
+            'ram'  => array_sum($this->arr->pluck($values, 'ram'))  / count($values),
         ];
     }
 
