@@ -42,7 +42,7 @@ class Stats extends Base
         }
 
         foreach ($data['total'] as $name => $value) {
-            $this->put($items, 'total', $name, fn () => ['time' => $value[0], 'ram' => $value[1]]);
+            $this->put($items, 'total', $name, fn () => ['time' => $value[0]]);
         }
 
         return $items;

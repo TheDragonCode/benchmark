@@ -16,6 +16,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function work(): void
     {
-        usleep(50);
+        usleep(10);
     }
 }
