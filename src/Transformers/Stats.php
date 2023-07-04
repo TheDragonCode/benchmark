@@ -42,7 +42,7 @@ class Stats extends Base
         }
 
         foreach ($data['total'] as $name => $value) {
-            $this->put($items, 'total', $name, fn () => ['time' => $value[0], 'ram' => $value[1]]);
+            $this->put($items, 'total', $name, fn () => ['time' => $value[0]]);
         }
 
         return $items;
@@ -70,7 +70,7 @@ class Stats extends Base
 
         return [
             'time' => array_sum($this->arr->pluck($values, 'time')) / count($values),
-            'ram'  => array_sum($this->arr->pluck($values, 'ram'))  / count($values),
+            'ram'  => array_sum($this->arr->pluck($values, 'ram')) / count($values),
         ];
     }
 

@@ -59,7 +59,12 @@ class View
                     continue;
                 }
 
-                $value = sprintf('%s ms - %s', $this->roundTime($value['time']), $this->roundRam($value['ram']));
+                $time = $this->roundTime($value['time']);
+                $ram  = $this->roundRam($value['ram'] ?? null);
+
+                $value = ! empty($ram)
+                    ? sprintf('%s ms - %s', $time, $ram)
+                    : sprintf('%s ms', $time);
             }
         }
 
@@ -75,8 +80,12 @@ class View
         return $value;
     }
 
-    protected function roundRam(float|int $bytes): string
+    protected function roundRam(float|int|null $bytes): ?string
     {
-        return $this->memory->format((int) $bytes);
+        if ($bytes !== null) {
+            return $this->memory->format((int) $bytes);
+        }
+
+        return null;
     }
 }
