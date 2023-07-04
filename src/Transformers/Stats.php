@@ -7,6 +7,12 @@ namespace DragonCode\Benchmark\Transformers;
 use DragonCode\Benchmark\Services\Arr;
 use DragonCode\Benchmark\Services\MeasurementError;
 
+use function array_sum;
+use function call_user_func;
+use function count;
+use function max;
+use function min;
+
 class Stats extends Base
 {
     protected array $methods = [
@@ -64,7 +70,7 @@ class Stats extends Base
 
         return [
             'time' => array_sum($this->arr->pluck($values, 'time')) / count($values),
-            'ram'  => array_sum($this->arr->pluck($values, 'ram'))  / count($values),
+            'ram'  => array_sum($this->arr->pluck($values, 'ram')) / count($values),
         ];
     }
 

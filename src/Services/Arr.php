@@ -6,6 +6,13 @@ namespace DragonCode\Benchmark\Services;
 
 use DragonCode\Support\Facades\Helpers\Arr as DragonArray;
 
+use function array_flip;
+use function array_keys;
+use function array_map;
+use function array_values;
+use function is_array;
+use function usort;
+
 class Arr
 {
     public function get(array $data, string $key): mixed

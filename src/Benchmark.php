@@ -14,6 +14,13 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use function count;
+use function func_get_args;
+use function gettype;
+use function is_array;
+use function is_callable;
+use function max;
+
 class Benchmark
 {
     protected View $view;

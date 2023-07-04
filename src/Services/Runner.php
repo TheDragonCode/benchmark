@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use function gc_collect_cycles;
+use function hrtime;
+
 class Runner
 {
     public function __construct(
