@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use function gc_collect_cycles;
 use function memory_get_peak_usage;
+use function memory_reset_peak_usage;
+use function sprintf;
 
 class Memory
 {
@@ -22,6 +25,12 @@ class Memory
     public function diff(int $memory): int
     {
         return memory_get_peak_usage(true) - $memory;
+    }
+
+    public function reset(): void
+    {
+        gc_collect_cycles();
+        memory_reset_peak_usage();
     }
 
     public function format(int $bytes): string
