@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
-use function gc_collect_cycles;
 use function hrtime;
 
 class Runner
@@ -22,7 +21,7 @@ class Runner
 
     protected function clean(): void
     {
-        gc_collect_cycles();
+        $this->memory->reset();
     }
 
     protected function run(callable $callback, array $parameters = []): array
