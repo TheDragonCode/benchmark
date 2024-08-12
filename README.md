@@ -22,7 +22,7 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ```json
 {
     "require-dev": {
-        "dragon-code/benchmark": "^2.0"
+        "dragon-code/benchmark": "^3.0"
     }
 }
 ```
