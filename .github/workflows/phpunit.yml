@@ -31,8 +31,5 @@ jobs:
                         symfony/console:^${{ matrix.symfony }} \
                         symfony/var-dumper:^${{ matrix.symfony }}
 
-            -   name: Update PHPUnit Configuration
-                run: vendor/bin/phpunit --migrate-configuration
-
             -   name: Execute tests
                 run: sudo vendor/bin/phpunit
