@@ -1,8 +1,8 @@
 # Benchmark
 
 <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://banners.beyondco.de/Benchmark.png?theme=dark&pattern=topography&style=style_2&fontSize=100px&images=https%3A%2F%2Fsymfony.com%2Flogos%2Fsymfony_black_03.svg&packageManager=composer+require&packageName=dragon-code%2Fbenchmark&description=Simple+comparison+of+code+execution+speed+between+different+options&md=1&showWatermark=1">
-    <img src="https://banners.beyondco.de/Benchmark.png?theme=light&pattern=topography&style=style_2&fontSize=100px&images=https%3A%2F%2Fsymfony.com%2Flogos%2Fsymfony_black_03.svg&packageManager=composer+require&packageName=dragon-code%2Fbenchmark&description=Simple+comparison+of+code+execution+speed+between+different+options&md=1&showWatermark=1" alt="Benchmark">
+    <source media="(prefers-color-scheme: dark)" srcset="https://banners.beyondco.de/Benchmark.png?pattern=topography&style=style_2&fontSize=100px&md=1&showWatermark=1&theme=dark&packageManager=composer+require&packageName=dragon-code%2Fbenchmark&description=Simple+comparison+of+code+execution+speed+between+different+options&images=https%3A%2F%2Fsymfony.com%2Flogos%2Fsymfony_black_03.svg">
+    <img src="https://banners.beyondco.de/Benchmark.png?pattern=topography&style=style_2&fontSize=100px&md=1&showWatermark=1&theme=light&packageManager=composer+require&packageName=dragon-code%2Fbenchmark&description=Simple+comparison+of+code+execution+speed+between+different+options&images=https%3A%2F%2Fsymfony.com%2Flogos%2Fsymfony_black_03.svg" alt="Benchmark">
 </picture>
 
 [![Stable Version][badge_stable]][link_packagist]
