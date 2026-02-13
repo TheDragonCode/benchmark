@@ -12,6 +12,7 @@ use function sprintf;
 class MemoryService
 {
     protected array $sizes = [
+        'TB' => 1024 * 1024 * 1024 * 1024,
         'GB' => 1024 * 1024 * 1024,
         'MB' => 1024 * 1024,
         'KB' => 1024,

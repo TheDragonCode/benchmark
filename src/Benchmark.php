@@ -77,7 +77,7 @@ class Benchmark
 
     public function round(?int $precision): self
     {
-        $this->view->setRound($precision);
+        $this->transformer->round($precision);
 
         return $this;
     }
@@ -109,7 +109,7 @@ class Benchmark
 
     public function toConsole(): void
     {
-        $table = $this->transformer->show(
+        $table = $this->transformer->toTable(
             $this->toData()
         );
 
@@ -125,6 +125,8 @@ class Benchmark
 
     protected function withProgress(array $callbacks, int $count): void
     {
+        $this->view->emptyLine();
+
         $bar = $this->view->progressBar()->create($count);
 
         $this->chunks($callbacks, $bar);

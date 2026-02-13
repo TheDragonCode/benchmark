@@ -24,6 +24,12 @@ class TableView extends View
         $this->writeLine($this->separator($widths));
 
         foreach ($data as $row) {
+            if ($row === [null]) {
+                $this->writeLine($this->separator($widths));
+
+                continue;
+            }
+
             $this->writeLine($this->formatRow(array_values($row), $widths));
         }
 
@@ -72,7 +78,7 @@ class TableView extends View
     protected function stream()
     {
         if (static::$stream === null) {
-            static::$stream = fopen('php://stdout', 'w');
+            static::$stream = fopen('php://stdout', 'wb');
         }
 
         return static::$stream;

@@ -16,6 +16,8 @@ class ProgressBarView extends View
 
     protected int $total = 100;
 
+    protected ?bool $canShow = null;
+
     public function create(int $total): static
     {
         $this->total = max(1, $total);
@@ -61,7 +63,7 @@ class ProgressBarView extends View
     protected function stream()
     {
         if (static::$stream === null) {
-            static::$stream = fopen('php://stderr', 'w');
+            static::$stream = fopen('php://stderr', 'wb');
         }
 
         return static::$stream;
