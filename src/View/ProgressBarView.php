@@ -16,7 +16,7 @@ class ProgressBarView extends View
 
     protected int $total = 100;
 
-    protected ?bool $canShow = null;
+    protected string $streamName = 'php://stderr';
 
     public function create(int $total): static
     {
@@ -55,17 +55,5 @@ class ProgressBarView extends View
         $line = " {$this->current}/{$this->total} [{$bar}] {$percText}%";
 
         $this->write("\r" . $line);
-    }
-
-    /**
-     * @return resource
-     */
-    protected function stream()
-    {
-        if (static::$stream === null) {
-            static::$stream = fopen('php://stderr', 'wb');
-        }
-
-        return static::$stream;
     }
 }
