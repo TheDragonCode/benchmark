@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 pest()
-    ->extend(Tests\TestCase::class)
+    ->extend(TestCase::class)
     ->in('Unit');

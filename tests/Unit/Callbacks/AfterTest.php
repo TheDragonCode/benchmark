@@ -50,8 +50,8 @@ test('array without names', function () {
         ]);
 
     expect($result)->toBe([
-        '0',
-        '1',
+        0,
+        1,
     ]);
 });
 
@@ -86,7 +86,7 @@ test('callback without names', function () {
         );
 
     expect($result)->toBe([
-        '0',
-        '1',
+        0,
+        1,
     ]);
 });

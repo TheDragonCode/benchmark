@@ -84,7 +84,11 @@ class Benchmark
 
     public function compare(array|Closure ...$callbacks): static
     {
-        $values = is_array($callbacks[0]) ? $callbacks[0] : func_get_args();
+        $values = match (true) {
+            is_array($callbacks[0]) => $callbacks[0],
+            is_array($callbacks)    => $callbacks,
+            default                 => func_get_args()
+        };
 
         $this->clear();
 
