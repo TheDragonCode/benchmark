@@ -32,4 +32,4 @@ jobs:
                         symfony/var-dumper:^${{ matrix.symfony }}
 
             -   name: Execute tests
-                run: sudo vendor/bin/phpunit
+                run: composer test
