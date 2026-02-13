@@ -24,7 +24,7 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ```json
 {
     "require-dev": {
-        "dragon-code/benchmark": "^3.0"
+        "dragon-code/benchmark": "^4.0"
     }
 }
 ```
@@ -135,45 +135,6 @@ Benchmark::start()
         fn (int $iteration) => /* some code */,
     );
 ```
-
-### Without Data
-
-If you want to see only the summary result of the run time without detailed information for each iteration, then you can
-call the `withoutData` method, which will display only the
-summary information:
-
-```php
-use DragonCode\Benchmark\Benchmark;
-
-Benchmark::start()
-    ->withoutData()
-    ->compare([
-        'foo' => fn () => /* some code */,
-        'bar' => fn () => /* some code */,
-    ]);
-```
-
-Result example:
-
-```
- ------- ------------------- ------------------- 
-  #       foo                 bar                  
- ------- ------------------- ------------------- 
-  min     12.02 ms - 58.4Kb   14.71 ms - 55.4Kb  
-  max     15.66 ms - 64.8Kb   15.67 ms - 57.3Kb  
-  avg     14.65 ms - 60.1Kb   15.17 ms - 56.2Kb  
-  total   73.93 ms            76.31 ms
- ------- ------------------- ------------------- 
-  Order   - 1 -               - 2 -              
- ------- ------------------- ------------------- 
-```
-
-> Note
->
-> If the option to display detailed information is enabled (without using the `withoutData` method) and more than 1000
-> iterations are requested, then the output of detailed
-> information will be forcibly disabled, since there will be absolutely no point in it with a significantly increasing
-> load on the computer.
 
 ### Round Precision
 

@@ -27,8 +27,6 @@ class Benchmark
 
     protected int $iterations = 100;
 
-    protected bool $withData = true;
-
     protected ?Closure $prepare = null;
 
     protected array $result = [
@@ -70,13 +68,6 @@ class Benchmark
     public function round(?int $precision): self
     {
         $this->view->setRound($precision);
-
-        return $this;
-    }
-
-    public function withoutData(): self
-    {
-        $this->withData = false;
 
         return $this;
     }
@@ -155,17 +146,10 @@ class Benchmark
 
     protected function show(): void
     {
-        $table = $this->withData() ? $this->transformer->forTime($this->result['each']) : [];
-
         $stats  = $this->transformer->forStats($this->result);
         $winner = $this->transformer->forWinners($stats);
 
-        $this->view->table($this->transformer->merge($table, $stats, $winner));
-    }
-
-    protected function withData(): bool
-    {
-        return $this->withData && $this->iterations <= 1000;
+        $this->view->table($this->transformer->merge($stats, $winner));
     }
 
     protected function validate(mixed $callback): void
