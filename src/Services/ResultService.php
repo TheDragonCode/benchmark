@@ -9,7 +9,6 @@ use DragonCode\Benchmark\Data\ResultData;
 
 use function array_column;
 use function array_map;
-use function array_slice;
 use function array_sum;
 use function count;
 use function max;
@@ -18,6 +17,10 @@ use function min;
 class ResultService
 {
     protected ?array $data = null;
+
+    public function __construct(
+        protected MeasurementErrorService $measurement = new MeasurementErrorService,
+    ) {}
 
     /**
      * @return \DragonCode\Benchmark\Data\ResultData[]
@@ -100,18 +103,6 @@ class ResultService
 
     protected function filter(array $values): array
     {
-        $count = count($values);
-
-        if ($count < 10) {
-            return $values;
-        }
-
-        $skip = (int) ($count * 0.1);
-
-        return array_slice(
-            array : $values,
-            offset: $skip + 1,
-            length: $count - ($skip - 1) * 2
-        );
+        return $this->measurement->filter($values);
     }
 }

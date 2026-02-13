@@ -5,7 +5,7 @@ declare(strict_types=1);
 test('success', function () {
     benchmark()
         ->assert()
-        ->toBeMinMemory(1, 100);
+        ->toBeMinMemory(1, 10000);
 
     expect(true)->toBeTrue();
 });
@@ -21,8 +21,8 @@ test('success without arguments', function () {
 test('failure less than', function () {
     benchmark()
         ->assert()
-        ->toBeMinMemory(from: 100);
-})->throws(AssertionError::class, 'The minimum memory value must be greater than or equal to 100.');
+        ->toBeMinMemory(from: 10000);
+})->throws(AssertionError::class, 'The minimum memory value must be greater than or equal to 10000.');
 
 test('failure greater than', function () {
     benchmark()

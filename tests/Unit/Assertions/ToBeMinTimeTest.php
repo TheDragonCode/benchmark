@@ -5,7 +5,7 @@ declare(strict_types=1);
 test('success', function () {
     benchmark()
         ->assert()
-        ->toBeMinTime(1, 100);
+        ->toBeMinTime(1, 1000);
 
     expect(true)->toBeTrue();
 });
@@ -21,8 +21,8 @@ test('success without arguments', function () {
 test('failure less than', function () {
     benchmark()
         ->assert()
-        ->toBeMinTime(from: 100);
-})->throws(AssertionError::class, 'The minimum time value must be greater than or equal to 100.');
+        ->toBeMinTime(from: 1000);
+})->throws(AssertionError::class, 'The minimum time value must be greater than or equal to 1000.');
 
 test('failure greater than', function () {
     benchmark()

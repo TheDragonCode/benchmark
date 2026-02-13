@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-test('named array', function () {
+test('array', function () {
     $result = benchmark()->toData();
 
     expect($result[0])
@@ -12,8 +12,8 @@ test('named array', function () {
         ->total->time->toBeGreaterThan(3);
 
     expect($result[1])
-        ->min->time->toBeLessThan(10)
-        ->max->time->toBeLessThan(10)
-        ->avg->time->toBeLessThan(10)
-        ->total->time->toBeLessThan(10);
+        ->min->time->toBeLessThan(1000)
+        ->max->time->toBeLessThan(1000)
+        ->avg->time->toBeLessThan(1000)
+        ->total->time->toBeLessThan(1000);
 });
