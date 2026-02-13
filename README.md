@@ -60,18 +60,6 @@ Result example:
  ------- --------------------- -------------------- 
   #       0                     1                   
  ------- --------------------- -------------------- 
-  1       0.0101 ms - 64.8Kb    0.0014 ms - 13.7Kb  
-  2       0.0099 ms - 59.5Kb    0.0011 ms - 12.9Kb  
-  3       0.0014 ms - 59.1Kb    0.001 ms - 12.5Kb   
-  4       0.0012 ms - 58.8Kb    0.0011 ms - 12.2Kb  
-  5       0.0012 ms - 58.4Kb    0.0011 ms - 11.8Kb  
-  6       0.0011 ms - 58Kb      0.001 ms - 11.4Kb   
-  7       0.0011 ms - 57.6Kb    0.001 ms - 11Kb     
-  8       0.0011 ms - 57.3Kb    0.001 ms - 10.7Kb   
-  9       0.0012 ms - 56.6Kb    0.001 ms - 10Kb     
-          ...
-  100     0.0011 ms - 14.8Kb    0.0011 ms - 4.1Kb   
- ------- --------------------- -------------------- 
   min     0.001 ms - 14.8Kb     0.001 ms - 4.1Kb    
   max     0.0101 ms - 64.8Kb    0.0026 ms - 13.7Kb  
   avg     0.00122 ms - 47.5Kb   0.0016 ms - 4.1Kb   
@@ -107,12 +95,6 @@ If the passed value is less than 1, then one iteration will be performed for eac
 ```
  ------- --------------------- --------------------- 
   #       0                     1                    
- ------- --------------------- --------------------- 
-  1       0.0077 ms - 64.8Kb    0.0015 ms - 57.3Kb   
-  2       0.0023 ms - 59.5Kb    0.0013 ms - 56.5Kb   
-  3       0.0013 ms - 59.1Kb    0.0012 ms - 56.1Kb   
-  4       0.0012 ms - 58.8Kb    0.0011 ms - 55.8Kb   
-  5       0.0011 ms - 58.4Kb    0.0011 ms - 55.4Kb   
  ------- --------------------- --------------------- 
   min     0.0011 ms - 58.4Kb    0.0011 ms - 55.4Kb   
   max     0.0077 ms - 64.8Kb    0.0015 ms - 57.3Kb   
@@ -160,12 +142,6 @@ Result example:
 ```
  ------- ------------------ ------------------ 
   #       0                  1                 
- ------- ------------------ ------------------ 
-  1       11.85 ms - 0b      15.22 ms - 0b     
-  2       14.56 ms - 0b      14.94 ms - 0b     
-  3       15.4 ms - 0b       14.99 ms - 0b     
-  4       15.3 ms - 0b       15.24 ms - 0b     
-  5       14.76 ms - 0b      15.14 ms - 0b     
  ------- ------------------ ------------------ 
   min     11.85 ms - 0b      14.94 ms - 0b     
   max     15.4 ms - 0b       15.24 ms - 0b     
@@ -227,12 +203,6 @@ Benchmark::make()
  ------- ------------------ ------------------ 
   #       foo                bar                 
  ------- ------------------ ------------------ 
-  1       11.33 ms - 0b      14.46 ms - 0b     
-  2       14.63 ms - 0b      14.8 ms - 0b      
-  3       14.72 ms - 0b      15.02 ms - 0b     
-  4       15.28 ms - 0b      15.04 ms - 0b     
-  N+1     15.03 ms - 0b      15.09 ms - 0b     
- ------- ------------------ ------------------ 
   min     11.33 ms - 0b      14.46 ms - 0b     
   max     15.28 ms - 0b      15.09 ms - 0b     
   avg     14.2 ms - 0b       14.88 ms - 0b     
@@ -244,7 +214,6 @@ Benchmark::make()
 
 * `foo`, `bar` - The names of the columns in the passed array. Needed for identification. By default, the array index is
   used, starting from zero. For example, `1, 2, 3,.. N+1`.
-* `1`, `2`, `3`, ..., `N+1` - Verification iteration sequence number.
 * `11.33 ms` - Execution time of the checked code in one iteration.
 * `0b`, `6.8Kb`, etc. - The amount of RAM used by the checked code.
 * `min` - Minimum code processing time.
