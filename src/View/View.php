@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\View;
 
-abstract class Console
+abstract class View
 {
     protected static $stream;
 

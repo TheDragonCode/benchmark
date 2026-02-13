@@ -8,7 +8,7 @@ use function floor;
 use function max;
 use function str_repeat;
 
-class ProgressBarView extends Console
+class ProgressBarView extends View
 {
     protected int $current = 0;
 

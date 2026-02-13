@@ -12,7 +12,7 @@ use function max;
 use function mb_str_pad;
 use function mb_strlen;
 
-class TableView extends Console
+class TableView extends View
 {
     public function show(array $data): void
     {
