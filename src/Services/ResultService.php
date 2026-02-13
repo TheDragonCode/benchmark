@@ -15,7 +15,7 @@ use function count;
 use function max;
 use function min;
 
-class Result
+class ResultService
 {
     protected ?array $data = null;
 

@@ -7,12 +7,12 @@ namespace DragonCode\Benchmark;
 use Closure;
 use DragonCode\Benchmark\Exceptions\ValueIsNotCallableException;
 use DragonCode\Benchmark\Services\AssertService;
-use DragonCode\Benchmark\Services\Callbacks;
-use DragonCode\Benchmark\Services\Collector;
-use DragonCode\Benchmark\Services\Result;
-use DragonCode\Benchmark\Services\Runner;
-use DragonCode\Benchmark\Services\View;
-use DragonCode\Benchmark\Transformers\Transformer;
+use DragonCode\Benchmark\Services\CallbacksService;
+use DragonCode\Benchmark\Services\CollectorService;
+use DragonCode\Benchmark\Services\ResultService;
+use DragonCode\Benchmark\Services\RunnerService;
+use DragonCode\Benchmark\Services\ViewService;
+use DragonCode\Benchmark\Transformers\ManagerTransformer;
 use DragonCode\Benchmark\View\ProgressBarView;
 
 use function abs;
@@ -27,12 +27,12 @@ class Benchmark
     protected int $iterations = 100;
 
     public function __construct(
-        protected Runner $runner = new Runner,
-        protected Transformer $transformer = new Transformer,
-        protected View $view = new View,
-        protected Callbacks $callbacks = new Callbacks,
-        protected Collector $collector = new Collector,
-        protected Result $result = new Result,
+        protected RunnerService $runner = new RunnerService,
+        protected ManagerTransformer $transformer = new ManagerTransformer,
+        protected ViewService $view = new ViewService,
+        protected CallbacksService $callbacks = new CallbacksService,
+        protected CollectorService $collector = new CollectorService,
+        protected ResultService $result = new ResultService,
     ) {}
 
     public static function make(): static

@@ -4,55 +4,14 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Transformers;
 
+use Closure;
 use DragonCode\Benchmark\Contracts\Transformer as TransformerContract;
 
-use function array_merge;
-use function count;
-
-class Transformer
+abstract class Transformer implements TransformerContract
 {
-    public function forTime(array $data): array
+    protected function put(array &$items, string $key, mixed $name, Closure $callback): void
     {
-        return $this->resolve(Times::class, $data);
-    }
-
-    public function forStats(array $data): array
-    {
-        return $this->resolve(Stats::class, $data);
-    }
-
-    public function forWinners(array $data): array
-    {
-        return $this->resolve(Winner::class, $data);
-    }
-
-    public function separator(array $data): array
-    {
-        return $this->resolve(Separator::class, $data);
-    }
-
-    public function merge(array ...$arrays): array
-    {
-        $result = [];
-
-        $count = count($arrays);
-        $index = 1;
-
-        foreach ($arrays as $array) {
-            if (! empty($array)) {
-                $result = $index < $count
-                    ? array_merge($result, $array, $this->separator($arrays[0]))
-                    : array_merge($result, $array);
-            }
-
-            ++$index;
-        }
-
-        return $result;
-    }
-
-    protected function resolve(string|TransformerContract $transformer, array $data): array
-    {
-        return (new $transformer)->transform($data);
+        $items[$key]['#']   = $key;
+        $items[$key][$name] = $callback();
     }
 }

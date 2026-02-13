@@ -12,6 +12,6 @@ class ValueIsNotCallableException extends TypeError
 {
     public function __construct(mixed $value)
     {
-        parent::__construct(sprintf('The array value must be of type Closure, %s given.', gettype($value)), 500);
+        parent::__construct(sprintf('The property value must be of type Closure, %s given.', gettype($value)), 500);
     }
 }

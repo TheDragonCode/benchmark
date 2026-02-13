@@ -14,7 +14,7 @@ use function array_values;
 use function is_array;
 use function usort;
 
-class Arr
+class ArrService
 {
     public function get(array $data, string $key): mixed
     {
