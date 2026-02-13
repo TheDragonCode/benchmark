@@ -12,7 +12,7 @@ use DragonCode\Benchmark\Services\CollectorService;
 use DragonCode\Benchmark\Services\ResultService;
 use DragonCode\Benchmark\Services\RunnerService;
 use DragonCode\Benchmark\Services\ViewService;
-use DragonCode\Benchmark\Transformers\ManagerTransformer;
+use DragonCode\Benchmark\Transformers\ResultTransformer;
 use DragonCode\Benchmark\View\ProgressBarView;
 
 use function abs;
@@ -28,11 +28,11 @@ class Benchmark
 
     public function __construct(
         protected RunnerService $runner = new RunnerService,
-        protected ManagerTransformer $transformer = new ManagerTransformer,
         protected ViewService $view = new ViewService,
         protected CallbacksService $callbacks = new CallbacksService,
         protected CollectorService $collector = new CollectorService,
         protected ResultService $result = new ResultService,
+        protected ResultTransformer $transformer = new ResultTransformer
     ) {}
 
     public static function make(): static
@@ -109,10 +109,11 @@ class Benchmark
 
     public function toConsole(): void
     {
-        $stats  = $this->transformer->forStats($this->result);
-        $winner = $this->transformer->forWinners($stats);
+        $table = $this->transformer->show(
+            $this->toData()
+        );
 
-        $this->view->table($this->transformer->merge($stats, $winner));
+        $this->view->table($table);
     }
 
     public function assert(): AssertService
