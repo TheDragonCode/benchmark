@@ -25,7 +25,7 @@ class AsCallbackTest extends TestCase
             fn () => $this->work(),
         );
 
-        $this->benchmark()->iterations(500)->withoutData()->compare(
+        $this->benchmark()->iterations(500)->compare(
             fn () => $this->work(),
             fn () => $this->work(),
         );
@@ -35,7 +35,7 @@ class AsCallbackTest extends TestCase
 
     public function testWithoutData(): void
     {
-        $this->benchmark()->withoutData()->compare(
+        $this->benchmark()->compare(
             fn () => $this->work(),
             fn () => $this->work(),
         );

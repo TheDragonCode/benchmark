@@ -53,7 +53,7 @@ class FailureTest extends TestCase
         $this->expectException(TypeError::class);
         $this->expectExceptionMessage('must be of type callable|array, int given');
 
-        $this->benchmark()->withoutData()->compare(123);
+        $this->benchmark()->compare(123);
     }
 
     public function testAsArrayWithoutData(): void
@@ -61,7 +61,7 @@ class FailureTest extends TestCase
         $this->expectException(ValueIsNotCallableException::class);
         $this->expectExceptionMessage('The array value must be of type callable, integer given.');
 
-        $this->benchmark()->withoutData()->compare([
+        $this->benchmark()->compare([
             'first'  => 123,
             'second' => 123,
         ]);

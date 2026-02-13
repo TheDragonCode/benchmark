@@ -25,7 +25,7 @@ class AsArrayTest extends TestCase
             'bar' => fn () => $this->work(),
         ]);
 
-        $this->benchmark()->iterations(500)->withoutData()->compare([
+        $this->benchmark()->iterations(500)->compare([
             'foo' => fn () => $this->work(),
             'bar' => fn () => $this->work(),
         ]);
@@ -35,7 +35,7 @@ class AsArrayTest extends TestCase
 
     public function testWithoutData(): void
     {
-        $this->benchmark()->withoutData()->compare([
+        $this->benchmark()->compare([
             'foo' => fn () => $this->work(),
             'bar' => fn () => $this->work(),
         ]);
