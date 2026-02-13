@@ -5,7 +5,7 @@ declare(strict_types=1);
 test('success', function () {
     benchmark()
         ->assert()
-        ->toBeAvgTime(1, 100);
+        ->toBeAvgTime(1, 1000);
 
     expect(true)->toBeTrue();
 });
@@ -21,8 +21,8 @@ test('success without arguments', function () {
 test('failure less than', function () {
     benchmark()
         ->assert()
-        ->toBeAvgTime(from: 100);
-})->throws(AssertionError::class, 'The average time value must be greater than or equal to 100.');
+        ->toBeAvgTime(from: 1000);
+})->throws(AssertionError::class, 'The average time value must be greater than or equal to 1000.');
 
 test('failure greater than', function () {
     benchmark()
