@@ -8,20 +8,8 @@ test('default', function () {
     expectOutputToMatchSnapshot();
 });
 
-test('to 5', function () {
-    benchmark()->round(5)->toConsole();
+test('round', function (int $precision) {
+    benchmark()->round($precision)->toConsole();
 
     expectOutputToMatchSnapshot();
-});
-
-test('to 2', function () {
-    benchmark()->round(2)->toConsole();
-
-    expectOutputToMatchSnapshot();
-});
-
-test('to 0', function () {
-    benchmark()->round(0)->toConsole();
-
-    expectOutputToMatchSnapshot();
-});
+})->with([0, 2, 5]);
