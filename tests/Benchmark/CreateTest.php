@@ -16,6 +16,6 @@ class CreateTest extends TestCase
 
     public function testAsStatic(): void
     {
-        $this->assertInstanceOf(Benchmark::class, Benchmark::start());
+        $this->assertInstanceOf(Benchmark::class, Benchmark::make());
     }
 }
