@@ -9,10 +9,7 @@ use DragonCode\Benchmark\Exceptions\ValueIsNotCallableException;
 use DragonCode\Benchmark\Services\Runner;
 use DragonCode\Benchmark\Services\View;
 use DragonCode\Benchmark\Transformers\Transformer;
-use Symfony\Component\Console\Helper\ProgressBar as ProgressBarService;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use DragonCode\Benchmark\View\ProgressBarView;
 
 use function count;
 use function func_get_args;
@@ -23,8 +20,6 @@ use function max;
 
 class Benchmark
 {
-    protected View $view;
-
     protected int $iterations = 100;
 
     protected ?Closure $beforeEach = null;
@@ -38,15 +33,9 @@ class Benchmark
 
     public function __construct(
         protected Runner $runner = new Runner,
-        protected Transformer $transformer = new Transformer
-    ) {
-        $this->view = new View(
-            new SymfonyStyle(
-                new ArgvInput,
-                new ConsoleOutput
-            )
-        );
-    }
+        protected Transformer $transformer = new Transformer,
+        protected View $view = new View
+    ) {}
 
     public static function make(): static
     {
@@ -104,7 +93,7 @@ class Benchmark
         return count($callbacks) * $this->iterations;
     }
 
-    protected function chunks(array $callbacks, ProgressBarService $progressBar): void
+    protected function chunks(array $callbacks, ProgressBarView $progressBar): void
     {
         foreach ($callbacks as $name => $callback) {
             $this->validate($callback);
@@ -113,14 +102,14 @@ class Benchmark
         }
     }
 
-    protected function each(mixed $name, Closure $callback, ProgressBarService $progressBar): void
+    protected function each(mixed $name, Closure $callback, ProgressBarView $progressBar): void
     {
         $this->result['total'][$name] = $this->call(
             fn () => $this->run($name, $callback, $progressBar)
         );
     }
 
-    protected function run(mixed $name, Closure $callback, ProgressBarService $progressBar): void
+    protected function run(mixed $name, Closure $callback, ProgressBarView $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; ++$i) {
             $result = $this->runCallback($this->beforeEach, $name, $i);

@@ -8,18 +8,21 @@ use function floor;
 use function max;
 use function str_repeat;
 
-class ConsoleProgressBar extends AbstractConsoleView
+class ProgressBarView extends Console
 {
     protected int $current = 0;
 
     protected int $barWidth = 28;
 
-    public function __construct(
-        protected int $total
-    ) {
-        $this->total = max(1, $this->total);
+    protected int $total = 100;
+
+    public function create(int $total): static
+    {
+        $this->total = max(1, $total);
 
         $this->display();
+
+        return $this;
     }
 
     public function advance(int $step = 1): void

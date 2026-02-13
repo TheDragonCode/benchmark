@@ -12,9 +12,8 @@ use function max;
 use function mb_str_pad;
 use function mb_strlen;
 
-class ConsoleTable extends AbstractConsoleView
+class TableView extends Console
 {
-
     public function show(array $data): void
     {
         $headers = $this->headers($data);
