@@ -118,8 +118,6 @@ class Benchmark
         );
     }
 
-    public function assertMemory(Closure $condition): void {}
-
     protected function withProgress(array $callbacks, int $count): void
     {
         $bar = $this->view->progressBar()->create($count);
