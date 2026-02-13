@@ -78,7 +78,7 @@ class TableView extends View
     protected function stream()
     {
         if (static::$stream === null) {
-            static::$stream = fopen('php://stdout', 'w');
+            static::$stream = fopen('php://stdout', 'wb');
         }
 
         return static::$stream;
