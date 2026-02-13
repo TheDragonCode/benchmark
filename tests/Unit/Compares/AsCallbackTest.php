@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit;
 
 test('named', function () {
-    $results = benchmark()->compare(
+    $results = benchmark(false)->compare(
         foo: fn () => true,
         bar: fn () => true,
     )->toData();
@@ -17,7 +17,7 @@ test('named', function () {
 });
 
 test('without names', function () {
-    $results = benchmark()->compare(
+    $results = benchmark(false)->compare(
         fn () => true,
         fn () => true,
     )->toData();

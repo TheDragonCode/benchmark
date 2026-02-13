@@ -3,8 +3,12 @@
 declare(strict_types=1);
 
 use DragonCode\Benchmark\Benchmark;
+use DragonCode\Benchmark\Services\CollectorService;
+use Tests\Fixtures\CollectorFixture;
 
-function benchmark(): Benchmark
+function benchmark(bool $customCollector = true): Benchmark
 {
-    return (new Benchmark)->iterations(3);
+    $collector = $customCollector ? new CollectorFixture : new CollectorService;
+
+    return (new Benchmark(collector: $collector))->iterations(3);
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DragonCode\Benchmark\View;
 
 use function floor;
+use function getenv;
 use function max;
 use function str_repeat;
 
@@ -15,6 +16,8 @@ class ProgressBarView extends View
     protected int $barWidth = 28;
 
     protected int $total = 100;
+
+    protected ?bool $canShow = null;
 
     public function create(int $total): static
     {
@@ -43,6 +46,10 @@ class ProgressBarView extends View
 
     protected function display(): void
     {
+        if (! $this->canShow()) {
+            return;
+        }
+
         $percent  = $this->current / $this->total;
         $filled   = (int) floor($percent * $this->barWidth);
         $empty    = $this->barWidth - $filled;
@@ -61,9 +68,14 @@ class ProgressBarView extends View
     protected function stream()
     {
         if (static::$stream === null) {
-            static::$stream = fopen('php://stderr', 'w');
+            static::$stream = fopen('php://stderr', 'wb');
         }
 
         return static::$stream;
+    }
+
+    protected function canShow(): bool
+    {
+        return $this->canShow ??= getenv('APP_ENV') !== 'testing';
     }
 }
