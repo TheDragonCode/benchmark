@@ -38,20 +38,20 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::make()->compare(
+new Benchmark()->compare(
     fn () => /* some code */,
     fn () => /* some code */,
-);
+)->toConsole();
 
-Benchmark::make()->compare([
+new Benchmark()->compare([
     fn () => /* some code */,
     fn () => /* some code */,
-]);
+])->toConsole();
 
-Benchmark::make()->compare([
+new Benchmark()->compare([
     'foo' => fn () => /* some code */,
     'bar' => fn () => /* some code */,
-]);
+])->toConsole();
 ```
 
 Result example:
@@ -82,12 +82,13 @@ the `iterations` method:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::make()
+new Benchmark()
     ->iterations(5)
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
-    );
+    )
+    ->toConsole();
 ```
 
 If the passed value is less than 1, then one iteration will be performed for each callback.
@@ -110,12 +111,13 @@ You can also get the number of the current execution iteration from the input pa
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::make()
+new Benchmark()
     ->iterations(5)
     ->compare(
         fn (int $iteration) => /* some code */,
         fn (int $iteration) => /* some code */,
-    );
+    )
+    ->toConsole();
 ```
 
 ### Round Precision
@@ -128,13 +130,14 @@ For example:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::make()
+new Benchmark()
     ->iterations(5)
     ->round(2)
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
-    );
+    )
+    ->toConsole();
 ```
 
 Result example:
@@ -161,12 +164,13 @@ There is a `prepare` method for this:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::make()
+new Benchmark()
     ->prepare(fn () => /* some code */)
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
-    );
+    )
+    ->toConsole();
 ```
 
 When calling a callback, the name and iteration parameters are passed to it. If necessary, you can use this information
@@ -175,12 +179,13 @@ inside the callback function.
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::make()
+new Benchmark()
     ->prepare(fn (mixed $name, int $iteration) => /* some code */)
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
-    );
+    )
+    ->toConsole();
 ```
 
 You can also get the number of the current iteration and the result of the execution of the preliminary function from
@@ -189,12 +194,59 @@ the input parameter:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::make()
+new Benchmark()
     ->prepare(fn (mixed $name, int $iteration) => /* some code */)
     ->compare(
         fn (int $iteration, mixed $prepareResult) => /* some code */,
         fn (int $iteration, mixed $prepareResult) => /* some code */,
-    );
+    )
+    ->toConsole();
+```
+
+## Assertions
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->compare(
+        fn () => /* some code */,
+        fn () => /* some code */,
+    )
+    ->assert()
+    
+    ->toBeMinTime(0.5, 3)       // between 0.5 and 3 ms
+    ->toBeMaxTime(0.5, 3)       // between 0.5 and 3 ms
+    ->toBeAvgTime(0.5, 3)       // between 0.5 and 3 ms
+    ->toBeTotalTime(0.5, 9)     // between 0.5 and 9 ms
+    
+    ->toBeMinMemory(0, 1024)    // between 0 and 1024 bytes
+    ->toBeMaxMemory(0, 1024)    // between 0 and 1024 bytes
+    ->toBeAvgMemory(0, 1024)    // between 0 and 1024 bytes
+    ->toBeTotalMemory(0, 4096); // between 0 and 4096 bytes
+```
+
+You can also use a single value:
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->compare(
+        fn () => /* some code */,
+        fn () => /* some code */,
+    )
+    ->assert()
+    
+    ->toBeMinTime(0.5)       // time must be greater than or equal to 0.5 ms
+    ->toBeMaxTime(0.5)       // time must be greater than or equal to 0.5 ms
+    ->toBeAvgTime(0.5)       // time must be greater than or equal to 0.5 ms
+    ->toBeTotalTime(0.5)     // time must be greater than or equal to 0.5 ms
+    
+    ->toBeMinMemory(till: 1024)    // the memory footprint should not exceed 1024 bytes
+    ->toBeMaxMemory(till: 1024)    // the memory footprint should not exceed 1024 bytes
+    ->toBeAvgMemory(till: 1024)    // the memory footprint should not exceed 1024 bytes
+    ->toBeTotalMemory(till: 4096); // the memory footprint should not exceed 4096 bytes
 ```
 
 ## Information

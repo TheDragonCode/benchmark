@@ -6,15 +6,18 @@ namespace DragonCode\Benchmark;
 
 use Closure;
 use DragonCode\Benchmark\Exceptions\ValueIsNotCallableException;
+use DragonCode\Benchmark\Services\AssertService;
 use DragonCode\Benchmark\Services\Callbacks;
+use DragonCode\Benchmark\Services\Collector;
+use DragonCode\Benchmark\Services\Result;
 use DragonCode\Benchmark\Services\Runner;
 use DragonCode\Benchmark\Services\View;
 use DragonCode\Benchmark\Transformers\Transformer;
 use DragonCode\Benchmark\View\ProgressBarView;
 
+use function abs;
 use function count;
 use function func_get_args;
-use function gettype;
 use function is_array;
 use function is_callable;
 use function max;
@@ -23,16 +26,13 @@ class Benchmark
 {
     protected int $iterations = 100;
 
-    protected array $result = [
-        'each'  => [],
-        'total' => [],
-    ];
-
     public function __construct(
         protected Runner $runner = new Runner,
         protected Transformer $transformer = new Transformer,
         protected View $view = new View,
         protected Callbacks $callbacks = new Callbacks,
+        protected Collector $collector = new Collector,
+        protected Result $result = new Result,
     ) {}
 
     public static function make(): static
@@ -70,7 +70,7 @@ class Benchmark
 
     public function iterations(int $count): self
     {
-        $this->iterations = max(1, $count);
+        $this->iterations = max(1, abs($count));
 
         return $this;
     }
@@ -84,10 +84,15 @@ class Benchmark
 
     public function compare(array|Closure ...$callbacks): static
     {
-        $values = is_array($callbacks[0]) ? $callbacks[0] : func_get_args();
+        $values = match (true) {
+            is_array($callbacks[0]) => $callbacks[0],
+            is_array($callbacks)    => $callbacks,
+            default                 => func_get_args()
+        };
 
-        $this->withProgress($values, $this->stepsCount($values));
-        $this->show();
+        $this->clear();
+
+        $this->withProgress($values, $this->steps($values));
 
         return $this;
     }
@@ -95,9 +100,27 @@ class Benchmark
     /**
      * @return \DragonCode\Benchmark\Data\ResultData[]
      */
-    public function toData(): array {}
+    public function toData(): array
+    {
+        return $this->result->get(
+            $this->collector->all()
+        );
+    }
 
-    public function toConsole(): void {}
+    public function toConsole(): void
+    {
+        $stats  = $this->transformer->forStats($this->result);
+        $winner = $this->transformer->forWinners($stats);
+
+        $this->view->table($this->transformer->merge($stats, $winner));
+    }
+
+    public function assert(): AssertService
+    {
+        return new AssertService(
+            $this->toData()
+        );
+    }
 
     protected function withProgress(array $callbacks, int $count): void
     {
@@ -109,7 +132,7 @@ class Benchmark
         $this->view->emptyLine(2);
     }
 
-    protected function stepsCount(array $callbacks): int
+    protected function steps(array $callbacks): int
     {
         return count($callbacks) * $this->iterations;
     }
@@ -119,34 +142,27 @@ class Benchmark
         foreach ($callbacks as $name => $callback) {
             $this->validate($callback);
 
-            $this->each($name, $callback, $progressBar);
-        }
-    }
+            $this->callbacks->performBefore($name);
 
-    protected function each(mixed $name, Closure $callback, ProgressBarView $progressBar): void
-    {
-        $this->result['total'][$name] = $this->call(
-            fn () => $this->run($name, $callback, $progressBar)
-        );
+            $this->run($name, $callback, $progressBar);
+
+            $this->callbacks->performAfter($name);
+        }
     }
 
     protected function run(mixed $name, Closure $callback, ProgressBarView $progressBar): void
     {
-        $this->callbacks->performBefore($name);
-
         for ($i = 1; $i <= $this->iterations; ++$i) {
             $result = $this->callbacks->performBeforeEach($name, $i);
 
-            [$time, $ram] = $this->call($callback, [$i, $result]);
+            [$time, $memory] = $this->call($callback, [$i, $result]);
 
-            $this->callbacks->performAfterEach($name, $i, $time, $ram);
+            $this->callbacks->performAfterEach($name, $i, $time, $memory);
 
-            $this->push($name, $i, $time, $ram);
+            $this->push($name, $time, $memory);
 
             $progressBar->advance();
         }
-
-        $this->callbacks->performAfter($name);
     }
 
     protected function call(Closure $callback, array $parameters = []): array
@@ -154,24 +170,21 @@ class Benchmark
         return $this->runner->call($callback, $parameters);
     }
 
-    protected function push(mixed $name, int $iteration, float $time, float $ram): void
+    protected function push(mixed $name, float $time, float $memory): void
     {
-        $this->result['each'][$name][$iteration]['time'] = $time;
-        $this->result['each'][$name][$iteration]['ram']  = $ram;
-    }
-
-    protected function show(): void
-    {
-        $stats  = $this->transformer->forStats($this->result);
-        $winner = $this->transformer->forWinners($stats);
-
-        $this->view->table($this->transformer->merge($stats, $winner));
+        $this->collector->push($name, [$time, $memory]);
     }
 
     protected function validate(mixed $callback): void
     {
         if (! is_callable($callback)) {
-            throw new ValueIsNotCallableException(gettype($callback));
+            throw new ValueIsNotCallableException($callback);
         }
+    }
+
+    protected function clear(): void
+    {
+        $this->result->clear();
+        $this->collector->clear();
     }
 }
