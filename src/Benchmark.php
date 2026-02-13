@@ -40,9 +40,23 @@ class Benchmark
         return new static;
     }
 
+    public function before(Closure $callback): self
+    {
+        $this->callbacks->before = $callback;
+
+        return $this;
+    }
+
     public function beforeEach(Closure $callback): self
     {
         $this->callbacks->beforeEach = $callback;
+
+        return $this;
+    }
+
+    public function after(Closure $callback): self
+    {
+        $this->callbacks->after = $callback;
 
         return $this;
     }
@@ -118,6 +132,8 @@ class Benchmark
 
     protected function run(mixed $name, Closure $callback, ProgressBarView $progressBar): void
     {
+        $this->callbacks->performBefore($name);
+
         for ($i = 1; $i <= $this->iterations; ++$i) {
             $result = $this->callbacks->performBeforeEach($name, $i);
 
@@ -129,6 +145,8 @@ class Benchmark
 
             $progressBar->advance();
         }
+
+        $this->callbacks->performAfter($name);
     }
 
     protected function call(Closure $callback, array $parameters = []): array
