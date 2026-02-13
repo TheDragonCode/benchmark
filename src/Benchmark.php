@@ -6,13 +6,11 @@ namespace DragonCode\Benchmark;
 
 use Closure;
 use DragonCode\Benchmark\Exceptions\ValueIsNotCallableException;
+use DragonCode\Benchmark\Services\Callbacks;
 use DragonCode\Benchmark\Services\Runner;
 use DragonCode\Benchmark\Services\View;
 use DragonCode\Benchmark\Transformers\Transformer;
-use Symfony\Component\Console\Helper\ProgressBar as ProgressBarService;
-use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use DragonCode\Benchmark\View\ProgressBarView;
 
 use function count;
 use function func_get_args;
@@ -23,13 +21,7 @@ use function max;
 
 class Benchmark
 {
-    protected View $view;
-
     protected int $iterations = 100;
-
-    protected ?Closure $beforeEach = null;
-
-    protected ?Closure $afterEach = null;
 
     protected array $result = [
         'each'  => [],
@@ -38,15 +30,10 @@ class Benchmark
 
     public function __construct(
         protected Runner $runner = new Runner,
-        protected Transformer $transformer = new Transformer
-    ) {
-        $this->view = new View(
-            new SymfonyStyle(
-                new ArgvInput,
-                new ConsoleOutput
-            )
-        );
-    }
+        protected Transformer $transformer = new Transformer,
+        protected View $view = new View,
+        protected Callbacks $callbacks = new Callbacks,
+    ) {}
 
     public static function make(): static
     {
@@ -55,14 +42,14 @@ class Benchmark
 
     public function beforeEach(Closure $callback): self
     {
-        $this->beforeEach = $callback;
+        $this->callbacks->beforeEach = $callback;
 
         return $this;
     }
 
     public function afterEach(Closure $callback): self
     {
-        $this->afterEach = $callback;
+        $this->callbacks->afterEach = $callback;
 
         return $this;
     }
@@ -81,13 +68,22 @@ class Benchmark
         return $this;
     }
 
-    public function compare(array|Closure ...$callbacks): void
+    public function compare(array|Closure ...$callbacks): static
     {
         $values = is_array($callbacks[0]) ? $callbacks[0] : func_get_args();
 
         $this->withProgress($values, $this->stepsCount($values));
         $this->show();
+
+        return $this;
     }
+
+    /**
+     * @return \DragonCode\Benchmark\Data\ResultData[]
+     */
+    public function toData(): array {}
+
+    public function toConsole(): void {}
 
     protected function withProgress(array $callbacks, int $count): void
     {
@@ -104,7 +100,7 @@ class Benchmark
         return count($callbacks) * $this->iterations;
     }
 
-    protected function chunks(array $callbacks, ProgressBarService $progressBar): void
+    protected function chunks(array $callbacks, ProgressBarView $progressBar): void
     {
         foreach ($callbacks as $name => $callback) {
             $this->validate($callback);
@@ -113,35 +109,26 @@ class Benchmark
         }
     }
 
-    protected function each(mixed $name, Closure $callback, ProgressBarService $progressBar): void
+    protected function each(mixed $name, Closure $callback, ProgressBarView $progressBar): void
     {
         $this->result['total'][$name] = $this->call(
             fn () => $this->run($name, $callback, $progressBar)
         );
     }
 
-    protected function run(mixed $name, Closure $callback, ProgressBarService $progressBar): void
+    protected function run(mixed $name, Closure $callback, ProgressBarView $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; ++$i) {
-            $result = $this->runCallback($this->beforeEach, $name, $i);
+            $result = $this->callbacks->performBeforeEach($name, $i);
 
             [$time, $ram] = $this->call($callback, [$i, $result]);
 
-            $this->runCallback($this->afterEach, $name, $i, $time, $ram);
+            $this->callbacks->performAfterEach($name, $i, $time, $ram);
 
             $this->push($name, $i, $time, $ram);
 
             $progressBar->advance();
         }
-    }
-
-    protected function runCallback(?Closure $callback, mixed ...$arguments): mixed
-    {
-        if (! $callback) {
-            return null;
-        }
-
-        return $callback(...$arguments);
     }
 
     protected function call(Closure $callback, array $parameters = []): array

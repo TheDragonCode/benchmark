@@ -38,12 +38,11 @@
     ],
     "require": {
         "php": "^8.2",
-        "dragon-code/support": "^6.10",
-        "symfony/console": "^6.0 || ^7.0"
+        "dragon-code/support": "^6.10"
     },
     "require-dev": {
         "pestphp/pest": "^4.3",
-        "symfony/var-dumper": "^6.0 || ^7.0"
+        "symfony/var-dumper": "^7.0 || ^8.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

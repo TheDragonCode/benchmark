@@ -9,27 +9,26 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                php: [ "8.2", "8.3", "8.4" ]
-                symfony: [ "6.0", "7.0" ]
+                php: [ "8.2", "8.3", "8.4", "8.5" ]
 
-        name: PHP ${{ matrix.php }}, Symfony ${{ matrix.symfony }} ${{ matrix.prefer }}
+        name: PHP ${{ matrix.php }}
 
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v6
+            -   uses: actions/checkout@v6
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv
                     coverage: none
 
             -   name: Install dependencies
                 run: |
-                    composer require --no-interaction \
-                        symfony/console:^${{ matrix.symfony }} \
-                        symfony/var-dumper:^${{ matrix.symfony }}
+                    composer update \
+                        --no-audit \
+                        --no-suggest \
+                        --no-interaction
+
 
             -   name: Execute tests
                 run: composer test

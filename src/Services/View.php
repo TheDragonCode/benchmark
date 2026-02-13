@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
-use DragonCode\Benchmark\View\ProgressBar;
-use DragonCode\Benchmark\View\Table;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use DragonCode\Benchmark\View\ProgressBarView;
+use DragonCode\Benchmark\View\TableView;
 
 use function is_array;
 use function is_numeric;
@@ -15,19 +14,13 @@ use function sprintf;
 
 class View
 {
-    protected Table $table;
-
-    protected ProgressBar $progressBar;
-
     protected ?int $roundPrecision = null;
 
     public function __construct(
-        protected SymfonyStyle $io,
-        protected Memory $memory = new Memory
-    ) {
-        $this->table       = new Table($this->io);
-        $this->progressBar = new ProgressBar($this->io);
-    }
+        protected Memory $memory = new Memory,
+        protected TableView $table = new TableView,
+        protected ProgressBarView $progressBar = new ProgressBarView,
+    ) {}
 
     public function setRound(?int $precision): void
     {
@@ -41,14 +34,14 @@ class View
         );
     }
 
-    public function progressBar(): ProgressBar
+    public function progressBar(): ProgressBarView
     {
         return $this->progressBar;
     }
 
     public function emptyLine(int $count = 1): void
     {
-        $this->io->newLine($count);
+        echo "\r";
     }
 
     protected function appendMs(array $data): array

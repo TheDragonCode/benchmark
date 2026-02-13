@@ -6,5 +6,5 @@ use DragonCode\Benchmark\Benchmark;
 
 function benchmark(): Benchmark
 {
-    return new Benchmark;
+    return (new Benchmark)->iterations(3);
 }
