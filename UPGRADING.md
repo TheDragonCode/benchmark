@@ -9,3 +9,4 @@
 - Класс `ValueIsNotCallableException` теперь принимает объект вместо строки типа.
 - Все имена классов теперь имеют обязательные суффиксы.
 - Удалён контракт `Transformer`
+- Remove unused `ArrayService` class
