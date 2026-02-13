@@ -31,9 +31,9 @@ class CallbacksService
         return $this->perform($this->after, $name);
     }
 
-    public function performAfterEach(string|int $name, int $iteration, float $time, float $ram): mixed
+    public function performAfterEach(string|int $name, int $iteration, float $time, float $memory): mixed
     {
-        return $this->perform($this->afterEach, $name, $iteration, $time, $ram);
+        return $this->perform($this->afterEach, $name, $iteration, $time, $memory);
     }
 
     protected function perform(?Closure $callback, mixed ...$args): mixed
