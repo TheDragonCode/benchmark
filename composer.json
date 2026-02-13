@@ -42,7 +42,7 @@
         "symfony/console": "^6.0 || ^7.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^11.0 || ^12.0",
+        "pestphp/pest": "^4.3",
         "symfony/var-dumper": "^6.0 || ^7.0"
     },
     "minimum-stability": "stable",
@@ -62,9 +62,13 @@
             "dragon-code/codestyler": true,
             "ergebnis/composer-normalize": true,
             "friendsofphp/php-cs-fixer": true,
+            "pestphp/pest-plugin": true,
             "symfony/thanks": true
         },
         "preferred-install": "dist",
         "sort-packages": true
+    },
+    "scripts": {
+        "test": "vendor/bin/pest"
     }
 }
