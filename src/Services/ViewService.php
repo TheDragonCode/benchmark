@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use DragonCode\Benchmark\View\LineView;
 use DragonCode\Benchmark\View\ProgressBarView;
 use DragonCode\Benchmark\View\TableView;
 
@@ -12,6 +13,7 @@ class ViewService
     public function __construct(
         protected TableView $table = new TableView,
         protected ProgressBarView $progressBar = new ProgressBarView,
+        protected LineView $line = new LineView,
     ) {}
 
     public function table(array $data): void
@@ -26,8 +28,6 @@ class ViewService
 
     public function emptyLine(int $count = 1): void
     {
-        for ($i = 0; $i < $count; $i++) {
-            echo PHP_EOL;
-        }
+        $this->line->newLine($count);
     }
 }

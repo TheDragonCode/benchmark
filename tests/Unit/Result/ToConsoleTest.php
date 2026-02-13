@@ -2,23 +2,20 @@
 
 declare(strict_types=1);
 
-use DragonCode\Benchmark\View\TableView;
+use DragonCode\Benchmark\View\View;
 
 test('output', function () {
-    $reflection = new ReflectionClass(TableView::class);
-    
-    $property = $reflection->getProperty('stream');
-    
-    $stream = fopen('php://memory', 'r+b');
-    $property->setValue(null, $stream);
-
     benchmark()->toConsole();
 
-    rewind($stream);
-    $output = stream_get_contents($stream);
-    fclose($stream);
+    $reflection = new ReflectionClass(View::class);
 
-    $property->setValue(null, null);
+    $property = $reflection->getProperty('stream');
+
+    $stream = $property->getValue();
+
+    rewind($stream);
+
+    $output = stream_get_contents($stream);
 
     expect($output)->toMatchSnapshot();
 });
