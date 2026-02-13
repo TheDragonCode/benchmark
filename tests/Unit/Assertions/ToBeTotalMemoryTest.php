@@ -18,13 +18,13 @@ test('success without arguments', function () {
     expect(true)->toBeTrue();
 });
 
-test('failure less than', function () {
+test('failure greater than', function () {
     benchmark()
         ->assert()
         ->toBeTotalMemory(from: 10000);
 })->throws(AssertionError::class, 'The total memory value must be greater than or equal to 10000.');
 
-test('failure greater than', function () {
+test('failure less than', function () {
     benchmark()
         ->assert()
         ->toBeTotalMemory(till: 10);
