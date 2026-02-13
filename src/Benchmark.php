@@ -53,14 +53,14 @@ class Benchmark
         return new static;
     }
 
-    public function beforeEach(callable $callback): self
+    public function beforeEach(Closure $callback): self
     {
         $this->beforeEach = $callback;
 
         return $this;
     }
 
-    public function afterEach(callable $callback): self
+    public function afterEach(Closure $callback): self
     {
         $this->afterEach = $callback;
 
@@ -81,7 +81,7 @@ class Benchmark
         return $this;
     }
 
-    public function compare(array|callable ...$callbacks): void
+    public function compare(array|Closure ...$callbacks): void
     {
         $values = is_array($callbacks[0]) ? $callbacks[0] : func_get_args();
 
@@ -113,14 +113,14 @@ class Benchmark
         }
     }
 
-    protected function each(mixed $name, callable $callback, ProgressBarService $progressBar): void
+    protected function each(mixed $name, Closure $callback, ProgressBarService $progressBar): void
     {
         $this->result['total'][$name] = $this->call(
             fn () => $this->run($name, $callback, $progressBar)
         );
     }
 
-    protected function run(mixed $name, callable $callback, ProgressBarService $progressBar): void
+    protected function run(mixed $name, Closure $callback, ProgressBarService $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; ++$i) {
             $result = $this->runCallback($this->beforeEach, $name, $i);
@@ -144,7 +144,7 @@ class Benchmark
         return $callback(...$arguments);
     }
 
-    protected function call(callable $callback, array $parameters = []): array
+    protected function call(Closure $callback, array $parameters = []): array
     {
         return $this->runner->call($callback, $parameters);
     }

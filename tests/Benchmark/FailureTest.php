@@ -13,7 +13,7 @@ class FailureTest extends TestCase
     public function testAsProperties(): void
     {
         $this->expectException(TypeError::class);
-        $this->expectExceptionMessage('must be of type callable|array, int given');
+        $this->expectExceptionMessage('must be of type Closure|array, int given');
 
         $this->benchmark()->compare(123);
     }
@@ -32,7 +32,7 @@ class FailureTest extends TestCase
     public function testAsPropertiesWithIterations(): void
     {
         $this->expectException(TypeError::class);
-        $this->expectExceptionMessage('must be of type callable|array, int given');
+        $this->expectExceptionMessage('must be of type Closure|array, int given');
 
         $this->benchmark()->iterations(5)->compare(123);
     }
@@ -51,7 +51,7 @@ class FailureTest extends TestCase
     public function testAsPropertiesWithoutData(): void
     {
         $this->expectException(TypeError::class);
-        $this->expectExceptionMessage('must be of type callable|array, int given');
+        $this->expectExceptionMessage('must be of type Closure|array, int given');
 
         $this->benchmark()->compare(123);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use Closure;
 use DragonCode\Support\Facades\Helpers\Arr as DragonArray;
 
 use function array_flip;
@@ -27,7 +28,7 @@ class Arr
         return $data;
     }
 
-    public function map(array $data, callable $callback): array
+    public function map(array $data, Closure $callback): array
     {
         return array_map($callback, array_values($data), array_keys($data));
     }

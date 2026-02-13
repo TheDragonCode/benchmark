@@ -23,7 +23,7 @@ class View
 
     public function __construct(
         protected SymfonyStyle $io,
-        protected Memory $memory = new Memory()
+        protected Memory $memory = new Memory
     ) {
         $this->table       = new Table($this->io);
         $this->progressBar = new ProgressBar($this->io);

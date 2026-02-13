@@ -14,7 +14,7 @@ class MeasurementError
     protected int $minCount = 10;
 
     public function __construct(
-        protected Arr $arr = new Arr()
+        protected Arr $arr = new Arr
     ) {}
 
     public function filter(array $data): array
