@@ -6,9 +6,9 @@ use DragonCode\Benchmark\View\TableView;
 
 test('output', function () {
     $reflection = new ReflectionClass(TableView::class);
-
+    
     $property = $reflection->getProperty('stream');
-
+    
     $stream = fopen('php://memory', 'r+b');
     $property->setValue(null, $stream);
 
