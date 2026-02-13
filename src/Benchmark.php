@@ -27,7 +27,7 @@ class Benchmark
 
     protected int $iterations = 100;
 
-    protected ?Closure $prepare = null;
+    protected ?Closure $beforeEach = null;
 
     protected array $result = [
         'each'  => [],
@@ -51,9 +51,9 @@ class Benchmark
         return new static();
     }
 
-    public function prepare(callable $callback): self
+    public function beforeEach(callable $callback): self
     {
-        $this->prepare = $callback;
+        $this->beforeEach = $callback;
 
         return $this;
     }
@@ -114,7 +114,7 @@ class Benchmark
     protected function run(mixed $name, callable $callback, ProgressBarService $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; ++$i) {
-            $result = $this->runPrepare($name, $i);
+            $result = $this->runBeforeEach($name, $i);
 
             [$time, $ram] = $this->call($callback, [$i, $result]);
 
@@ -124,9 +124,9 @@ class Benchmark
         }
     }
 
-    protected function runPrepare(mixed $name, int $iteration): mixed
+    protected function runBeforeEach(mixed $name, int $iteration): mixed
     {
-        if ($callback = $this->prepare) {
+        if ($callback = $this->beforeEach) {
             return $callback($name, $iteration);
         }
 

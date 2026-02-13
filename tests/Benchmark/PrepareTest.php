@@ -14,7 +14,7 @@ class PrepareTest extends TestCase
 
         $this->benchmark()
             ->iterations(3)
-            ->prepare(function () use (&$result) {
+            ->beforeEach(function () use (&$result) {
                 $result[] = 1;
             })
             ->compare([
@@ -31,7 +31,7 @@ class PrepareTest extends TestCase
 
         $this->benchmark()
             ->iterations(3)
-            ->prepare(function (mixed $name, int $iteration) use (&$result) {
+            ->beforeEach(function (mixed $name, int $iteration) use (&$result) {
                 $result[] = sprintf('%s:%d', $name, $iteration);
             })
             ->compare([
@@ -57,7 +57,7 @@ class PrepareTest extends TestCase
 
         $this->benchmark()
             ->iterations(3)
-            ->prepare(function (mixed $name) use (&$result) {
+            ->beforeEach(function (mixed $name) use (&$result) {
                 $result[] = $name;
             })
             ->compare([
@@ -81,7 +81,7 @@ class PrepareTest extends TestCase
     {
         $this->benchmark()
             ->iterations(3)
-            ->prepare(
+            ->beforeEach(
                 fn (mixed $name, int $iteration) => sprintf('%s:%d', $name, $iteration)
             )
             ->compare([
