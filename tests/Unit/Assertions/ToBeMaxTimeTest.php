@@ -18,13 +18,13 @@ test('success without arguments', function () {
     expect(true)->toBeTrue();
 });
 
-test('failure less than', function () {
+test('failure greater than', function () {
     benchmark()
         ->assert()
         ->toBeMaxTime(from: 1000);
 })->throws(AssertionError::class, 'The maximum time value must be greater than or equal to 1000.');
 
-test('failure greater than', function () {
+test('failure less than', function () {
     benchmark()
         ->assert()
         ->toBeMaxTime(till: 1);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
-use function assert;
+use AssertionError;
 
 class AssertService
 {
@@ -111,22 +111,34 @@ class AssertService
         return $this;
     }
 
-    protected function assertGreaterThan(?float $actual, ?float $expected, string $name): void
+    protected function assertGreaterThan(float $actual, ?float $expected, string $name): void
     {
         if ($expected === null) {
             return;
         }
 
-        assert($actual >= $expected, "The $name value must be greater than or equal to $expected.");
+        if ($actual >= $expected) {
+            return;
+        }
+
+        throw new AssertionError(
+            "The $name value must be greater than or equal to $expected."
+        );
     }
 
-    protected function assertLessThan(?float $actual, ?float $expected, string $name): void
+    protected function assertLessThan(float $actual, ?float $expected, string $name): void
     {
         if ($expected === null) {
             return;
         }
 
-        assert($actual <= $expected, "The $name value must be less than or equal to $expected.");
+        if ($actual <= $expected) {
+            return;
+        }
+
+        throw new AssertionError(
+            "The $name value must be less than or equal to $expected."
+        );
     }
 
     protected function resolveFrom(?float $from, ?float $till): ?float
