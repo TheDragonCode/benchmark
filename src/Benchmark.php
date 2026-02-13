@@ -107,13 +107,15 @@ class Benchmark
         );
     }
 
-    public function toConsole(): void
+    public function toConsole(): static
     {
         $table = $this->transformer->toTable(
             $this->toData()
         );
 
         $this->view->table($table);
+
+        return $this;
     }
 
     public function assert(): AssertService
