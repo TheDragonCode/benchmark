@@ -12,12 +12,12 @@ use function is_numeric;
 use function round;
 use function sprintf;
 
-class View
+class ViewService
 {
     protected ?int $roundPrecision = null;
 
     public function __construct(
-        protected Memory $memory = new Memory,
+        protected MemoryService $memory = new MemoryService,
         protected TableView $table = new TableView,
         protected ProgressBarView $progressBar = new ProgressBarView,
     ) {}

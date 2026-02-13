@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Transformers;
 
-use DragonCode\Benchmark\Services\Arr;
+use DragonCode\Benchmark\Services\ArrService;
 
 use function array_keys;
 use function compact;
 use function sprintf;
 
-class Winner extends Base
+class WinnerTransformer extends Transformer
 {
     protected string $key = 'avg';
 
@@ -21,7 +21,7 @@ class Winner extends Base
     ];
 
     public function __construct(
-        protected Arr $arr = new Arr
+        protected ArrService $arr = new ArrService
     ) {}
 
     public function transform(array $data): array

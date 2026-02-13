@@ -6,7 +6,7 @@ namespace DragonCode\Benchmark\Services;
 
 use Closure;
 
-class Callbacks
+class CallbacksService
 {
     public ?Closure $before = null;
 

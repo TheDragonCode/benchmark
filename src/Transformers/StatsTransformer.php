@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Transformers;
 
-use DragonCode\Benchmark\Services\Arr;
-use DragonCode\Benchmark\Services\MeasurementError;
+use DragonCode\Benchmark\Services\ArrService;
+use DragonCode\Benchmark\Services\MeasurementErrorService;
 
 use function array_sum;
 use function call_user_func;
@@ -13,7 +13,7 @@ use function count;
 use function max;
 use function min;
 
-class Stats extends Base
+class StatsTransformer extends Transformer
 {
     protected array $methods = [
         'min',
@@ -22,8 +22,8 @@ class Stats extends Base
     ];
 
     public function __construct(
-        protected MeasurementError $measurementError = new MeasurementError,
-        protected Arr $arr = new Arr
+        protected MeasurementErrorService $measurementError = new MeasurementErrorService,
+        protected ArrService $arr = new ArrService
     ) {}
 
     public function transform(array $data): array

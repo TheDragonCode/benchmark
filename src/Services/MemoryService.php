@@ -9,7 +9,7 @@ use function memory_get_peak_usage;
 use function memory_reset_peak_usage;
 use function sprintf;
 
-class Memory
+class MemoryService
 {
     protected array $sizes = [
         'GB' => 1024 * 1024 * 1024,

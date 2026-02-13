@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
-class Collector
+class CollectorService
 {
     protected array $data = [];
 

@@ -7,14 +7,14 @@ namespace DragonCode\Benchmark\Services;
 use function array_slice;
 use function count;
 
-class MeasurementError
+class MeasurementErrorService
 {
     protected float $percent = 0.1;
 
     protected int $minCount = 10;
 
     public function __construct(
-        protected Arr $arr = new Arr
+        protected ArrService $arr = new ArrService
     ) {}
 
     public function filter(array $data): array

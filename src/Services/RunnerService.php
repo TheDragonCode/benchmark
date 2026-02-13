@@ -8,10 +8,10 @@ use Closure;
 
 use function hrtime;
 
-class Runner
+class RunnerService
 {
     public function __construct(
-        protected readonly Memory $memory = new Memory
+        protected readonly MemoryService $memory = new MemoryService
     ) {}
 
     public function call(Closure $callback, array $parameters = []): array
