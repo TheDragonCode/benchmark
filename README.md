@@ -38,17 +38,17 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::start()->compare(
+Benchmark::make()->compare(
     fn () => /* some code */,
     fn () => /* some code */,
 );
 
-Benchmark::start()->compare([
+Benchmark::make()->compare([
     fn () => /* some code */,
     fn () => /* some code */,
 ]);
 
-Benchmark::start()->compare([
+Benchmark::make()->compare([
     'foo' => fn () => /* some code */,
     'bar' => fn () => /* some code */,
 ]);
@@ -94,7 +94,7 @@ the `iterations` method:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::start()
+Benchmark::make()
     ->iterations(5)
     ->compare(
         fn () => /* some code */,
@@ -128,7 +128,7 @@ You can also get the number of the current execution iteration from the input pa
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::start()
+Benchmark::make()
     ->iterations(5)
     ->compare(
         fn (int $iteration) => /* some code */,
@@ -146,7 +146,7 @@ For example:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::start()
+Benchmark::make()
     ->iterations(5)
     ->round(2)
     ->compare(
@@ -185,7 +185,7 @@ There is a `prepare` method for this:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::start()
+Benchmark::make()
     ->prepare(fn () => /* some code */)
     ->compare(
         fn () => /* some code */,
@@ -199,7 +199,7 @@ inside the callback function.
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::start()
+Benchmark::make()
     ->prepare(fn (mixed $name, int $iteration) => /* some code */)
     ->compare(
         fn () => /* some code */,
@@ -213,7 +213,7 @@ the input parameter:
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-Benchmark::start()
+Benchmark::make()
     ->prepare(fn (mixed $name, int $iteration) => /* some code */)
     ->compare(
         fn (int $iteration, mixed $prepareResult) => /* some code */,

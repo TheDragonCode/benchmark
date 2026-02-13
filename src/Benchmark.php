@@ -48,7 +48,7 @@ class Benchmark
         );
     }
 
-    public static function start(): static
+    public static function make(): static
     {
         return new static;
     }
