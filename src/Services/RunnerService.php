@@ -28,15 +28,15 @@ class RunnerService
 
     protected function run(Closure $callback, array $parameters = []): array
     {
-        $ramFrom = $this->memory->now();
+        $memoryFrom = $this->memory->now();
         $startAt = hrtime(true);
 
         $callback(...$parameters);
 
         $time = $this->diff(hrtime(true), $startAt);
-        $ram  = $this->memory->diff($ramFrom);
+        $memory  = $this->memory->diff($memoryFrom);
 
-        return [$time, $ram];
+        return [$time, $memory];
     }
 
     protected function diff(float $now, float $startAt): float
