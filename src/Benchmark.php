@@ -29,31 +29,40 @@ class Benchmark
 
     protected ?Closure $beforeEach = null;
 
+    protected ?Closure $afterEach = null;
+
     protected array $result = [
         'each'  => [],
         'total' => [],
     ];
 
     public function __construct(
-        protected Runner $runner = new Runner(),
-        protected Transformer $transformer = new Transformer()
+        protected Runner $runner = new Runner,
+        protected Transformer $transformer = new Transformer
     ) {
         $this->view = new View(
             new SymfonyStyle(
-                new ArgvInput(),
-                new ConsoleOutput()
+                new ArgvInput,
+                new ConsoleOutput
             )
         );
     }
 
     public static function start(): static
     {
-        return new static();
+        return new static;
     }
 
     public function beforeEach(callable $callback): self
     {
         $this->beforeEach = $callback;
+
+        return $this;
+    }
+
+    public function afterEach(callable $callback): self
+    {
+        $this->afterEach = $callback;
 
         return $this;
     }
@@ -114,9 +123,11 @@ class Benchmark
     protected function run(mixed $name, callable $callback, ProgressBarService $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; ++$i) {
-            $result = $this->runBeforeEach($name, $i);
+            $result = $this->runCallback($this->beforeEach, $name, $i);
 
             [$time, $ram] = $this->call($callback, [$i, $result]);
+
+            $this->runCallback($this->afterEach, $name, $i, $time, $ram);
 
             $this->push($name, $i, $time, $ram);
 
@@ -124,13 +135,13 @@ class Benchmark
         }
     }
 
-    protected function runBeforeEach(mixed $name, int $iteration): mixed
+    protected function runCallback(?Closure $callback, mixed ...$arguments): mixed
     {
-        if ($callback = $this->beforeEach) {
-            return $callback($name, $iteration);
+        if (! $callback) {
+            return null;
         }
 
-        return null;
+        return $callback(...$arguments);
     }
 
     protected function call(callable $callback, array $parameters = []): array
