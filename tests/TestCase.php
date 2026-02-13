@@ -6,10 +6,4 @@ namespace Tests;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
-abstract class TestCase extends BaseTestCase
-{
-    protected function work(): void
-    {
-        usleep(10);
-    }
-}
+abstract class TestCase extends BaseTestCase {}
