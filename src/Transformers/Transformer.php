@@ -53,6 +53,6 @@ class Transformer
 
     protected function resolve(string|TransformerContract $transformer, array $data): array
     {
-        return (new $transformer())->transform($data);
+        return (new $transformer)->transform($data);
     }
 }

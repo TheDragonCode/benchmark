@@ -21,7 +21,7 @@ class Winner extends Base
     ];
 
     public function __construct(
-        protected Arr $arr = new Arr()
+        protected Arr $arr = new Arr
     ) {}
 
     public function transform(array $data): array

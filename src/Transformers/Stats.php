@@ -22,8 +22,8 @@ class Stats extends Base
     ];
 
     public function __construct(
-        protected MeasurementError $measurementError = new MeasurementError(),
-        protected Arr $arr = new Arr()
+        protected MeasurementError $measurementError = new MeasurementError,
+        protected Arr $arr = new Arr
     ) {}
 
     public function transform(array $data): array
@@ -70,7 +70,7 @@ class Stats extends Base
 
         return [
             'time' => array_sum($this->arr->pluck($values, 'time')) / count($values),
-            'ram'  => array_sum($this->arr->pluck($values, 'ram'))  / count($values),
+            'ram'  => array_sum($this->arr->pluck($values, 'ram')) / count($values),
         ];
     }
 

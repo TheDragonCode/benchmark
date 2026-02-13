@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use Closure;
+
 use function hrtime;
 
 class Runner
 {
     public function __construct(
-        protected readonly Memory $memory = new Memory()
+        protected readonly Memory $memory = new Memory
     ) {}
 
-    public function call(callable $callback, array $parameters = []): array
+    public function call(Closure $callback, array $parameters = []): array
     {
         $this->clean();
 
@@ -24,7 +26,7 @@ class Runner
         $this->memory->reset();
     }
 
-    protected function run(callable $callback, array $parameters = []): array
+    protected function run(Closure $callback, array $parameters = []): array
     {
         $ramFrom = $this->memory->now();
         $startAt = hrtime(true);

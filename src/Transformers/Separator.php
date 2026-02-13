@@ -10,6 +10,6 @@ class Separator extends Base
 {
     public function transform(array $data): array
     {
-        return [new TableSeparator()];
+        return [new TableSeparator];
     }
 }
