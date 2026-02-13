@@ -41,7 +41,7 @@
         "dragon-code/support": "^6.10"
     },
     "require-dev": {
-        "pestphp/pest": "^4.3",
+        "pestphp/pest": "^3.8 || ^4.0",
         "symfony/var-dumper": "^7.0 || ^8.0"
     },
     "minimum-stability": "stable",
