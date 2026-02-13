@@ -15,10 +15,10 @@ test('named array', function () {
     benchmark()->compare([
         'foo' => 123,
     ]);
-})->throws(ValueIsNotCallableException::class, 'The array value must be of type Closure, integer given.');
+})->throws(ValueIsNotCallableException::class, 'The property value must be of type Closure, integer given.');
 
 test('unnamed array', function () {
     benchmark()->compare([
         123,
     ]);
-})->throws(ValueIsNotCallableException::class, 'The array value must be of type Closure, integer given.');
+})->throws(ValueIsNotCallableException::class, 'The property value must be of type Closure, integer given.');
