@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\View;
 
+use function fopen;
+use function fwrite;
+
 abstract class View
 {
     protected static $stream;
+
+    protected string $streamName;
 
     protected function writeLine(string $line): void
     {
@@ -21,5 +26,8 @@ abstract class View
     /**
      * @return resource
      */
-    abstract protected function stream();
+    protected function stream()
+    {
+        return static::$stream ??= fopen('php://stderr', 'wb');
+    }
 }
