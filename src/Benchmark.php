@@ -97,7 +97,7 @@ class Benchmark
     }
 
     /**
-     * @return \DragonCode\Benchmark\Data\ResultData[]
+     * @return Data\ResultData[]
      */
     public function toData(): array
     {
@@ -156,7 +156,7 @@ class Benchmark
 
     protected function run(mixed $name, Closure $callback, ProgressBarView $progressBar): void
     {
-        for ($i = 1; $i <= $this->iterations; ++$i) {
+        for ($i = 1; $i <= $this->iterations; $i++) {
             $result = $this->callbacks->performBeforeEach($name, $i);
 
             [$time, $memory] = $this->call($callback, [$i, $result]);
