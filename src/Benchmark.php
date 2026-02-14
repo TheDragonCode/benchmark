@@ -16,6 +16,7 @@ use DragonCode\Benchmark\Transformers\ResultTransformer;
 use DragonCode\Benchmark\View\ProgressBarView;
 
 use function abs;
+use function array_first;
 use function count;
 use function func_get_args;
 use function is_array;
@@ -84,11 +85,9 @@ class Benchmark
 
     public function compare(array|Closure ...$callbacks): static
     {
-        $values = match (true) {
-            is_array($callbacks[0] ?? null) => $callbacks[0],
-            is_array($callbacks)            => $callbacks,
-            default                         => func_get_args()
-        };
+        $values = $this->resolveCallbacks(
+            func_get_args() ?: $callbacks
+        );
 
         $this->clear();
 
@@ -178,6 +177,13 @@ class Benchmark
     protected function push(mixed $name, float $time, float $memory): void
     {
         $this->collector->push($name, [$time, $memory]);
+    }
+
+    protected function resolveCallbacks(array $callbacks): array
+    {
+        $first = array_first($callbacks);
+
+        return is_array($first) ? $first : $callbacks;
     }
 
     protected function validate(mixed $callback): void

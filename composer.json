@@ -37,7 +37,8 @@
         }
     ],
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "symfony/polyfill-php85": "^1.33"
     },
     "require-dev": {
         "pestphp/pest": "^3.8 || ^4.0",
