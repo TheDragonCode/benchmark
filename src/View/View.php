@@ -12,8 +12,6 @@ abstract class View
     /** @var resource|null */
     protected static mixed $stream = null;
 
-    protected string $streamName;
-
     protected function writeLine(string $line): void
     {
         fwrite($this->stream(), $line . PHP_EOL);
@@ -29,6 +27,6 @@ abstract class View
      */
     protected function stream()
     {
-        return static::$stream ??= fopen($this->streamName, 'wb');
+        return static::$stream ??= fopen('php://stderr', 'wb');
     }
 }

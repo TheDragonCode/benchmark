@@ -14,8 +14,6 @@ use function mb_strlen;
 
 class TableView extends View
 {
-    protected string $streamName = 'php://stdout';
-
     public function show(array $data): void
     {
         $headers = $this->headers($data);
