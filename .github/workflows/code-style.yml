@@ -5,20 +5,5 @@ on: [ push, pull_request ]
 permissions: write-all
 
 jobs:
-    style:
-        runs-on: ubuntu-latest
-
-        steps:
-            -   name: Checkout code
-                uses: actions/checkout@v6
-
-            -   name: Check the code style
-                uses: TheDragonCode/codestyler@v5
-                if: ${{ github.event_name != 'push' || github.ref != 'refs/heads/main' }}
-
-            -   name: Fix the code style
-                uses: TheDragonCode/codestyler@v5
-                if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-                with:
-                    github_token: ${{ secrets.COMPOSER_TOKEN }}
-                    fix: true
+    check:
+        uses: TheDragonCode/.github/.github/workflows/code-style.yml@main
