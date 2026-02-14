@@ -58,12 +58,7 @@
     },
     "config": {
         "allow-plugins": {
-            "dragon-code/codestyler": true,
-            "ergebnis/composer-normalize": true,
-            "friendsofphp/php-cs-fixer": true,
-            "laravel/pint": true,
-            "pestphp/pest-plugin": true,
-            "symfony/thanks": true
+            "pestphp/pest-plugin": true
         },
         "preferred-install": "dist",
         "sort-packages": true
