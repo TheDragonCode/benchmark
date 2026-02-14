@@ -8,7 +8,7 @@ class CollectorService
 {
     protected array $data = [];
 
-    public function push(string|int $name, array $values): self
+    public function push(string|int $name, array $values): static
     {
         $this->data[$name][] = $values;
 
