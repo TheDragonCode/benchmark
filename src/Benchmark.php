@@ -117,7 +117,7 @@ class Benchmark
         return $this;
     }
 
-    public function assert(): AssertService
+    public function toAssert(): AssertService
     {
         return new AssertService(
             $this->toData()
