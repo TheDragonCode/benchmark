@@ -12,8 +12,7 @@
 
 ## Installation
 
-To get the latest version of `The Dragon Code: Benchmark`, simply require the project
-using [Composer](https://getcomposer.org):
+To get the latest version of `Benchmark`, simply require the project using [Composer](https://getcomposer.org):
 
 ```bash
 composer require dragon-code/benchmark --dev
@@ -29,7 +28,7 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 }
 ```
 
-## Using
+## Usage
 
 > Note
 >
@@ -38,38 +37,47 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ```php
 use DragonCode\Benchmark\Benchmark;
 
+// Массив без указания имён ключей
+new Benchmark()->compare([
+    fn () => /* some code */,
+    fn () => /* some code */,
+])->toConsole();
+
+// Массив с указанием имён ключей
+new Benchmark()->compare([
+    'foo' => fn () => /* some code */,
+    'bar' => fn () => /* some code */,
+])->toConsole();
+
+// Колбэки без указания имён свойств
 new Benchmark()->compare(
     fn () => /* some code */,
     fn () => /* some code */,
 )->toConsole();
 
-new Benchmark()->compare([
-    fn () => /* some code */,
-    fn () => /* some code */,
-])->toConsole();
-
-new Benchmark()->compare([
-    'foo' => fn () => /* some code */,
-    'bar' => fn () => /* some code */,
-])->toConsole();
+// Колбэки с указанием имён свойств
+new Benchmark()->compare(
+    foo: fn () => /* some code */,
+    bar: fn () => /* some code */,
+)->toConsole();
 ```
 
-Result example:
+Пример вывода результата с указанием имён:
 
-```
- ------- --------------------- -------------------- 
-  #       0                     1                   
- ------- --------------------- -------------------- 
-  min     0.001 ms - 14.8Kb     0.001 ms - 4.1Kb    
-  max     0.0101 ms - 64.8Kb    0.0026 ms - 13.7Kb  
-  avg     0.00122 ms - 47.5Kb   0.0016 ms - 4.1Kb   
-  total   0.7998 ms             0.6156 ms
- ------- --------------------- -------------------- 
-  Order   - 1 -                 - 2 -               
- ------- --------------------- -------------------- 
+```bash
++-------+-------------------------+-------------------------+
+| #     | foo                     | bar                     |
++-------+-------------------------+-------------------------+
+| min   | 14.3472 ms - 0 bytes    | 14.3657 ms - 0 bytes    |
+| max   | 15.7684 ms - 0 bytes    | 15.7249 ms - 0 bytes    |
+| avg   | 15.0967475 ms - 0 bytes | 14.9846725 ms - 0 bytes |
+| total | 1207.7398 ms - 0 bytes  | 1198.7738 ms - 0 bytes  |
++-------+-------------------------+-------------------------+
+| order | 2                       | 1                       |
++-------+-------------------------+-------------------------+
 ```
 
-When measuring the average value among the results, when more than 10 iterations are used, the final data is filtered by
+When measuring the average value among the results, when more than 9 iterations are used, the final data is filtered by
 peak values. The calculation of the 10% of the lowest and
 10% of the highest values is excluded from the total result, thus the final data becomes cleaner and less dependent on
 any external factors.
@@ -84,26 +92,23 @@ use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
     ->iterations(5)
-    ->compare(
-        fn () => /* some code */,
-        fn () => /* some code */,
-    )
+    ->compare([
+        'foo' => fn () => /* some code */,
+        'bar' => fn () => /* some code */,
+    ])
     ->toConsole();
 ```
 
-If the passed value is less than 1, then one iteration will be performed for each callback.
+При передаче отрицательного значения, это значение будет взято по модулю.
 
-```
- ------- --------------------- --------------------- 
-  #       0                     1                    
- ------- --------------------- --------------------- 
-  min     0.0011 ms - 58.4Kb    0.0011 ms - 55.4Kb   
-  max     0.0077 ms - 64.8Kb    0.0015 ms - 57.3Kb   
-  avg     0.00272 ms - 60.1Kb   0.00124 ms - 56.2Kb  
-  total   0.2453 ms             0.1105 ms
- ------- --------------------- --------------------- 
-  Order   - 2 -                 - 1 -                
- ------- --------------------- --------------------- 
+Например:
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->iterations(-20) // Будет 20 итераций
+    // ...
 ```
 
 You can also get the number of the current execution iteration from the input parameter:
@@ -125,47 +130,50 @@ new Benchmark()
 By default, the script does not round measurement results, but you can specify the number of decimal places to which
 rounding can be performed.
 
+Этот метод имеет влияние только на вывод результата в консоль (метод `toConsole`).
+
 For example:
 
 ```php
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->iterations(5)
     ->round(2)
-    ->compare(
-        fn () => /* some code */,
-        fn () => /* some code */,
-    )
+    ->compare([
+        'foo' => fn () => /* some code */,
+        'bar' => fn () => /* some code */,
+    ])
     ->toConsole();
 ```
 
 Result example:
 
-```
- ------- ------------------ ------------------ 
-  #       0                  1                 
- ------- ------------------ ------------------ 
-  min     11.85 ms - 0b      14.94 ms - 0b     
-  max     15.4 ms - 0b       15.24 ms - 0b     
-  avg     14.37 ms - 0b      15.11 ms - 0b     
-  total   73.47 ms           76.03 ms
- ------- ------------------ ------------------ 
-  Order   - 1 -              - 2 -             
- ------- ------------------ ------------------ 
+```bash
++-------+----------------------+----------------------+
+| #     | foo                  | bar                  |
++-------+----------------------+----------------------+
+| min   | 14.58 ms - 0 bytes   | 14.38 ms - 0 bytes   |
+| max   | 15.55 ms - 0 bytes   | 15.71 ms - 0 bytes   |
+| avg   | 15.01 ms - 0 bytes   | 15.1 ms - 0 bytes    |
+| total | 1201.09 ms - 0 bytes | 1207.76 ms - 0 bytes |
++-------+----------------------+----------------------+
+| order | 1                    | 2                    |
++-------+----------------------+----------------------+
 ```
 
-### Prepare Data
+### Callbacks
 
-In some cases, it becomes necessary to call some action before starting each check cycle so that its time does not fall
-into the result of the runtime check.
-There is a `prepare` method for this:
+#### Before
+
+В некоторых случаях нужно выполнить какие-либо действия до запуска цикла проверки.
+
+Сделать это можно путём вызова метода `before` с передачей колбэка.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->prepare(fn () => /* some code */)
+    ->before(fn () => /* some code */)
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
@@ -173,14 +181,13 @@ new Benchmark()
     ->toConsole();
 ```
 
-When calling a callback, the name and iteration parameters are passed to it. If necessary, you can use this information
-inside the callback function.
+При вызове колбэка ему передаются параметры имени цикла. Если это необходимо, можно использовать эту информацию.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->prepare(fn (mixed $name, int $iteration) => /* some code */)
+    ->before(fn (int|string $name) => /* some code */)
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
@@ -188,32 +195,279 @@ new Benchmark()
     ->toConsole();
 ```
 
-You can also get the number of the current iteration and the result of the execution of the preliminary function from
-the input parameter:
+#### BeforeEach
+
+В некоторых случаях нужно выполнить какие-либо действия до запуска итерации проверки.
+
+Сделать это можно путём вызова метода `beforeEach` с передачей колбэка.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->prepare(fn (mixed $name, int $iteration) => /* some code */)
+    ->beforeEach(fn () => /* some code */)
     ->compare(
-        fn (int $iteration, mixed $prepareResult) => /* some code */,
-        fn (int $iteration, mixed $prepareResult) => /* some code */,
+        fn () => /* some code */,
+        fn () => /* some code */,
     )
     ->toConsole();
 ```
 
-## Assertions
+При вызове колбэка ему передаются параметры имени цикла и номер итерации.
+Также в сам колбэк передаётся результат выполнения колбэка `beforeEach`.
+Если это необходимо, можно использовать эту информацию.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
+    ->beforeEach(fn (int|string $name, int $iteration) => /* some code */)
+    ->compare(
+        fn (mixed $before) => /* some code */,
+        fn (mixed $before) => /* some code */,
+    )
+    ->toConsole();
+```
+
+#### After
+
+В некоторых случаях нужно выполнить какие-либо действия после запуска цикла проверки.
+
+Сделать это можно путём вызова метода `after` с передачей колбэка.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->after(fn () => /* some code */)
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
     )
-    ->assert()
+    ->toConsole();
+```
+
+При вызове колбэка ему передаются параметры имени цикла. Если это необходимо, можно использовать эту информацию.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->before(fn (int|string $name) => /* some code */)
+    ->compare(
+        fn () => /* some code */,
+        fn () => /* some code */,
+    )
+    ->toConsole();
+```
+
+#### AfterEach
+
+В некоторых случаях нужно выполнить какие-либо действия до запуска итерации проверки.
+
+Сделать это можно путём вызова метода `afterEach` с передачей колбэка.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->afterEach(fn () => /* some code */)
+    ->compare(
+        fn () => /* some code */,
+        fn () => /* some code */,
+    )
+    ->toConsole();
+```
+
+При вызове колбэка ему передаются параметры имени цикла и номер итерации.
+Если это необходимо, можно использовать эту информацию.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->afterEach(fn (int|string $name, int $iteration) => /* some code */)
+    ->compare(
+        fn () => /* some code */,
+        fn () => /* some code */,
+    )
+    ->toConsole();
+```
+
+### Results
+
+Для получения результата бенчмарка воспользуйтесь одним из методов.
+
+#### toConsole
+
+Этот метод выведет результат выполнения бенчмарка в консоль.
+
+##### Вариант 1
+
+```php
+new Benchmark()
+    ->round(2)
+    ->compare([
+        'foo' => static fn () => /* some code */,
+        'bar' => static fn () => /* some code */,
+    ])
+    ->toConsole();
+```
+
+```Bash
++-------+---------------------+----------------------+
+| #     | foo                 | bar                  |
++-------+---------------------+----------------------+
+| min   | 14.56 ms - 0 bytes  | 14.62 ms - 0 bytes   |
+| max   | 15.85 ms - 0 bytes  | 15.65 ms - 0 bytes   |
+| avg   | 15.08 ms - 0 bytes  | 15.12 ms - 0 bytes   |
+| total | 1206.7 ms - 0 bytes | 1209.44 ms - 0 bytes |
++-------+---------------------+----------------------+
+| order | 1                   | 2                    |
++-------+---------------------+----------------------+
+```
+
+##### Вариант 2
+
+```php
+new Benchmark()
+    ->round(2)
+    ->compare([
+        static fn () => /* some code */,
+        static fn () => /* some code */,
+    ])
+    ->toConsole();
+```
+
+```bash
++-------+----------------------+----------------------+
+| #     | 0                    | 1                    |
++-------+----------------------+----------------------+
+| min   | 14.52 ms - 0 bytes   | 14.42 ms - 0 bytes   |
+| max   | 15.78 ms - 0 bytes   | 15.7 ms - 0 bytes    |
+| avg   | 15.09 ms - 0 bytes   | 15.01 ms - 0 bytes   |
+| total | 1207.56 ms - 0 bytes | 1200.55 ms - 0 bytes |
++-------+----------------------+----------------------+
+| order | 2                    | 1                    |
++-------+----------------------+----------------------+
+```
+
+##### Вариант 3
+
+```php
+new Benchmark()
+    ->round(2)
+    ->compare(
+        static fn () => /* some code */,
+        static fn () => /* some code */,
+    )
+    ->toConsole();
+```
+
+```bash
++-------+----------------------+----------------------+
+| #     | 0                    | 1                    |
++-------+----------------------+----------------------+
+| min   | 14.52 ms - 0 bytes   | 14.56 ms - 0 bytes   |
+| max   | 15.68 ms - 0 bytes   | 15.61 ms - 0 bytes   |
+| avg   | 15.1 ms - 0 bytes    | 15.04 ms - 0 bytes   |
+| total | 1207.73 ms - 0 bytes | 1203.17 ms - 0 bytes |
++-------+----------------------+----------------------+
+| order | 2                    | 1                    |
++-------+----------------------+----------------------+
+```
+
+##### Вариант 4
+
+```php
+new Benchmark()
+    ->round(2)
+    ->compare(
+        foo: static fn () => /* some code */,
+        bar: static fn () => /* some code */,
+    )
+    ->toConsole();
+```
+
+```bash
++-------+----------------------+----------------------+
+| #     | foo                  | bar                  |
++-------+----------------------+----------------------+
+| min   | 14.68 ms - 0 bytes   | 14.56 ms - 0 bytes   |
+| max   | 15.69 ms - 0 bytes   | 15.64 ms - 0 bytes   |
+| avg   | 15.13 ms - 0 bytes   | 15.07 ms - 0 bytes   |
+| total | 1210.38 ms - 0 bytes | 1205.26 ms - 0 bytes |
++-------+----------------------+----------------------+
+| order | 2                    | 1                    |
++-------+----------------------+----------------------+
+```
+
+#### toData
+
+Этот метод выведет результат бенчмарка в массив DTO объектов `DragonCode\Benchmark\Data\ResultData`.
+
+Его можно использовать в приложении для Ваших нужд.
+
+```php
+return new Benchmark()
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    )
+    ->toData();
+```
+
+```bash
+array:2 [
+  "foo" => DragonCode\Benchmark\Data\ResultData {#17
+    +min: DragonCode\Benchmark\Data\MetricData {#19
+      +time: 14.6123
+      +memory: 0.0
+    }
+    +max: DragonCode\Benchmark\Data\MetricData {#20
+      +time: 15.7372
+      +memory: 0.0
+    }
+    +avg: DragonCode\Benchmark\Data\MetricData {#21
+      +time: 15.12268875
+      +memory: 0.0
+    }
+    +total: DragonCode\Benchmark\Data\MetricData {#22
+      +time: 1209.8151
+      +memory: 0.0
+    }
+  }
+  "bar" => DragonCode\Benchmark\Data\ResultData {#23
+    +min: DragonCode\Benchmark\Data\MetricData {#24
+      +time: 14.3369
+      +memory: 0.0
+    }
+    +max: DragonCode\Benchmark\Data\MetricData {#25
+      +time: 15.8259
+      +memory: 0.0
+    }
+    +avg: DragonCode\Benchmark\Data\MetricData {#26
+      +time: 15.10940625
+      +memory: 0.0
+    }
+    +total: DragonCode\Benchmark\Data\MetricData {#27
+      +time: 1208.7525
+      +memory: 0.0
+    }
+  }
+]
+```
+
+#### toAssert
+
+Этот метод позволяет проверить результаты бенчмарка на соответствие ожидаемым значениям.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->compare(/* ... */)
+    ->toAssert()
     
     ->toBeMinTime(0.5, 3)       // between 0.5 and 3 ms
     ->toBeMaxTime(0.5, 3)       // between 0.5 and 3 ms
@@ -232,11 +486,8 @@ You can also use a single value:
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->compare(
-        fn () => /* some code */,
-        fn () => /* some code */,
-    )
-    ->assert()
+    ->compare(/* ... */)
+    ->toAssert()
     
     ->toBeMinTime(0.5)       // time must be greater than or equal to 0.5 ms
     ->toBeMaxTime(0.5)       // time must be greater than or equal to 0.5 ms
@@ -248,32 +499,6 @@ new Benchmark()
     ->toBeAvgMemory(till: 1024)    // the memory footprint should not exceed 1024 bytes
     ->toBeTotalMemory(till: 4096); // the memory footprint should not exceed 4096 bytes
 ```
-
-## Information
-
-```
- ------- ------------------ ------------------ 
-  #       foo                bar                 
- ------- ------------------ ------------------ 
-  min     11.33 ms - 0b      14.46 ms - 0b     
-  max     15.28 ms - 0b      15.09 ms - 0b     
-  avg     14.2 ms - 0b       14.88 ms - 0b     
-  total   71.62 ms           75.12 ms
- ------- ------------------ ------------------ 
-  Order   - 1 -              - 2 -             
- ------- ------------------ ------------------ 
-```
-
-* `foo`, `bar` - The names of the columns in the passed array. Needed for identification. By default, the array index is
-  used, starting from zero. For example, `1, 2, 3,.. N+1`.
-* `11.33 ms` - Execution time of the checked code in one iteration.
-* `0b`, `6.8Kb`, etc. - The amount of RAM used by the checked code.
-* `min` - Minimum code processing time.
-* `max` - Maximum code processing time.
-* `avg` - The arithmetic mean value among all iterations, taking into account the elimination of 10% of the smallest and
-  10% of the largest values to obtain a more accurate value
-  through the possible intervention of external factors.
-* `total` - The total time and RAM spent on checking all iterations of the code.
 
 ## License
 
