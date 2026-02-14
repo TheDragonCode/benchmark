@@ -9,7 +9,8 @@ use function fwrite;
 
 abstract class View
 {
-    protected static $stream;
+    /** @var resource|null */
+    protected static mixed $stream = null;
 
     protected string $streamName;
 
