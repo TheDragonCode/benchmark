@@ -37,32 +37,32 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ```php
 use DragonCode\Benchmark\Benchmark;
 
-// Массив без указания имён ключей
+// Array without named keys
 new Benchmark()->compare([
     fn () => /* some code */,
     fn () => /* some code */,
 ])->toConsole();
 
-// Массив с указанием имён ключей
+// Array with named keys
 new Benchmark()->compare([
     'foo' => fn () => /* some code */,
     'bar' => fn () => /* some code */,
 ])->toConsole();
 
-// Колбэки без указания имён свойств
+// Callbacks without named parameters
 new Benchmark()->compare(
     fn () => /* some code */,
     fn () => /* some code */,
 )->toConsole();
 
-// Колбэки с указанием имён свойств
+// Callbacks with named parameters
 new Benchmark()->compare(
     foo: fn () => /* some code */,
     bar: fn () => /* some code */,
 )->toConsole();
 ```
 
-Пример вывода результата с указанием имён:
+Example output with named keys:
 
 ```bash
 +-------+-------------------------+-------------------------+
@@ -78,9 +78,8 @@ new Benchmark()->compare(
 ```
 
 When measuring the average value among the results, when more than 9 iterations are used, the final data is filtered by
-peak values. The calculation of the 10% of the lowest and
-10% of the highest values is excluded from the total result, thus the final data becomes cleaner and less dependent on
-any external factors.
+peak values. The calculation of the 10% of the lowest and 10% of the highest values is excluded from the total result,
+thus the final data becomes cleaner and less dependent on any external factors.
 
 ### Iterations Count
 
@@ -99,15 +98,15 @@ new Benchmark()
     ->toConsole();
 ```
 
-При передаче отрицательного значения, это значение будет взято по модулю.
+If a negative value is passed, its absolute value will be used.
 
-Например:
+For example:
 
 ```php
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->iterations(-20) // Будет 20 итераций
+    ->iterations(-20) // Will result in 20 iterations
     // ...
 ```
 
@@ -130,7 +129,7 @@ new Benchmark()
 By default, the script does not round measurement results, but you can specify the number of decimal places to which
 rounding can be performed.
 
-Этот метод имеет влияние только на вывод результата в консоль (метод `toConsole`).
+This method only affects the console output (the `toConsole` method).
 
 For example:
 
@@ -165,9 +164,9 @@ Result example:
 
 #### Before
 
-В некоторых случаях нужно выполнить какие-либо действия до запуска цикла проверки.
+In some cases, you may need to perform certain actions before running the benchmark loop.
 
-Сделать это можно путём вызова метода `before` с передачей колбэка.
+You can do this by calling the `before` method with a callback.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -181,7 +180,7 @@ new Benchmark()
     ->toConsole();
 ```
 
-При вызове колбэка ему передаются параметры имени цикла. Если это необходимо, можно использовать эту информацию.
+The loop name is passed to the callback as a parameter. You can use this information if needed.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -197,9 +196,9 @@ new Benchmark()
 
 #### BeforeEach
 
-В некоторых случаях нужно выполнить какие-либо действия до запуска итерации проверки.
+In some cases, you may need to perform certain actions before each benchmark iteration.
 
-Сделать это можно путём вызова метода `beforeEach` с передачей колбэка.
+You can do this by calling the `beforeEach` method with a callback.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -213,9 +212,9 @@ new Benchmark()
     ->toConsole();
 ```
 
-При вызове колбэка ему передаются параметры имени цикла и номер итерации.
-Также в сам колбэк передаётся результат выполнения колбэка `beforeEach`.
-Если это необходимо, можно использовать эту информацию.
+The loop name and iteration number are passed to the callback as parameters.
+Additionally, the result of the `beforeEach` callback is passed to the compare callback itself.
+You can use this information if needed.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -231,9 +230,9 @@ new Benchmark()
 
 #### After
 
-В некоторых случаях нужно выполнить какие-либо действия после запуска цикла проверки.
+In some cases, you may need to perform certain actions after the benchmark loop has completed.
 
-Сделать это можно путём вызова метода `after` с передачей колбэка.
+You can do this by calling the `after` method with a callback.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -247,13 +246,13 @@ new Benchmark()
     ->toConsole();
 ```
 
-При вызове колбэка ему передаются параметры имени цикла. Если это необходимо, можно использовать эту информацию.
+The loop name is passed to the callback as a parameter. You can use this information if needed.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->before(fn (int|string $name) => /* some code */)
+    ->after(fn (int|string $name) => /* some code */)
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
@@ -263,9 +262,9 @@ new Benchmark()
 
 #### AfterEach
 
-В некоторых случаях нужно выполнить какие-либо действия до запуска итерации проверки.
+In some cases, you may need to perform certain actions after each benchmark iteration.
 
-Сделать это можно путём вызова метода `afterEach` с передачей колбэка.
+You can do this by calling the `afterEach` method with a callback.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -279,8 +278,8 @@ new Benchmark()
     ->toConsole();
 ```
 
-При вызове колбэка ему передаются параметры имени цикла и номер итерации.
-Если это необходимо, можно использовать эту информацию.
+The loop name and iteration number are passed to the callback as parameters.
+You can use this information if needed.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -296,13 +295,13 @@ new Benchmark()
 
 ### Results
 
-Для получения результата бенчмарка воспользуйтесь одним из методов.
+Use one of the following methods to obtain benchmark results.
 
 #### toConsole
 
-Этот метод выведет результат выполнения бенчмарка в консоль.
+This method outputs the benchmark results to the console.
 
-##### Вариант 1
+##### Option 1
 
 ```php
 new Benchmark()
@@ -327,7 +326,7 @@ new Benchmark()
 +-------+---------------------+----------------------+
 ```
 
-##### Вариант 2
+##### Option 2
 
 ```php
 new Benchmark()
@@ -352,7 +351,7 @@ new Benchmark()
 +-------+----------------------+----------------------+
 ```
 
-##### Вариант 3
+##### Option 3
 
 ```php
 new Benchmark()
@@ -377,7 +376,7 @@ new Benchmark()
 +-------+----------------------+----------------------+
 ```
 
-##### Вариант 4
+##### Option 4
 
 ```php
 new Benchmark()
@@ -404,9 +403,9 @@ new Benchmark()
 
 #### toData
 
-Этот метод выведет результат бенчмарка в массив DTO объектов `DragonCode\Benchmark\Data\ResultData`.
+This method returns benchmark results as an array of `DragonCode\Benchmark\Data\ResultData` DTO objects.
 
-Его можно использовать в приложении для Ваших нужд.
+You can use it in your application for your own purposes.
 
 ```php
 return new Benchmark()
@@ -460,7 +459,7 @@ array:2 [
 
 #### toAssert
 
-Этот метод позволяет проверить результаты бенчмарка на соответствие ожидаемым значениям.
+This method allows you to validate benchmark results against expected values.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
