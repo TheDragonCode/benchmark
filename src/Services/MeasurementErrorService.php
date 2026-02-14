@@ -16,7 +16,7 @@ class MeasurementErrorService
 
     public function filter(array $data): array
     {
-        $count = $this->count($data);
+        $count = count($data);
 
         if ($this->disabled($count)) {
             return $data;
@@ -43,11 +43,6 @@ class MeasurementErrorService
     protected function take(int $count): int
     {
         return $count - (2 * $this->offset($count));
-    }
-
-    protected function count(array $values): int
-    {
-        return count($values);
     }
 
     protected function disabled(int $count): bool
