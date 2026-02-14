@@ -29,12 +29,12 @@ class RunnerService
     protected function run(Closure $callback, array $parameters = []): array
     {
         $memoryFrom = $this->memory->now();
-        $startAt = hrtime(true);
+        $startAt    = hrtime(true);
 
         $callback(...$parameters);
 
-        $time = $this->diff(hrtime(true), $startAt);
-        $memory  = $this->memory->diff($memoryFrom);
+        $time   = $this->diff(hrtime(true), $startAt);
+        $memory = $this->memory->diff($memoryFrom);
 
         return [$time, $memory];
     }

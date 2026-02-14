@@ -16,22 +16,22 @@ class CallbacksService
 
     public ?Closure $afterEach = null;
 
-    public function performBefore(string|int $name): mixed
+    public function performBefore(int|string $name): mixed
     {
         return $this->perform($this->before, $name);
     }
 
-    public function performBeforeEach(string|int $name, int $iteration): mixed
+    public function performBeforeEach(int|string $name, int $iteration): mixed
     {
         return $this->perform($this->beforeEach, $name, $iteration);
     }
 
-    public function performAfter(string|int $name): mixed
+    public function performAfter(int|string $name): mixed
     {
         return $this->perform($this->after, $name);
     }
 
-    public function performAfterEach(string|int $name, int $iteration, float $time, float $memory): mixed
+    public function performAfterEach(int|string $name, int $iteration, float $time, float $memory): mixed
     {
         return $this->perform($this->afterEach, $name, $iteration, $time, $memory);
     }

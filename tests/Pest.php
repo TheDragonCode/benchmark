@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use DragonCode\Benchmark\View\View;
 use PHPUnit\Framework\TestCase;
 
