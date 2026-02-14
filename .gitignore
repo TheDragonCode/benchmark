@@ -1,17 +1,10 @@
-.idea/
-_site/
-build/
-node_modules/
-tmp/
-vendor/
+/.idea
+/vendor
 
-.cache
-.DS_Store
-.output.txt
-.env
-.php_cs.cache
-.phpintel
-.temp
+/.cache
+/.DS_Store
+
+/.output.txt
 
 *.bak
 *.cache
@@ -19,6 +12,5 @@ vendor/
 *.orig
 
 composer.lock
-package-lock.json
 
-playground.php
+/playground.php
