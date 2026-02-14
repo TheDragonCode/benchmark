@@ -38,7 +38,7 @@ class MemoryService
     {
         foreach ($this->sizes as $unit => $value) {
             if ($bytes >= $value) {
-                return sprintf('%.2f %s', $bytes >= 1024 ? $bytes / $value : $bytes, $unit);
+                return sprintf('%.2f %s', $bytes / $value, $unit);
             }
         }
 
