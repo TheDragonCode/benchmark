@@ -28,6 +28,6 @@ abstract class View
      */
     protected function stream()
     {
-        return static::$stream ??= fopen('php://stderr', 'wb');
+        return static::$stream ??= fopen($this->streamName, 'wb');
     }
 }
