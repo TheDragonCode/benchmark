@@ -41,42 +41,42 @@ class Benchmark
         return new static;
     }
 
-    public function before(Closure $callback): self
+    public function before(Closure $callback): static
     {
         $this->callbacks->before = $callback;
 
         return $this;
     }
 
-    public function beforeEach(Closure $callback): self
+    public function beforeEach(Closure $callback): static
     {
         $this->callbacks->beforeEach = $callback;
 
         return $this;
     }
 
-    public function after(Closure $callback): self
+    public function after(Closure $callback): static
     {
         $this->callbacks->after = $callback;
 
         return $this;
     }
 
-    public function afterEach(Closure $callback): self
+    public function afterEach(Closure $callback): static
     {
         $this->callbacks->afterEach = $callback;
 
         return $this;
     }
 
-    public function iterations(int $count): self
+    public function iterations(int $count): static
     {
         $this->iterations = max(1, abs($count));
 
         return $this;
     }
 
-    public function round(?int $precision): self
+    public function round(?int $precision): static
     {
         $this->transformer->round($precision);
 
