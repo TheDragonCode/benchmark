@@ -18,7 +18,6 @@ use DragonCode\Benchmark\View\ProgressBarView;
 use function abs;
 use function array_first;
 use function count;
-use function func_get_args;
 use function is_array;
 use function is_callable;
 use function max;
@@ -103,11 +102,9 @@ class Benchmark
 
     public function compare(array|Closure ...$callbacks): static
     {
-        $values = $this->resolveCallbacks(
-            func_get_args() ?: $callbacks
-        );
-
         $this->clear();
+
+        $values = $this->resolveCallbacks($callbacks);
 
         $this->withProgress($values, $this->steps($values));
 
