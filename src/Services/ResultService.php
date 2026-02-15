@@ -94,7 +94,7 @@ class ResultService
     public function avg(array $times, array $memory): MetricData
     {
         return $this->metric(
-            time  : array_sum($times) / count($times),
+            time  : array_sum($times)  / count($times),
             memory: array_sum($memory) / count($memory),
         );
     }
