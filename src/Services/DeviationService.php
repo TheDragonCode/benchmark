@@ -60,10 +60,12 @@ class DeviationService
         $time   = $this->result->values($item['avg'], 0, false);
         $memory = $this->result->values($item['avg'], 1, false);
 
+        $avg = $this->metric($item, 'avg');
+
         return new DeviationData(
             percent: $this->metricData(
-                $this->deviation($time),
-                $this->deviation($memory),
+                $this->percentage($avg->time, $this->deviation($time)),
+                $this->percentage($avg->memory, $this->deviation($memory)),
             ),
         );
     }
@@ -98,5 +100,18 @@ class DeviationService
         }
 
         return sqrt(array_sum($values) / count($values));
+    }
+
+    protected function percentage(float $value1, float $value2): float
+    {
+        if (! $value1 && ! $value2) {
+            return 0;
+        }
+
+        if ($value1 === 0.0) {
+            return INF;
+        }
+
+        return ($value2 / $value1) * 100;
     }
 }

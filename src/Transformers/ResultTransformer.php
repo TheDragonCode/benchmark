@@ -102,9 +102,9 @@ class ResultTransformer
 
     protected function deviation(float $value): string
     {
-        $value = round($value, 6);
+        $value = round($value, 2);
 
-        return ($value > 0 ? '+' : '') . $value;
+        return ($value > 0 ? '+' : '') . $value . '%';
     }
 
     protected function time(float $value): float
