@@ -11,5 +11,6 @@ readonly class ResultData
         public MetricData $max,
         public MetricData $avg,
         public MetricData $total,
+        public ?DeviationData $deviation = null,
     ) {}
 }

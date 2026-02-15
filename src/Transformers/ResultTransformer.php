@@ -53,6 +53,18 @@ class ResultTransformer
             $table[2][$key] = $this->value($item->avg);
             $table[3][$key] = $this->value($item->total);
             $table[5][$key] = 0;
+
+            if (! $deviation = $item->deviation?->percent) {
+                continue;
+            }
+
+            $table[6] = [null];
+
+            $table[7]['#'] = 'deviation time';
+            $table[8]['#'] = 'deviation memory';
+
+            $table[7][$key] = $this->deviation($deviation->time);
+            $table[8][$key] = $this->deviation($deviation->memory);
         }
 
         return $table;
@@ -86,6 +98,13 @@ class ResultTransformer
         return $memory
             ? sprintf('%s ms - %s', $time, $memory)
             : sprintf('%s ms', $time);
+    }
+
+    protected function deviation(float $value): string
+    {
+        $value = round($value, 2);
+
+        return ($value > 0 ? '+' : '') . $value . '%';
     }
 
     protected function time(float $value): float

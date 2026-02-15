@@ -22,17 +22,22 @@ class ResultService
         protected MeasurementErrorService $measurement = new MeasurementErrorService,
     ) {}
 
+    public function has(): bool
+    {
+        return $this->data !== null;
+    }
+
+    public function force(array $collection): void
+    {
+        $this->data = $collection;
+    }
+
     /**
      * @return ResultData[]
      */
     public function get(array $collections): array
     {
-        return $this->data ??= array_map(function (array $data): ResultData {
-            return $this->collect(
-                $this->times($data),
-                $this->memory($data)
-            );
-        }, $collections);
+        return $this->data ??= $this->map($collections);
     }
 
     public function clear(): void
@@ -40,18 +45,24 @@ class ResultService
         $this->data = null;
     }
 
-    protected function times(array $data): array
+    /**
+     * @return ResultData[]
+     */
+    public function map(array $collections): array
     {
-        return $this->filter(
-            array_column($data, 0)
-        );
+        return array_map(function (array $data): ResultData {
+            return $this->collect(
+                $this->values($data, 0),
+                $this->values($data, 1)
+            );
+        }, $collections);
     }
 
-    protected function memory(array $data): array
+    public function values(array $data, int $column, bool $filter = true): array
     {
-        return $this->filter(
-            array_column($data, 1)
-        );
+        $values = array_column($data, $column);
+
+        return $filter ? $this->filter($values) : $values;
     }
 
     protected function collect(array $times, array $memory): ResultData
@@ -64,7 +75,7 @@ class ResultService
         );
     }
 
-    protected function min(array $times, array $memory): MetricData
+    public function min(array $times, array $memory): MetricData
     {
         return $this->metric(
             time  : min($times),
@@ -72,7 +83,7 @@ class ResultService
         );
     }
 
-    protected function max(array $times, array $memory): MetricData
+    public function max(array $times, array $memory): MetricData
     {
         return $this->metric(
             time  : max($times),
@@ -80,15 +91,15 @@ class ResultService
         );
     }
 
-    protected function avg(array $times, array $memory): MetricData
+    public function avg(array $times, array $memory): MetricData
     {
         return $this->metric(
-            time  : array_sum($times)  / count($times),
+            time  : array_sum($times) / count($times),
             memory: array_sum($memory) / count($memory),
         );
     }
 
-    protected function total(array $times, array $memory): MetricData
+    public function total(array $times, array $memory): MetricData
     {
         return $this->metric(
             time  : array_sum($times),

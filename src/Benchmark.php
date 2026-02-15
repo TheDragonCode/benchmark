@@ -8,6 +8,7 @@ use Closure;
 use DragonCode\Benchmark\Services\AssertService;
 use DragonCode\Benchmark\Services\CallbacksService;
 use DragonCode\Benchmark\Services\CollectorService;
+use DragonCode\Benchmark\Services\DeviationService;
 use DragonCode\Benchmark\Services\ResultService;
 use DragonCode\Benchmark\Services\RunnerService;
 use DragonCode\Benchmark\Services\ViewService;
@@ -22,13 +23,16 @@ class Benchmark
 {
     protected int $iterations = 100;
 
+    protected int $deviations = 1;
+
     public function __construct(
         protected RunnerService $runner = new RunnerService,
         protected ViewService $view = new ViewService,
         protected CallbacksService $callbacks = new CallbacksService,
         protected CollectorService $collector = new CollectorService,
         protected ResultService $result = new ResultService,
-        protected ResultTransformer $transformer = new ResultTransformer
+        protected ResultTransformer $transformer = new ResultTransformer,
+        protected DeviationService $deviation = new DeviationService,
     ) {}
 
     public static function make(): static
@@ -87,6 +91,18 @@ class Benchmark
     }
 
     /**
+     * @param  int<2, max>  $count
+     */
+    public function deviations(int $count = 2): static
+    {
+        $this->clear();
+
+        $this->deviations = max(2, abs($count));
+
+        return $this;
+    }
+
+    /**
      * @param  int<0, max>|null  $precision
      */
     public function round(?int $precision): static
@@ -98,6 +114,8 @@ class Benchmark
 
     public function compare(array|Closure ...$callbacks): static
     {
+        $this->clear();
+
         $this->callbacks->compare(...$callbacks);
 
         return $this;
@@ -108,11 +126,11 @@ class Benchmark
      */
     public function toData(): array
     {
-        $this->performCallbacks();
+        if (! $this->result->has()) {
+            $this->perform();
+        }
 
-        return $this->result->get(
-            $this->collector->all()
-        );
+        return $this->mapResult();
     }
 
     public function toConsole(): static
@@ -133,15 +151,50 @@ class Benchmark
         );
     }
 
-    protected function performCallbacks(): void
+    protected function perform(): void
     {
-        $this->clear();
+        $this->deviations === 1
+            ? $this->performCompare()
+            : $this->performDeviation();
+    }
 
+    protected function mapResult(): array
+    {
+        return $this->result->get(
+            $this->collector->all()
+        );
+    }
+
+    protected function performCompare(): void
+    {
         $callbacks = $this->callbacks->compare;
 
         $this->withProgress(
             callback: fn (ProgressBarView $bar) => $this->chunks($callbacks, $bar),
             total   : $this->steps($callbacks)
+        );
+    }
+
+    protected function performDeviation(): void
+    {
+        $results = [];
+
+        $callbacks = $this->callbacks->compare;
+
+        $this->withProgress(function (ProgressBarView $bar) use (&$results, $callbacks) {
+            for ($i = 1; $i <= $this->deviations; $i++) {
+                $this->clear();
+
+                $this->chunks($callbacks, $bar);
+
+                $results[] = $this->mapResult();
+            }
+        }, $this->steps($callbacks, $this->deviations));
+
+        $this->clear();
+
+        $this->result->force(
+            $this->deviation->calculate($results)
         );
     }
 
@@ -157,9 +210,9 @@ class Benchmark
         $this->view->emptyLine(2);
     }
 
-    protected function steps(array $callbacks): int
+    protected function steps(array $callbacks, int $multiplier = 1): int
     {
-        return count($callbacks) * $this->iterations;
+        return count($callbacks) * $this->iterations * $multiplier;
     }
 
     protected function chunks(array $callbacks, ProgressBarView $progressBar): void

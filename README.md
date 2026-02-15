@@ -34,6 +34,21 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 >
 > The result of the execution is printed to the console, so make sure you call the code from the console.
 
+### Quick Start
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->compare(
+        static fn () => true,
+        static fn () => true
+    )
+    ->toConsole();
+```
+
+### How To Use
+
 ```php
 use DragonCode\Benchmark\Benchmark;
 
@@ -158,6 +173,82 @@ Result example:
 +-------+----------------------+----------------------+
 | order | 1                    | 2                    |
 +-------+----------------------+----------------------+
+```
+
+### Deviation Values
+
+In some cases, it is necessary to test not only the functionality of the options themselves, but also to determine the
+level of deviation between them. To do this, use the `deviations` method.
+
+When you specify this method during a call, all your loops will repeat the specified number of times.
+Meanwhile, the resulting table and DTO will display values from the results, where:
+
+- `min` - minimum among all result values
+- `max` - maximum among all results
+- `avg` - arithmetic mean of all result values
+- `total` - the total value among the values of all results
+- `deviation` - deviation calculated from the mean of all results
+
+For example:
+
+```php
+new Benchmark()
+    ->deviations(4)
+    ->iterations(5)
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    )
+    ->toConsole();
+```
+
+```bash
++------------------+----------------------+-----------------------+
+| #                | foo                  | bar                   |
++------------------+----------------------+-----------------------+
+| min              | 0.0011 ms - 0 bytes  | 0.0009 ms - 0 bytes   |
+| max              | 0.0111 ms - 0 bytes  | 0.0082 ms - 0 bytes   |
+| avg              | 0.00453 ms - 0 bytes | 0.002715 ms - 0 bytes |
+| total            | 0.0906 ms - 0 bytes  | 0.0543 ms - 0 bytes   |
++------------------+----------------------+-----------------------+
+| order            | 2                    | 1                     |
++------------------+----------------------+-----------------------+
+| deviation time   | +0.002768            | +0.000919             |
+| deviation memory | 0                    | 0                     |
++------------------+----------------------+-----------------------+
+```
+
+#### To understand work without deviations
+
+```php
+$iterations = 10;
+$result = [];
+
+for ($i = 0; $i < $iterations; $i++) {
+    $result[] = /* perform some code */;
+}
+
+return $result;
+```
+
+#### To understand work with deviations
+
+```php
+$iterations = 10;
+$deviations = 4;
+$result = [];
+
+for ($i = 0; $i < $deviations; $i++) {
+    $insideResult = [];
+
+    for ($j = 0; $j < $iterations; $j++) {
+        $insideResult[] = /* perform some code */;
+    }
+    
+    $result[] = $this->performResult($insideResult);
+}
+
+return $result;
 ```
 
 ### Callbacks
@@ -401,6 +492,35 @@ new Benchmark()
 +-------+----------------------+----------------------+
 ```
 
+##### Option 5: With Deviation Values
+
+```php
+new Benchmark()
+    ->deviations(4)
+    ->round(2)
+    ->compare(
+        foo: static fn () => /* some code */,
+        bar: static fn () => /* some code */,
+    )
+    ->toConsole();
+```
+
+```bash
++------------------+-----------------------+---------------------+
+| #                | 0                     | 1                   |
++------------------+-----------------------+---------------------+
+| min              | 15.68 ms - 202 bytes  | 2.35 ms - 102 bytes |
+| max              | 112.79 ms - 209 bytes | 9.76 ms - 109 bytes |
+| avg              | 53.03 ms - 205 bytes  | 5.94 ms - 105 bytes |
+| total            | 1696.81 ms - 6.42 KB  | 190.17 ms - 3.30 KB |
++------------------+-----------------------+---------------------+
+| order            | 2                     | 1                   |
++------------------+-----------------------+---------------------+
+| deviation time   | +0.100715             | +0.114023           |
+| deviation memory | 0                     | 0                   |
++------------------+-----------------------+---------------------+
+```
+
 #### toData
 
 This method returns benchmark results as an array of `DragonCode\Benchmark\Data\ResultData` DTO objects.
@@ -452,6 +572,73 @@ array:2 [
     +total: DragonCode\Benchmark\Data\MetricData {#27
       +time: 1208.7525
       +memory: 0.0
+    }
+  }
+]
+```
+
+##### With Deviation Values
+
+When calling the benchmark with deviation calculation, the DTO will contain the `deviations` property:
+
+```php
+return new Benchmark()
+    ->deviations()
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    )
+    ->toData();
+```
+
+```bash
+array:2 [
+  "foo" => DragonCode\Benchmark\Data\ResultData {#23
+    +min: DragonCode\Benchmark\Data\MetricData {#64
+      +time: 0.001
+      +memory: 0.0
+    }
+    +max: DragonCode\Benchmark\Data\MetricData {#65
+      +time: 0.0036
+      +memory: 0.0
+    }
+    +avg: DragonCode\Benchmark\Data\MetricData {#66
+      +time: 0.0024209375
+      +memory: 0.0
+    }
+    +total: DragonCode\Benchmark\Data\MetricData {#67
+      +time: 0.7747
+      +memory: 0.0
+    }
+    +deviation: DragonCode\Benchmark\Data\DeviationData {#68
+      +percent: DragonCode\Benchmark\Data\MetricData {#69
+        +time: 0.0007048383984778
+        +memory: 0.0
+      }
+    }
+  }
+  "bar" => DragonCode\Benchmark\Data\ResultData {#70
+    +min: DragonCode\Benchmark\Data\MetricData {#71
+      +time: 0.001
+      +memory: 0.0
+    }
+    +max: DragonCode\Benchmark\Data\MetricData {#72
+      +time: 0.0032
+      +memory: 0.0
+    }
+    +avg: DragonCode\Benchmark\Data\MetricData {#73
+      +time: 0.00242875
+      +memory: 0.0
+    }
+    +total: DragonCode\Benchmark\Data\MetricData {#74
+      +time: 0.7772
+      +memory: 0.0
+    }
+    +deviation: DragonCode\Benchmark\Data\DeviationData {#75
+      +percent: DragonCode\Benchmark\Data\MetricData {#76
+        +time: 0.00061642429076895
+        +memory: 0.0
+      }
     }
   }
 ]
