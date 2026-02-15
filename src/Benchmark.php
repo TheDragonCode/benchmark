@@ -42,7 +42,7 @@ class Benchmark
     }
 
     /**
-     * @param Closure(int|string $name): mixed $callback
+     * @param  Closure(int|string $name): mixed  $callback
      */
     public function before(Closure $callback): static
     {
@@ -52,7 +52,7 @@ class Benchmark
     }
 
     /**
-     * @param Closure(int|string $name, int<1, max> $iteration): mixed $callback
+     * @param  Closure(int|string $name, int<1, max> $iteration): mixed  $callback
      */
     public function beforeEach(Closure $callback): static
     {
@@ -62,7 +62,7 @@ class Benchmark
     }
 
     /**
-     * @param Closure(int|string $name): mixed $callback
+     * @param  Closure(int|string $name): mixed  $callback
      */
     public function after(Closure $callback): static
     {
@@ -72,7 +72,7 @@ class Benchmark
     }
 
     /**
-     * @param Closure(int|string $name, int<1, max> $iteration, float $time, float $memory): mixed $callback
+     * @param  Closure(int|string $name, int<1, max> $iteration, float $time, float $memory): mixed  $callback
      */
     public function afterEach(Closure $callback): static
     {
@@ -82,7 +82,7 @@ class Benchmark
     }
 
     /**
-     * @param int<1, max> $count
+     * @param  int<1, max>  $count
      */
     public function iterations(int $count): static
     {
@@ -92,7 +92,7 @@ class Benchmark
     }
 
     /**
-     * @param int<0, max>|null $precision
+     * @param  int<0, max>|null  $precision
      */
     public function round(?int $precision): static
     {
