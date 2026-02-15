@@ -7,6 +7,6 @@ namespace DragonCode\Benchmark\Data;
 readonly class DeviationData
 {
     public function __construct(
-        public MetricData $avg,
+        public MetricData $percent,
     ) {}
 }

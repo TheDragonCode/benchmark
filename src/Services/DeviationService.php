@@ -9,6 +9,8 @@ use DragonCode\Benchmark\Data\MetricData;
 use DragonCode\Benchmark\Data\ResultData;
 
 use function array_map;
+use function array_sum;
+use function count;
 use function sqrt;
 
 class DeviationService
@@ -55,58 +57,46 @@ class DeviationService
 
     protected function deviationMetric(array $item): DeviationData
     {
+        $time   = $this->result->values($item['avg'], 0, false);
+        $memory = $this->result->values($item['avg'], 1, false);
+
         return new DeviationData(
-            avg: $this->result->avg(
-                $this->result->values($item['deviation'], 0, false),
-                $this->result->values($item['deviation'], 1, false),
+            percent: $this->metricData(
+                $this->deviation($time),
+                $this->deviation($memory),
             ),
         );
     }
 
+    protected function metricData(float $time, float $memory): MetricData
+    {
+        return new MetricData($time, $memory);
+    }
+
     protected function flatten(array $collection): array
     {
-        $default = [];
-        $result  = [];
+        $result = [];
 
-        foreach ($collection as $i => $items) {
+        foreach ($collection as $items) {
             foreach ($items as $key => $item) {
                 $result[$key]['min'][]   = [$item->min->time, $item->min->memory];
                 $result[$key]['max'][]   = [$item->max->time, $item->max->memory];
                 $result[$key]['avg'][]   = [$item->avg->time, $item->avg->memory];
                 $result[$key]['total'][] = [$item->total->time, $item->total->memory];
-
-                if ($i === 0) {
-                    $default[$key] = [$item->avg->time, $item->avg->memory];
-
-                    continue;
-                }
-
-                $result[$key]['deviation'][] = [
-                    $this->percentage($default[$key][0], $this->deviation($default[$key][0], $item->avg->time)),
-                    $this->percentage($default[$key][1], $this->deviation($default[$key][1], $item->avg->memory)),
-                ];
             }
         }
 
         return $result;
     }
 
-    protected function deviation(float $first, float $second): float
+    protected function deviation(array $values): float
     {
-        $avg = ($first + $second) / 2;
+        $avg = array_sum($values) / count($values);
 
-        $deviation1 = ($first - $avg) ** 2;
-        $deviation2 = ($second - $avg) ** 2;
-
-        return sqrt(($deviation1 + $deviation2) / 2);
-    }
-
-    protected function percentage(float $reference, float $value): float
-    {
-        if ($reference === 0.0) {
-            return 0;
+        foreach ($values as &$value) {
+            $value = ($value - $avg) ** 2;
         }
 
-        return ($value - $reference) / $reference * 100;
+        return sqrt(array_sum($values) / count($values));
     }
 }

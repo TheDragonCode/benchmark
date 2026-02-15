@@ -54,7 +54,7 @@ class ResultTransformer
             $table[3][$key] = $this->value($item->total);
             $table[5][$key] = 0;
 
-            if (! $deviation = $item->deviation?->avg) {
+            if (! $deviation = $item->deviation?->percent) {
                 continue;
             }
 
@@ -100,9 +100,11 @@ class ResultTransformer
             : sprintf('%s ms', $time);
     }
 
-    protected function deviation(float $value): ?string
+    protected function deviation(float $value): string
     {
-        return ($value > 0 ? '+' : '') . round($value, 2) . '%';
+        $value = round($value, 6);
+
+        return ($value > 0 ? '+' : '') . $value;
     }
 
     protected function time(float $value): float
