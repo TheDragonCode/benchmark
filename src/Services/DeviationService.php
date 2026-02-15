@@ -21,8 +21,6 @@ class DeviationService
 
     /**
      * @param  array<int, array<int|string, ResultData>>  $collection
-     *
-     * @return array
      */
     public function calculate(array $collection): array
     {
