@@ -22,17 +22,22 @@ class ResultService
         protected MeasurementErrorService $measurement = new MeasurementErrorService,
     ) {}
 
+    public function has(): bool
+    {
+        return $this->data !== null;
+    }
+
+    public function force(array $collection): void
+    {
+        $this->data = $collection;
+    }
+
     /**
      * @return ResultData[]
      */
-    public function get(array $collections): array
+    public function get(array $collections, bool $filterable = true): array
     {
-        return $this->data ??= array_map(function (array $data): ResultData {
-            return $this->collect(
-                $this->times($data),
-                $this->memory($data)
-            );
-        }, $collections);
+        return $this->data ??= $this->map($collections, $filterable);
     }
 
     public function clear(): void
@@ -40,18 +45,24 @@ class ResultService
         $this->data = null;
     }
 
-    protected function times(array $data): array
+    /**
+     * @return ResultData[]
+     */
+    public function map(array $collections, bool $filterable = true): array
     {
-        return $this->filter(
-            array_column($data, 0)
-        );
+        return array_map(function (array $data) use ($filterable) {
+            return $this->collect(
+                $this->values($data, 0, $filterable),
+                $this->values($data, 1, $filterable)
+            );
+        }, $collections);
     }
 
-    protected function memory(array $data): array
+    protected function values(array $data, int $column, bool $filterable): array
     {
-        return $this->filter(
-            array_column($data, 1)
-        );
+        $values = array_column($data, $column);
+
+        return $filterable ? $this->filter($values) : $values;
     }
 
     protected function collect(array $times, array $memory): ResultData
@@ -83,7 +94,7 @@ class ResultService
     protected function avg(array $times, array $memory): MetricData
     {
         return $this->metric(
-            time  : array_sum($times)  / count($times),
+            time  : array_sum($times) / count($times),
             memory: array_sum($memory) / count($memory),
         );
     }
