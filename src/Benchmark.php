@@ -41,6 +41,9 @@ class Benchmark
         return new static;
     }
 
+    /**
+     * @param Closure(int|string $name): mixed $callback
+     */
     public function before(Closure $callback): static
     {
         $this->callbacks->before = $callback;
@@ -48,6 +51,9 @@ class Benchmark
         return $this;
     }
 
+    /**
+     * @param Closure(int|string $name, int<1, max> $iteration): mixed $callback
+     */
     public function beforeEach(Closure $callback): static
     {
         $this->callbacks->beforeEach = $callback;
@@ -55,6 +61,9 @@ class Benchmark
         return $this;
     }
 
+    /**
+     * @param Closure(int|string $name): mixed $callback
+     */
     public function after(Closure $callback): static
     {
         $this->callbacks->after = $callback;
@@ -62,6 +71,9 @@ class Benchmark
         return $this;
     }
 
+    /**
+     * @param Closure(int|string $name, int<1, max> $iteration, float $time, float $memory): mixed $callback
+     */
     public function afterEach(Closure $callback): static
     {
         $this->callbacks->afterEach = $callback;
@@ -69,6 +81,9 @@ class Benchmark
         return $this;
     }
 
+    /**
+     * @param int<1, max> $count
+     */
     public function iterations(int $count): static
     {
         $this->iterations = max(1, abs($count));
@@ -76,6 +91,9 @@ class Benchmark
         return $this;
     }
 
+    /**
+     * @param int<0, max>|null $precision
+     */
     public function round(?int $precision): static
     {
         $this->transformer->round($precision);
