@@ -8,6 +8,13 @@ class CollectorService
 {
     protected array $data = [];
 
+    public function set(array $values): static
+    {
+        $this->data = $values;
+
+        return $this;
+    }
+
     public function push(int|string $name, array $values): static
     {
         $this->data[$name][] = $values;
