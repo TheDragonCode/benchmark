@@ -27,3 +27,17 @@ test('without names', function () {
         1,
     ]);
 });
+
+test('mixed names', function () {
+    $results = benchmark(false)->compare([
+        static fn () => true,
+        'foo' => static fn () => true,
+        'bar' => static fn () => false,
+    ])->toData();
+
+    expect($results)->toHaveKeys([
+        0,
+        'foo',
+        'bar',
+    ]);
+});
