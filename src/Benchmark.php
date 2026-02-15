@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DragonCode\Benchmark;
 
 use Closure;
-use DragonCode\Benchmark\Exceptions\ValueIsNotCallableException;
 use DragonCode\Benchmark\Services\AssertService;
 use DragonCode\Benchmark\Services\CallbacksService;
 use DragonCode\Benchmark\Services\CollectorService;
@@ -16,10 +15,7 @@ use DragonCode\Benchmark\Transformers\ResultTransformer;
 use DragonCode\Benchmark\View\ProgressBarView;
 
 use function abs;
-use function array_first;
 use function count;
-use function is_array;
-use function is_callable;
 use function max;
 
 class Benchmark
@@ -102,11 +98,7 @@ class Benchmark
 
     public function compare(array|Closure ...$callbacks): static
     {
-        $this->clear();
-
-        $values = $this->resolveCallbacks($callbacks);
-
-        $this->withProgress($values, $this->steps($values));
+        $this->callbacks->compare(...$callbacks);
 
         return $this;
     }
@@ -116,6 +108,8 @@ class Benchmark
      */
     public function toData(): array
     {
+        $this->performCallbacks();
+
         return $this->result->get(
             $this->collector->all()
         );
@@ -139,13 +133,25 @@ class Benchmark
         );
     }
 
-    protected function withProgress(array $callbacks, int $count): void
+    protected function performCallbacks(): void
+    {
+        $this->clear();
+
+        $callbacks = $this->callbacks->compare;
+
+        $this->withProgress(
+            callback: fn (ProgressBarView $bar) => $this->chunks($callbacks, $bar),
+            total   : $this->steps($callbacks)
+        );
+    }
+
+    protected function withProgress(Closure $callback, int $total): void
     {
         $this->view->emptyLine();
 
-        $bar = $this->view->progressBar()->create($count);
+        $bar = $this->view->progressBar()->create($total);
 
-        $this->chunks($callbacks, $bar);
+        $callback($bar);
 
         $bar->finish();
         $this->view->emptyLine(2);
@@ -159,8 +165,6 @@ class Benchmark
     protected function chunks(array $callbacks, ProgressBarView $progressBar): void
     {
         foreach ($callbacks as $name => $callback) {
-            $this->validate($callback);
-
             $this->callbacks->performBefore($name);
 
             $this->run($name, $callback, $progressBar);
@@ -192,20 +196,6 @@ class Benchmark
     protected function push(mixed $name, float $time, float $memory): void
     {
         $this->collector->push($name, [$time, $memory]);
-    }
-
-    protected function resolveCallbacks(array $callbacks): array
-    {
-        $first = array_first($callbacks);
-
-        return is_array($first) ? $first : $callbacks;
-    }
-
-    protected function validate(mixed $callback): void
-    {
-        if (! is_callable($callback)) {
-            throw new ValueIsNotCallableException($callback);
-        }
     }
 
     protected function clear(): void

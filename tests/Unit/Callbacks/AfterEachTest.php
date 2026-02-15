@@ -14,7 +14,8 @@ test('calls count', function () {
         ->compare([
             fn () => true,
             fn () => true,
-        ]);
+        ])
+        ->toData();
 
     expect($result)->toHaveCount(6);
 });
@@ -29,7 +30,8 @@ test('names only', function () {
         ->compare([
             'foo' => fn () => true,
             'bar' => fn () => true,
-        ]);
+        ])
+        ->toData();
 
     expect($result)->toBe([
         'foo',
@@ -51,7 +53,8 @@ test('iterations', function () {
         ->compare([
             'foo' => fn () => true,
             'bar' => fn () => true,
-        ]);
+        ])
+        ->toData();
 
     expect($result)->toBe([
         'foo:1',
@@ -73,7 +76,8 @@ test('array without names', function () {
         ->compare([
             fn () => true,
             fn () => true,
-        ]);
+        ])
+        ->toData();
 
     expect($result)->toBe([
         '0:1',
@@ -95,7 +99,8 @@ test('callback without names', function () {
         ->compare(
             fn () => true,
             fn () => true,
-        );
+        )
+        ->toData();
 
     expect($result)->toBe([
         '0:1',
