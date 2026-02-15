@@ -35,9 +35,9 @@ class ResultService
     /**
      * @return ResultData[]
      */
-    public function get(array $collections, bool $filterable = true): array
+    public function get(array $collections): array
     {
-        return $this->data ??= $this->map($collections, $filterable);
+        return $this->data ??= $this->map($collections);
     }
 
     public function clear(): void
@@ -48,21 +48,21 @@ class ResultService
     /**
      * @return ResultData[]
      */
-    public function map(array $collections, bool $filterable = true): array
+    public function map(array $collections): array
     {
-        return array_map(function (array $data) use ($filterable) {
+        return array_map(function (array $data): ResultData {
             return $this->collect(
-                $this->values($data, 0, $filterable),
-                $this->values($data, 1, $filterable)
+                $this->values($data, 0),
+                $this->values($data, 1)
             );
         }, $collections);
     }
 
-    protected function values(array $data, int $column, bool $filterable): array
+    public function values(array $data, int $column, bool $filter = true): array
     {
         $values = array_column($data, $column);
 
-        return $filterable ? $this->filter($values) : $values;
+        return $filter ? $this->filter($values) : $values;
     }
 
     protected function collect(array $times, array $memory): ResultData
@@ -75,7 +75,7 @@ class ResultService
         );
     }
 
-    protected function min(array $times, array $memory): MetricData
+    public function min(array $times, array $memory): MetricData
     {
         return $this->metric(
             time  : min($times),
@@ -83,7 +83,7 @@ class ResultService
         );
     }
 
-    protected function max(array $times, array $memory): MetricData
+    public function max(array $times, array $memory): MetricData
     {
         return $this->metric(
             time  : max($times),
@@ -91,7 +91,7 @@ class ResultService
         );
     }
 
-    protected function avg(array $times, array $memory): MetricData
+    public function avg(array $times, array $memory): MetricData
     {
         return $this->metric(
             time  : array_sum($times) / count($times),
@@ -99,7 +99,7 @@ class ResultService
         );
     }
 
-    protected function total(array $times, array $memory): MetricData
+    public function total(array $times, array $memory): MetricData
     {
         return $this->metric(
             time  : array_sum($times),

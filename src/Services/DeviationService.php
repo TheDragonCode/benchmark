@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use DragonCode\Benchmark\Data\DeviationData;
 use DragonCode\Benchmark\Data\MetricData;
 use DragonCode\Benchmark\Data\ResultData;
 
@@ -30,18 +31,37 @@ class DeviationService
 
     protected function map(array $collection): array
     {
-        return array_map(fn (array $item) => $this->make($item), $collection);
+        return array_map(fn (array $item): ResultData => $this->make($item), $collection);
     }
 
     protected function make(array $item): ResultData
     {
-        dd($item);
         return new ResultData(
-            min: $this->metric()
+            min      : $this->metric($item, 'min'),
+            max      : $this->metric($item, 'max'),
+            avg      : $this->metric($item, 'avg'),
+            total    : $this->metric($item, 'total'),
+            deviation: $this->deviationMetric($item),
         );
     }
 
-    protected function metric(float $time, float $memory): MetricData {}
+    protected function metric(array $item, string $key): MetricData
+    {
+        return $this->result->$key(
+            $this->result->values($item[$key], 0, false),
+            $this->result->values($item[$key], 1, false),
+        );
+    }
+
+    protected function deviationMetric(array $item): DeviationData
+    {
+        return new DeviationData(
+            avg: $this->result->avg(
+                $this->result->values($item['deviation'], 0, false),
+                $this->result->values($item['deviation'], 1, false),
+            ),
+        );
+    }
 
     protected function flatten(array $collection): array
     {
@@ -62,8 +82,8 @@ class DeviationService
                 }
 
                 $result[$key]['deviation'][] = [
-                    $this->deviation($default[$key][0], $item->avg->time),
-                    $this->deviation($default[$key][1], $item->avg->memory),
+                    $this->percentage($default[$key][0], $this->deviation($default[$key][0], $item->avg->time)),
+                    $this->percentage($default[$key][1], $this->deviation($default[$key][1], $item->avg->memory)),
                 ];
             }
         }
@@ -79,5 +99,14 @@ class DeviationService
         $deviation2 = ($second - $avg) ** 2;
 
         return sqrt(($deviation1 + $deviation2) / 2);
+    }
+
+    protected function percentage(float $reference, float $value): float
+    {
+        if ($reference === 0.0) {
+            return 0;
+        }
+
+        return ($value - $reference) / $reference * 100;
     }
 }

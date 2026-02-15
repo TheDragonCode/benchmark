@@ -43,7 +43,7 @@ class TableView extends View
 
     protected function columnWidths(array $headers, array $data): array
     {
-        $widths = array_map(fn ($header) => mb_strlen((string) $header), $headers);
+        $widths = array_map(static fn ($header) => mb_strlen((string) $header), $headers);
 
         foreach ($data as $row) {
             foreach (array_values($row) as $i => $value) {
