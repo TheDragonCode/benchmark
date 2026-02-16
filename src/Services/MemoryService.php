@@ -18,22 +18,44 @@ class MemoryService
         'KB' => 1024,
     ];
 
+    /**
+     * Returns the current peak memory usage.
+     *
+     * @return int  The value is specified in bytes.
+     */
     public function now(): int
     {
         return memory_get_peak_usage(true);
     }
 
+    /**
+     * Calculates the difference between the current peak memory usage and the provided value.
+     *
+     * @param  int  $memory  The initial memory value is specified in bytes.
+     *
+     * @return int  The difference is specified in bytes.
+     */
     public function diff(int $memory): int
     {
         return memory_get_peak_usage(true) - $memory;
     }
 
+    /**
+     * Resets peak memory usage and runs the garbage collector.
+     */
     public function reset(): void
     {
         gc_collect_cycles();
         memory_reset_peak_usage();
     }
 
+    /**
+     * Formats a memory value into a human-readable format.
+     *
+     * @param  int  $bytes  The memory value is specified in bytes.
+     *
+     * @return string  A formatted string (e.g., "1.50 MB").
+     */
     public function format(int $bytes): string
     {
         foreach ($this->sizes as $unit => $value) {

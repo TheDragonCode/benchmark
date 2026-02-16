@@ -36,13 +36,22 @@ class Benchmark
         protected DeviationService $deviation = new DeviationService,
     ) {}
 
+    /**
+     * Creates a new benchmark instance.
+     *
+     * @return static
+     */
     public static function make(): static
     {
         return new static;
     }
 
     /**
+     * Sets a callback to be executed before all iterations for each comparison.
+     *
      * @param  Closure(int|string $name): mixed  $callback
+     *
+     * @return $this
      */
     public function before(Closure $callback): static
     {
@@ -52,7 +61,11 @@ class Benchmark
     }
 
     /**
+     * Sets a callback to be executed before each iteration.
+     *
      * @param  Closure(int|string $name, int<1, max> $iteration): mixed  $callback
+     *
+     * @return $this
      */
     public function beforeEach(Closure $callback): static
     {
@@ -62,7 +75,11 @@ class Benchmark
     }
 
     /**
+     * Sets a callback to be executed after all iterations for each comparison.
+     *
      * @param  Closure(int|string $name): mixed  $callback
+     *
+     * @return $this
      */
     public function after(Closure $callback): static
     {
@@ -72,7 +89,11 @@ class Benchmark
     }
 
     /**
+     * Sets a callback to be executed after each iteration.
+     *
      * @param  Closure(int|string $name, int<1, max> $iteration, float $time, float $memory): mixed  $callback
+     *
+     * @return $this
      */
     public function afterEach(Closure $callback): static
     {
@@ -82,7 +103,11 @@ class Benchmark
     }
 
     /**
+     * Sets the number of iterations for each comparison.
+     *
      * @param  int<1, max>  $count
+     *
+     * @return $this
      */
     public function iterations(int $count): static
     {
@@ -92,7 +117,11 @@ class Benchmark
     }
 
     /**
+     * Enables deviation calculation and sets the number of runs.
+     *
      * @param  int<2, max>  $count
+     *
+     * @return $this
      */
     public function deviations(int $count = 2): static
     {
@@ -104,7 +133,11 @@ class Benchmark
     }
 
     /**
-     * @param  int<0, max>|null  $precision
+     * Sets the rounding precision for time values.
+     *
+     * @param  int<0, max>|null  $precision  The number of decimal places. Null means no rounding.
+     *
+     * @return $this
      */
     public function round(?int $precision): static
     {
@@ -113,6 +146,11 @@ class Benchmark
         return $this;
     }
 
+    /**
+     * Disables the progress bar display.
+     *
+     * @return $this
+     */
     public function disableProgressBar(): static
     {
         $this->view->progressBar()->disable();
@@ -120,6 +158,13 @@ class Benchmark
         return $this;
     }
 
+    /**
+     * Registers callback functions for comparison.
+     *
+     * @param  array|Closure  ...$callbacks  Callback functions or an array of callback functions for comparison.
+     *
+     * @return $this
+     */
     public function compare(array|Closure ...$callbacks): static
     {
         $this->clear();
@@ -130,6 +175,8 @@ class Benchmark
     }
 
     /**
+     * Returns benchmark results as an array of data.
+     *
      * @return Data\ResultData[]
      */
     public function toData(): array
@@ -141,6 +188,9 @@ class Benchmark
         return $this->mapResult();
     }
 
+    /**
+     * Outputs benchmark results to the console as a table.
+     */
     public function toConsole(): void
     {
         if (! $data = $this->toData()) {
@@ -154,6 +204,11 @@ class Benchmark
         );
     }
 
+    /**
+     * Returns the assertion service for performing result checks.
+     *
+     * @return AssertService
+     */
     public function toAssert(): AssertService
     {
         if (! $data = $this->toData()) {
@@ -163,6 +218,9 @@ class Benchmark
         return new AssertService($data);
     }
 
+    /**
+     * Performs the benchmark: simple comparison or with deviation calculation.
+     */
     protected function perform(): void
     {
         $this->deviations === 1
@@ -170,6 +228,11 @@ class Benchmark
             : $this->performDeviation();
     }
 
+    /**
+     * Transforms collected data into an array of results.
+     *
+     * @return array
+     */
     protected function mapResult(): array
     {
         return $this->result->get(
@@ -177,6 +240,9 @@ class Benchmark
         );
     }
 
+    /**
+     * Performs a simple comparison of callback functions.
+     */
     protected function performCompare(): void
     {
         $callbacks = $this->callbacks->compare;
@@ -187,6 +253,9 @@ class Benchmark
         );
     }
 
+    /**
+     * Performs a comparison with deviation calculation through multiple runs.
+     */
     protected function performDeviation(): void
     {
         $results = [];
@@ -210,6 +279,12 @@ class Benchmark
         );
     }
 
+    /**
+     * Wraps execution in a progress bar.
+     *
+     * @param  Closure  $callback  The callback function to execute.
+     * @param  int  $total  The total number of progress bar steps.
+     */
     protected function withProgress(Closure $callback, int $total): void
     {
         $this->view->emptyLine();
@@ -222,11 +297,25 @@ class Benchmark
         $this->view->emptyLine(2);
     }
 
+    /**
+     * Calculates the total number of steps for the progress bar.
+     *
+     * @param  array  $callbacks  An array of callback functions.
+     * @param  int  $multiplier  The multiplier (number of runs).
+     *
+     * @return int
+     */
     protected function steps(array $callbacks, int $multiplier = 1): int
     {
         return count($callbacks) * $this->iterations * $multiplier;
     }
 
+    /**
+     * Executes all callback functions with before/after hooks.
+     *
+     * @param  array  $callbacks  An array of callback functions.
+     * @param  ProgressBarView  $progressBar  The progress bar.
+     */
     protected function chunks(array $callbacks, ProgressBarView $progressBar): void
     {
         foreach ($callbacks as $name => $callback) {
@@ -238,6 +327,13 @@ class Benchmark
         }
     }
 
+    /**
+     * Executes all iterations for a single callback function.
+     *
+     * @param  mixed  $name  The callback name.
+     * @param  Closure  $callback  The callback function to execute.
+     * @param  ProgressBarView  $progressBar  The progress bar.
+     */
     protected function run(mixed $name, Closure $callback, ProgressBarView $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; $i++) {
@@ -253,16 +349,34 @@ class Benchmark
         }
     }
 
+    /**
+     * Calls a callback function and returns the measurement results.
+     *
+     * @param  Closure  $callback  The callback function to execute.
+     * @param  array  $parameters  Parameters to pass to the callback.
+     *
+     * @return array  An array [time in milliseconds, memory in bytes].
+     */
     protected function call(Closure $callback, array $parameters = []): array
     {
         return $this->runner->call($callback, $parameters);
     }
 
+    /**
+     * Stores measurement results in the collector.
+     *
+     * @param  mixed  $name  The callback name.
+     * @param  float  $time  Execution time is specified in milliseconds.
+     * @param  float  $memory  Memory usage is specified in bytes.
+     */
     protected function push(mixed $name, float $time, float $memory): void
     {
         $this->collector->push($name, [$time, $memory]);
     }
 
+    /**
+     * Clears results and collected data.
+     */
     protected function clear(): void
     {
         $this->result->clear();

@@ -18,6 +18,11 @@ class ProgressBarView extends View
 
     protected int $total = 100;
 
+    /**
+     * Disables the progress bar display.
+     *
+     * @return $this
+     */
     public function disable(): static
     {
         $this->enabled = false;
@@ -25,6 +30,13 @@ class ProgressBarView extends View
         return $this;
     }
 
+    /**
+     * Creates a progress bar with the specified total number of steps.
+     *
+     * @param  int  $total  The total number of steps.
+     *
+     * @return $this
+     */
     public function create(int $total): static
     {
         $this->total = max(1, $total);
@@ -34,6 +46,11 @@ class ProgressBarView extends View
         return $this;
     }
 
+    /**
+     * Advances the progress bar by the specified number of steps.
+     *
+     * @param  int  $step  The number of steps to advance.
+     */
     public function advance(int $step = 1): void
     {
         $this->current += $step;
@@ -41,6 +58,9 @@ class ProgressBarView extends View
         $this->display();
     }
 
+    /**
+     * Finishes the progress bar by setting the current value equal to the total.
+     */
     public function finish(): void
     {
         $this->current = $this->total;
@@ -52,6 +72,9 @@ class ProgressBarView extends View
         }
     }
 
+    /**
+     * Renders the current state of the progress bar.
+     */
     protected function display(): void
     {
         if (! $this->enabled) {
