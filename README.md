@@ -655,18 +655,19 @@ new Benchmark()
     ->compare(/* ... */)
     ->toAssert()
     
-    ->toBeMinTime(0.5, 3)       // between 0.5 and 3 ms
-    ->toBeMaxTime(0.5, 3)       // between 0.5 and 3 ms
-    ->toBeAvgTime(0.5, 3)       // between 0.5 and 3 ms
-    ->toBeTotalTime(0.5, 9)     // between 0.5 and 9 ms
+    ->toBeMinTime(from: 0.5, till: 3)       // between 0.5 and 3 ms
+    ->toBeMaxTime(from: 0.5, till: 3)       // between 0.5 and 3 ms
+    ->toBeAvgTime(from: 0.5, till: 3)       // between 0.5 and 3 ms
+    ->toBeTotalTime(from: 0.5, till: 9)     // between 0.5 and 9 ms
     
-    ->toBeMinMemory(0, 1024)    // between 0 and 1024 bytes
-    ->toBeMaxMemory(0, 1024)    // between 0 and 1024 bytes
-    ->toBeAvgMemory(0, 1024)    // between 0 and 1024 bytes
-    ->toBeTotalMemory(0, 4096); // between 0 and 4096 bytes
-```
+    ->toBeMinMemory(from: 0, till: 1024)    // between 0 and 1024 bytes
+    ->toBeMaxMemory(from: 0, till: 1024)    // between 0 and 1024 bytes
+    ->toBeAvgMemory(from: 0, till: 1024)    // between 0 and 1024 bytes
+    ->toBeTotalMemory(from: 0, till: 4096)  // between 0 and 4096 bytes
 
-You can also use a single value:
+    ->toBeDeviationTime(from: -0.5, till: 0.5)   // deviation time must be between -0.5% and 0.5%
+    ->toBeDeviationMemory(from: -2.5, till: 2.5) // deviation memory must be between -2.5% and 2.5%
+```
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -675,15 +676,18 @@ new Benchmark()
     ->compare(/* ... */)
     ->toAssert()
     
-    ->toBeMinTime(0.5)       // time must be greater than or equal to 0.5 ms
-    ->toBeMaxTime(0.5)       // time must be greater than or equal to 0.5 ms
-    ->toBeAvgTime(0.5)       // time must be greater than or equal to 0.5 ms
-    ->toBeTotalTime(0.5)     // time must be greater than or equal to 0.5 ms
+    ->toBeMinTime(from: 0.5)       // time must be greater than or equal to 0.5 ms
+    ->toBeMaxTime(from: 0.5)       // time must be greater than or equal to 0.5 ms
+    ->toBeAvgTime(from: 0.5)       // time must be greater than or equal to 0.5 ms
+    ->toBeTotalTime(from: 0.5)     // time must be greater than or equal to 0.5 ms
     
     ->toBeMinMemory(till: 1024)    // the memory footprint should not exceed 1024 bytes
     ->toBeMaxMemory(till: 1024)    // the memory footprint should not exceed 1024 bytes
     ->toBeAvgMemory(till: 1024)    // the memory footprint should not exceed 1024 bytes
-    ->toBeTotalMemory(till: 4096); // the memory footprint should not exceed 4096 bytes
+    ->toBeTotalMemory(till: 4096)  // the memory footprint should not exceed 4096 bytes
+
+    ->toBeDeviationTime(from: -0.5)  // deviation time must be greater than or equal to -0.5%
+    ->toBeDeviationMemory(till: 2.5) // deviation memory must be less than or equal to 2.5%
 ```
 
 ### Disable Progress Bar
