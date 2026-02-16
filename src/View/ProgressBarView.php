@@ -34,7 +34,6 @@ class ProgressBarView extends View
      * Creates a progress bar with the specified total number of steps.
      *
      * @param  int  $total  The total number of steps.
-     *
      * @return $this
      */
     public function create(int $total): static

@@ -21,7 +21,7 @@ class MemoryService
     /**
      * Returns the current peak memory usage.
      *
-     * @return int  The value is specified in bytes.
+     * @return int The value is specified in bytes.
      */
     public function now(): int
     {
@@ -32,8 +32,7 @@ class MemoryService
      * Calculates the difference between the current peak memory usage and the provided value.
      *
      * @param  int  $memory  The initial memory value is specified in bytes.
-     *
-     * @return int  The difference is specified in bytes.
+     * @return int The difference is specified in bytes.
      */
     public function diff(int $memory): int
     {
@@ -53,8 +52,7 @@ class MemoryService
      * Formats a memory value into a human-readable format.
      *
      * @param  int  $bytes  The memory value is specified in bytes.
-     *
-     * @return string  A formatted string (e.g., "1.50 MB").
+     * @return string A formatted string (e.g., "1.50 MB").
      */
     public function format(int $bytes): string
     {

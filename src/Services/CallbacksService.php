@@ -26,7 +26,7 @@ class CallbacksService
      * Registers callback functions for comparison.
      *
      * @param  array<int|string, Closure>|Closure  ...$callbacks  Callback functions or an array of callback functions
-     *     for comparison.
+     *                                                            for comparison.
      */
     public function compare(array|Closure ...$callbacks): void
     {
@@ -100,8 +100,6 @@ class CallbacksService
      * Extracts parameters from callback functions.
      *
      * @param  array  $callbacks  An array of callback functions.
-     *
-     * @return array
      */
     protected function parameters(array $callbacks): array
     {

@@ -28,8 +28,6 @@ class ViewService
 
     /**
      * Returns the progress bar instance.
-     *
-     * @return ProgressBarView
      */
     public function progressBar(): ProgressBarView
     {

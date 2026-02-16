@@ -24,8 +24,6 @@ class ResultService
 
     /**
      * Checks whether results have already been calculated.
-     *
-     * @return bool
      */
     public function has(): bool
     {
@@ -46,7 +44,6 @@ class ResultService
      * Returns benchmark results, calculating them on the first call.
      *
      * @param  array  $collections  Collected measurement data.
-     *
      * @return ResultData[]
      */
     public function get(array $collections): array
@@ -66,7 +63,6 @@ class ResultService
      * Transforms collected measurement data into an array of ResultData.
      *
      * @param  array  $collections  Collected measurement data.
-     *
      * @return ResultData[]
      */
     public function map(array $collections): array
@@ -85,8 +81,6 @@ class ResultService
      * @param  array  $data  An array of measurement data.
      * @param  int  $column  The column index (0 — time, 1 — memory).
      * @param  bool  $filter  Whether to apply measurement error filtering.
-     *
-     * @return array
      */
     public function values(array $data, int $column, bool $filter = true): array
     {
@@ -100,8 +94,6 @@ class ResultService
      *
      * @param  array  $times  An array of time values in milliseconds.
      * @param  array  $memory  An array of memory values in bytes.
-     *
-     * @return ResultData
      */
     protected function collect(array $times, array $memory): ResultData
     {
@@ -118,8 +110,6 @@ class ResultService
      *
      * @param  array  $times  An array of time values in milliseconds.
      * @param  array  $memory  An array of memory values in bytes.
-     *
-     * @return MetricData
      */
     public function min(array $times, array $memory): MetricData
     {
@@ -134,8 +124,6 @@ class ResultService
      *
      * @param  array  $times  An array of time values in milliseconds.
      * @param  array  $memory  An array of memory values in bytes.
-     *
-     * @return MetricData
      */
     public function max(array $times, array $memory): MetricData
     {
@@ -150,8 +138,6 @@ class ResultService
      *
      * @param  array  $times  An array of time values in milliseconds.
      * @param  array  $memory  An array of memory values in bytes.
-     *
-     * @return MetricData
      */
     public function avg(array $times, array $memory): MetricData
     {
@@ -166,8 +152,6 @@ class ResultService
      *
      * @param  array  $times  An array of time values in milliseconds.
      * @param  array  $memory  An array of memory values in bytes.
-     *
-     * @return MetricData
      */
     public function total(array $times, array $memory): MetricData
     {
@@ -182,8 +166,6 @@ class ResultService
      *
      * @param  float  $time  Time value is specified in milliseconds.
      * @param  float  $memory  Memory value is specified in bytes.
-     *
-     * @return MetricData
      */
     protected function metric(float $time, float $memory): MetricData
     {
@@ -194,8 +176,6 @@ class ResultService
      * Filters values to reduce measurement error.
      *
      * @param  array  $values  An array of numeric values.
-     *
-     * @return array
      */
     protected function filter(array $values): array
     {

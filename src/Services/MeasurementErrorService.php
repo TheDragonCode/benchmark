@@ -18,8 +18,7 @@ class MeasurementErrorService
      * Filters data by discarding extreme values to reduce measurement error.
      *
      * @param  array  $data  An array of numeric measurement values.
-     *
-     * @return array  The filtered array of values.
+     * @return array The filtered array of values.
      */
     public function filter(array $data): array
     {
@@ -37,8 +36,6 @@ class MeasurementErrorService
      *
      * @param  array  $data  An array of numeric values.
      * @param  int  $count  The number of elements in the array.
-     *
-     * @return array
      */
     protected function partial(array $data, int $count): array
     {
@@ -54,8 +51,6 @@ class MeasurementErrorService
      * Calculates the offset for discarding extreme values.
      *
      * @param  int  $count  The number of elements in the array.
-     *
-     * @return int
      */
     protected function offset(int $count): int
     {
@@ -66,8 +61,6 @@ class MeasurementErrorService
      * Calculates the number of elements to keep after filtering.
      *
      * @param  int  $count  The number of elements in the array.
-     *
-     * @return int
      */
     protected function take(int $count): int
     {
@@ -78,8 +71,6 @@ class MeasurementErrorService
      * Checks whether filtering is disabled due to insufficient data.
      *
      * @param  int  $count  The number of elements in the array.
-     *
-     * @return bool
      */
     protected function disabled(int $count): bool
     {
@@ -90,8 +81,6 @@ class MeasurementErrorService
      * Sorts the array of values in ascending order.
      *
      * @param  array  $values  An array of numeric values.
-     *
-     * @return array
      */
     protected function sort(array $values): array
     {

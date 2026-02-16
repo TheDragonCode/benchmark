@@ -45,8 +45,6 @@ class TableView extends View
      * Extracts column headers from the data.
      *
      * @param  array  $data  An array of table rows.
-     *
-     * @return array
      */
     protected function headers(array $data): array
     {
@@ -58,8 +56,6 @@ class TableView extends View
      *
      * @param  array  $headers  The column headers.
      * @param  array  $data  An array of table rows.
-     *
-     * @return array
      */
     protected function columnWidths(array $headers, array $data): array
     {
@@ -78,8 +74,6 @@ class TableView extends View
      * Creates a table separator line.
      *
      * @param  array  $widths  An array of column widths.
-     *
-     * @return string
      */
     protected function separator(array $widths): string
     {
@@ -93,8 +87,6 @@ class TableView extends View
      *
      * @param  array  $values  The cell values of the row.
      * @param  array  $widths  An array of column widths.
-     *
-     * @return string
      */
     protected function formatRow(array $values, array $widths): string
     {
