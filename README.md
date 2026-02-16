@@ -686,6 +686,20 @@ new Benchmark()
     ->toBeTotalMemory(till: 4096); // the memory footprint should not exceed 4096 bytes
 ```
 
+### Disable Progress Bar
+
+In some cases, it is necessary to disable the progressbar so that it does not interfere in the console.
+
+To do this, use the `disableProgressBar` method:
+
+```PHP
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->disableProgressBar()
+    // ...
+```
+
 ## License
 
 This package is licensed under the [MIT License](LICENSE).

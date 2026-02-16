@@ -113,6 +113,13 @@ class Benchmark
         return $this;
     }
 
+    public function disableProgressBar(): static
+    {
+        $this->view->progressBar()->disable();
+
+        return $this;
+    }
+
     public function compare(array|Closure ...$callbacks): static
     {
         $this->clear();

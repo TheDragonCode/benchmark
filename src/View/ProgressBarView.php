@@ -10,11 +10,20 @@ use function str_repeat;
 
 class ProgressBarView extends View
 {
+    protected bool $enabled = true;
+
     protected int $current = 0;
 
     protected int $barWidth = 28;
 
     protected int $total = 100;
+
+    public function disable(): static
+    {
+        $this->enabled = false;
+
+        return $this;
+    }
 
     public function create(int $total): static
     {
@@ -38,11 +47,17 @@ class ProgressBarView extends View
 
         $this->display();
 
-        $this->write(PHP_EOL);
+        if ($this->enabled) {
+            $this->write(PHP_EOL);
+        }
     }
 
     protected function display(): void
     {
+        if (! $this->enabled) {
+            return;
+        }
+
         $percent  = $this->current / $this->total;
         $filled   = (int) floor($percent * $this->barWidth);
         $empty    = $this->barWidth - $filled;
