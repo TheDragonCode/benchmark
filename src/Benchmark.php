@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DragonCode\Benchmark;
 
 use Closure;
+use DragonCode\Benchmark\Exceptions\NoComparisonsException;
 use DragonCode\Benchmark\Services\AssertService;
 use DragonCode\Benchmark\Services\CallbacksService;
 use DragonCode\Benchmark\Services\CollectorService;
@@ -133,22 +134,26 @@ class Benchmark
         return $this->mapResult();
     }
 
-    public function toConsole(): static
+    public function toConsole(): void
     {
-        $table = $this->transformer->toTable(
-            $this->toData()
+        if (! $data = $this->toData()) {
+            $this->view->line('[INFO] No comparisons were made.');
+
+            return;
+        }
+
+        $this->view->table(
+            $this->transformer->toTable($data)
         );
-
-        $this->view->table($table);
-
-        return $this;
     }
 
     public function toAssert(): AssertService
     {
-        return new AssertService(
-            $this->toData()
-        );
+        if (! $data = $this->toData()) {
+            throw new NoComparisonsException;
+        }
+
+        return new AssertService($data);
     }
 
     protected function perform(): void
