@@ -26,6 +26,11 @@ class ViewService
         return $this->progressBar;
     }
 
+    public function line(string $text): void
+    {
+        $this->line->line($text);
+    }
+
     public function emptyLine(int $count = 1): void
     {
         $this->line->newLine($count);
