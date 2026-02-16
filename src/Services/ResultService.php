@@ -22,17 +22,31 @@ class ResultService
         protected MeasurementErrorService $measurement = new MeasurementErrorService,
     ) {}
 
+    /**
+     * Checks whether results have already been calculated.
+     *
+     * @return bool
+     */
     public function has(): bool
     {
         return $this->data !== null;
     }
 
+    /**
+     * Forcefully sets the results.
+     *
+     * @param  array  $collection  An array of results.
+     */
     public function force(array $collection): void
     {
         $this->data = $collection;
     }
 
     /**
+     * Returns benchmark results, calculating them on the first call.
+     *
+     * @param  array  $collections  Collected measurement data.
+     *
      * @return ResultData[]
      */
     public function get(array $collections): array
@@ -40,12 +54,19 @@ class ResultService
         return $this->data ??= $this->map($collections);
     }
 
+    /**
+     * Clears the stored results.
+     */
     public function clear(): void
     {
         $this->data = null;
     }
 
     /**
+     * Transforms collected measurement data into an array of ResultData.
+     *
+     * @param  array  $collections  Collected measurement data.
+     *
      * @return ResultData[]
      */
     public function map(array $collections): array
@@ -58,6 +79,15 @@ class ResultService
         }, $collections);
     }
 
+    /**
+     * Extracts values of the specified column from measurement data.
+     *
+     * @param  array  $data  An array of measurement data.
+     * @param  int  $column  The column index (0 — time, 1 — memory).
+     * @param  bool  $filter  Whether to apply measurement error filtering.
+     *
+     * @return array
+     */
     public function values(array $data, int $column, bool $filter = true): array
     {
         $values = array_column($data, $column);
@@ -65,6 +95,14 @@ class ResultService
         return $filter ? $this->filter($values) : $values;
     }
 
+    /**
+     * Creates a ResultData object from time and memory arrays.
+     *
+     * @param  array  $times  An array of time values in milliseconds.
+     * @param  array  $memory  An array of memory values in bytes.
+     *
+     * @return ResultData
+     */
     protected function collect(array $times, array $memory): ResultData
     {
         return new ResultData(
@@ -75,6 +113,14 @@ class ResultService
         );
     }
 
+    /**
+     * Calculates the minimum time and memory values.
+     *
+     * @param  array  $times  An array of time values in milliseconds.
+     * @param  array  $memory  An array of memory values in bytes.
+     *
+     * @return MetricData
+     */
     public function min(array $times, array $memory): MetricData
     {
         return $this->metric(
@@ -83,6 +129,14 @@ class ResultService
         );
     }
 
+    /**
+     * Calculates the maximum time and memory values.
+     *
+     * @param  array  $times  An array of time values in milliseconds.
+     * @param  array  $memory  An array of memory values in bytes.
+     *
+     * @return MetricData
+     */
     public function max(array $times, array $memory): MetricData
     {
         return $this->metric(
@@ -91,6 +145,14 @@ class ResultService
         );
     }
 
+    /**
+     * Calculates the average time and memory values.
+     *
+     * @param  array  $times  An array of time values in milliseconds.
+     * @param  array  $memory  An array of memory values in bytes.
+     *
+     * @return MetricData
+     */
     public function avg(array $times, array $memory): MetricData
     {
         return $this->metric(
@@ -99,6 +161,14 @@ class ResultService
         );
     }
 
+    /**
+     * Calculates the total time and memory values.
+     *
+     * @param  array  $times  An array of time values in milliseconds.
+     * @param  array  $memory  An array of memory values in bytes.
+     *
+     * @return MetricData
+     */
     public function total(array $times, array $memory): MetricData
     {
         return $this->metric(
@@ -107,11 +177,26 @@ class ResultService
         );
     }
 
+    /**
+     * Creates a MetricData object.
+     *
+     * @param  float  $time  Time value is specified in milliseconds.
+     * @param  float  $memory  Memory value is specified in bytes.
+     *
+     * @return MetricData
+     */
     protected function metric(float $time, float $memory): MetricData
     {
         return new MetricData($time, $memory);
     }
 
+    /**
+     * Filters values to reduce measurement error.
+     *
+     * @param  array  $values  An array of numeric values.
+     *
+     * @return array
+     */
     protected function filter(array $values): array
     {
         return $this->measurement->filter($values);

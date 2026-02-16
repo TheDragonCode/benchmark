@@ -10,12 +10,22 @@ use DragonCode\Benchmark\Exceptions\DeviationsNotCalculatedException;
 class AssertService
 {
     /**
+     * Creates a benchmark result assertion service.
+     *
      * @param  \DragonCode\Benchmark\Data\ResultData[]  $result
      */
     public function __construct(
         protected array $result
     ) {}
 
+    /**
+     * Asserts that the minimum execution time is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in milliseconds.
+     * @param  float|null  $till  End value is specified in milliseconds.
+     *
+     * @return $this
+     */
     public function toBeMinTime(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -28,6 +38,14 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the maximum execution time is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in milliseconds.
+     * @param  float|null  $till  End value is specified in milliseconds.
+     *
+     * @return $this
+     */
     public function toBeMaxTime(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -40,6 +58,14 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the average execution time is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in milliseconds.
+     * @param  float|null  $till  End value is specified in milliseconds.
+     *
+     * @return $this
+     */
     public function toBeAvgTime(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -52,6 +78,14 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the total execution time is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in milliseconds.
+     * @param  float|null  $till  End value is specified in milliseconds.
+     *
+     * @return $this
+     */
     public function toBeTotalTime(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -64,6 +98,14 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the minimum memory usage is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in bytes.
+     * @param  float|null  $till  End value is specified in bytes.
+     *
+     * @return $this
+     */
     public function toBeMinMemory(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -76,6 +118,14 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the maximum memory usage is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in bytes.
+     * @param  float|null  $till  End value is specified in bytes.
+     *
+     * @return $this
+     */
     public function toBeMaxMemory(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -88,6 +138,14 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the average memory usage is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in bytes.
+     * @param  float|null  $till  End value is specified in bytes.
+     *
+     * @return $this
+     */
     public function toBeAvgMemory(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -100,6 +158,14 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the total memory usage is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in bytes.
+     * @param  float|null  $till  End value is specified in bytes.
+     *
+     * @return $this
+     */
     public function toBeTotalMemory(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -112,6 +178,14 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the execution time deviation is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in percentages.
+     * @param  float|null  $till  End value is specified in percentages.
+     *
+     * @return $this
+     */
     public function toBeDeviationTime(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -128,6 +202,14 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the memory usage deviation is within the specified range.
+     *
+     * @param  float|null  $from  Start value is specified in percentages.
+     * @param  float|null  $till  End value is specified in percentages.
+     *
+     * @return $this
+     */
     public function toBeDeviationMemory(?float $from = null, ?float $till = null): static
     {
         $from = $this->resolveFrom($from, $till);
@@ -144,6 +226,13 @@ class AssertService
         return $this;
     }
 
+    /**
+     * Asserts that the actual value is greater than or equal to the expected value.
+     *
+     * @param  float  $actual  The actual value.
+     * @param  float|null  $expected  The expected minimum value.
+     * @param  string  $name  The name of the metric being checked.
+     */
     protected function assertGreaterThan(float $actual, ?float $expected, string $name): void
     {
         if ($expected === null) {
@@ -159,6 +248,13 @@ class AssertService
         );
     }
 
+    /**
+     * Asserts that the actual value is less than or equal to the expected value.
+     *
+     * @param  float  $actual  The actual value.
+     * @param  float|null  $expected  The expected maximum value.
+     * @param  string  $name  The name of the metric being checked.
+     */
     protected function assertLessThan(float $actual, ?float $expected, string $name): void
     {
         if ($expected === null) {
@@ -174,6 +270,14 @@ class AssertService
         );
     }
 
+    /**
+     * Resolves the start value of the range. Returns 0 if both parameters are null.
+     *
+     * @param  float|null  $from  The start value of the range.
+     * @param  float|null  $till  The end value of the range.
+     *
+     * @return float|null
+     */
     protected function resolveFrom(?float $from, ?float $till): ?float
     {
         if ($from === null && $till === null) {

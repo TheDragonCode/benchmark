@@ -27,13 +27,22 @@ class ResultTransformer
         protected MemoryService $memory = new MemoryService,
     ) {}
 
+    /**
+     * Sets the rounding precision for time values.
+     *
+     * @param  int|null  $precision  The number of decimal places. Null means no rounding.
+     */
     public function round(?int $precision): void
     {
         $this->precision = $precision;
     }
 
     /**
+     * Transforms a result collection into a table format for display.
+     *
      * @param  \DragonCode\Benchmark\Data\ResultData[]  $collection
+     *
+     * @return array
      */
     public function toTable(array $collection): array
     {
@@ -43,7 +52,12 @@ class ResultTransformer
     }
 
     /**
+     * Fills the table with data from the result collection.
+     *
+     * @param  array  $table  The table template.
      * @param  \DragonCode\Benchmark\Data\ResultData[]  $collection
+     *
+     * @return array
      */
     protected function map(array $table, array $collection): array
     {
@@ -71,7 +85,12 @@ class ResultTransformer
     }
 
     /**
+     * Determines the order of callbacks by average execution time.
+     *
+     * @param  array  $table  The table with data.
      * @param  \DragonCode\Benchmark\Data\ResultData[]  $collection
+     *
+     * @return array
      */
     protected function order(array $table, array $collection): array
     {
@@ -90,6 +109,13 @@ class ResultTransformer
         return $table;
     }
 
+    /**
+     * Formats a metric into a string with time and memory.
+     *
+     * @param  MetricData  $metric  The metric. Time is specified in milliseconds, memory in bytes.
+     *
+     * @return string  A formatted string (e.g., "0.123 ms - 2.00 MB").
+     */
     protected function value(MetricData $metric): string
     {
         $time   = $this->time($metric->time);
@@ -100,6 +126,13 @@ class ResultTransformer
             : sprintf('%s ms', $time);
     }
 
+    /**
+     * Formats a deviation value into a string with percentages.
+     *
+     * @param  float  $value  The deviation value is specified in percentages.
+     *
+     * @return string  A formatted string (e.g., "+1.23%").
+     */
     protected function deviation(float $value): string
     {
         $value = round($value, 2);
@@ -107,6 +140,13 @@ class ResultTransformer
         return ($value > 0 ? '+' : '') . $value . '%';
     }
 
+    /**
+     * Rounds a time value with the specified precision.
+     *
+     * @param  float  $value  Time value is specified in milliseconds.
+     *
+     * @return float  The rounded value is specified in milliseconds.
+     */
     protected function time(float $value): float
     {
         if ($this->precision === null) {
@@ -116,6 +156,13 @@ class ResultTransformer
         return round($value, $this->precision);
     }
 
+    /**
+     * Formats a memory value into a human-readable format.
+     *
+     * @param  float|int  $bytes  The memory value is specified in bytes.
+     *
+     * @return string  A formatted string (e.g., "2.00 MB").
+     */
     protected function memory(float|int $bytes): string
     {
         return $this->memory->format((int) $bytes);

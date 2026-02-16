@@ -10,6 +10,11 @@ use function implode;
 
 class DeviationsNotCalculatedException extends ValueError
 {
+    /**
+     * Creates an exception indicating that deviations were not calculated for the specified callback name.
+     *
+     * @param  int|string  $name  The name of the callback for which deviation data is missing.
+     */
     public function __construct(int|string $name)
     {
         parent::__construct(
