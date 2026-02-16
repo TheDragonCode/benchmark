@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DragonCode\Benchmark\Services;
 
 use AssertionError;
+use DragonCode\Benchmark\Exceptions\DeviationsNotCalculatedException;
 
 class AssertService
 {
@@ -106,6 +107,38 @@ class AssertService
         foreach ($this->result as $item) {
             $this->assertGreaterThan($item->total->memory, $from, 'total memory');
             $this->assertLessThan($item->total->memory, $till, 'total memory');
+        }
+
+        return $this;
+    }
+
+    public function toBeDeviationTime(?float $from = null, ?float $till = null): static
+    {
+        $from = $this->resolveFrom($from, $till);
+
+        foreach ($this->result as $key => $item) {
+            if (! $item->deviation) {
+                throw new DeviationsNotCalculatedException($key);
+            }
+
+            $this->assertGreaterThan($item->deviation->percent->time, $from, 'deviation time');
+            $this->assertLessThan($item->deviation->percent->time, $till, 'deviation time');
+        }
+
+        return $this;
+    }
+
+    public function toBeDeviationMemory(?float $from = null, ?float $till = null): static
+    {
+        $from = $this->resolveFrom($from, $till);
+
+        foreach ($this->result as $name => $item) {
+            if (! $item->deviation) {
+                throw new DeviationsNotCalculatedException($name);
+            }
+
+            $this->assertGreaterThan($item->deviation->percent->memory, $from, 'deviation memory');
+            $this->assertLessThan($item->deviation->percent->memory, $till, 'deviation memory');
         }
 
         return $this;
