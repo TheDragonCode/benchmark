@@ -9,11 +9,11 @@ readonly class ResultData
     /**
      * Creates an object with benchmark results.
      *
-     * @param  MetricData  $min  Minimum metric values. Time is specified in milliseconds, memory in bytes.
-     * @param  MetricData  $max  Maximum metric values. Time is specified in milliseconds, memory in bytes.
-     * @param  MetricData  $avg  Average metric values. Time is specified in milliseconds, memory in bytes.
-     * @param  MetricData  $total  Total metric values. Time is specified in milliseconds, memory in bytes.
-     * @param  DeviationData|null  $deviation  Deviation data. Values are specified in percentages.
+     * @param  MetricData  $min  Minimum metric values.
+     * @param  MetricData  $max  Maximum metric values.
+     * @param  MetricData  $avg  Average metric values.
+     * @param  MetricData  $total  Total metric values.
+     * @param  DeviationData|null  $deviation  Deviation data.
      */
     public function __construct(
         public MetricData $min,
