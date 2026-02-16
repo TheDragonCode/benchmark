@@ -13,7 +13,6 @@ class CollectorService
      *
      * @param  int|string  $name  The callback name.
      * @param  array  $values  An array of values [time in milliseconds, memory in bytes].
-     *
      * @return $this
      */
     public function push(int|string $name, array $values): static
@@ -25,8 +24,6 @@ class CollectorService
 
     /**
      * Returns all collected measurement data.
-     *
-     * @return array
      */
     public function all(): array
     {

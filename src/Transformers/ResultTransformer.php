@@ -41,8 +41,6 @@ class ResultTransformer
      * Transforms a result collection into a table format for display.
      *
      * @param  \DragonCode\Benchmark\Data\ResultData[]  $collection
-     *
-     * @return array
      */
     public function toTable(array $collection): array
     {
@@ -56,8 +54,6 @@ class ResultTransformer
      *
      * @param  array  $table  The table template.
      * @param  \DragonCode\Benchmark\Data\ResultData[]  $collection
-     *
-     * @return array
      */
     protected function map(array $table, array $collection): array
     {
@@ -89,8 +85,6 @@ class ResultTransformer
      *
      * @param  array  $table  The table with data.
      * @param  \DragonCode\Benchmark\Data\ResultData[]  $collection
-     *
-     * @return array
      */
     protected function order(array $table, array $collection): array
     {
@@ -113,8 +107,7 @@ class ResultTransformer
      * Formats a metric into a string with time and memory.
      *
      * @param  MetricData  $metric  The metric. Time is specified in milliseconds, memory in bytes.
-     *
-     * @return string  A formatted string (e.g., "0.123 ms - 2.00 MB").
+     * @return string A formatted string (e.g., "0.123 ms - 2.00 MB").
      */
     protected function value(MetricData $metric): string
     {
@@ -130,8 +123,7 @@ class ResultTransformer
      * Formats a deviation value into a string with percentages.
      *
      * @param  float  $value  The deviation value is specified in percentages.
-     *
-     * @return string  A formatted string (e.g., "+1.23%").
+     * @return string A formatted string (e.g., "+1.23%").
      */
     protected function deviation(float $value): string
     {
@@ -144,8 +136,7 @@ class ResultTransformer
      * Rounds a time value with the specified precision.
      *
      * @param  float  $value  Time value is specified in milliseconds.
-     *
-     * @return float  The rounded value is specified in milliseconds.
+     * @return float The rounded value is specified in milliseconds.
      */
     protected function time(float $value): float
     {
@@ -160,8 +151,7 @@ class ResultTransformer
      * Formats a memory value into a human-readable format.
      *
      * @param  float|int  $bytes  The memory value is specified in bytes.
-     *
-     * @return string  A formatted string (e.g., "2.00 MB").
+     * @return string A formatted string (e.g., "2.00 MB").
      */
     protected function memory(float|int $bytes): string
     {

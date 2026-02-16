@@ -19,8 +19,7 @@ class RunnerService
      *
      * @param  Closure  $callback  The callback function to execute.
      * @param  array  $parameters  Parameters to pass to the callback.
-     *
-     * @return array  An array [time in milliseconds, memory in bytes].
+     * @return array An array [time in milliseconds, memory in bytes].
      */
     public function call(Closure $callback, array $parameters = []): array
     {
@@ -42,8 +41,7 @@ class RunnerService
      *
      * @param  Closure  $callback  The callback function to execute.
      * @param  array  $parameters  Parameters to pass to the callback.
-     *
-     * @return array  An array [time in milliseconds, memory in bytes].
+     * @return array An array [time in milliseconds, memory in bytes].
      */
     protected function run(Closure $callback, array $parameters = []): array
     {
@@ -63,8 +61,7 @@ class RunnerService
      *
      * @param  float  $now  The current hrtime value is specified in nanoseconds.
      * @param  float  $startAt  The initial hrtime value is specified in nanoseconds.
-     *
-     * @return float  The difference is specified in milliseconds.
+     * @return float The difference is specified in milliseconds.
      */
     protected function diff(float $now, float $startAt): float
     {

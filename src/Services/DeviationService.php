@@ -23,7 +23,6 @@ class DeviationService
      * Calculates final results with deviations based on multiple runs.
      *
      * @param  array<int, array<int|string, ResultData>>  $collection  A collection of results from multiple runs.
-     *
      * @return array<int|string, ResultData>
      */
     public function calculate(array $collection): array
@@ -37,7 +36,6 @@ class DeviationService
      * Transforms grouped data into an array of ResultData.
      *
      * @param  array  $collection  Grouped measurement data.
-     *
      * @return array<int|string, ResultData>
      */
     protected function map(array $collection): array
@@ -49,8 +47,6 @@ class DeviationService
      * Creates a ResultData object with metrics and deviations from grouped data.
      *
      * @param  array  $item  Grouped data for a single callback.
-     *
-     * @return ResultData
      */
     protected function make(array $item): ResultData
     {
@@ -68,8 +64,6 @@ class DeviationService
      *
      * @param  array  $item  Grouped data for a single callback.
      * @param  string  $key  The metric key (min, max, avg, total).
-     *
-     * @return MetricData
      */
     protected function metric(array $item, string $key): MetricData
     {
@@ -83,8 +77,6 @@ class DeviationService
      * Calculates deviation data based on average values.
      *
      * @param  array  $item  Grouped data for a single callback.
-     *
-     * @return DeviationData
      */
     protected function deviationMetric(array $item): DeviationData
     {
@@ -106,8 +98,6 @@ class DeviationService
      *
      * @param  float  $time  Time value is specified in milliseconds.
      * @param  float  $memory  Memory value is specified in bytes.
-     *
-     * @return MetricData
      */
     protected function metricData(float $time, float $memory): MetricData
     {
@@ -118,8 +108,6 @@ class DeviationService
      * Groups results from multiple runs by callback names and metric types.
      *
      * @param  array  $collection  A collection of results from multiple runs.
-     *
-     * @return array
      */
     protected function flatten(array $collection): array
     {
@@ -141,8 +129,6 @@ class DeviationService
      * Calculates the standard deviation for an array of values.
      *
      * @param  array  $values  An array of numeric values.
-     *
-     * @return float
      */
     protected function deviation(array $values): float
     {
@@ -160,8 +146,7 @@ class DeviationService
      *
      * @param  float  $value1  The base value.
      * @param  float  $value2  The compared value.
-     *
-     * @return float  The result is specified in percentages.
+     * @return float The result is specified in percentages.
      */
     protected function percentage(float $value1, float $value2): float
     {

@@ -23,7 +23,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
-     *
      * @return $this
      */
     public function toBeMinTime(?float $from = null, ?float $till = null): static
@@ -43,7 +42,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
-     *
      * @return $this
      */
     public function toBeMaxTime(?float $from = null, ?float $till = null): static
@@ -63,7 +61,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
-     *
      * @return $this
      */
     public function toBeAvgTime(?float $from = null, ?float $till = null): static
@@ -83,7 +80,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
-     *
      * @return $this
      */
     public function toBeTotalTime(?float $from = null, ?float $till = null): static
@@ -103,7 +99,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
-     *
      * @return $this
      */
     public function toBeMinMemory(?float $from = null, ?float $till = null): static
@@ -123,7 +118,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
-     *
      * @return $this
      */
     public function toBeMaxMemory(?float $from = null, ?float $till = null): static
@@ -143,7 +137,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
-     *
      * @return $this
      */
     public function toBeAvgMemory(?float $from = null, ?float $till = null): static
@@ -163,7 +156,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
-     *
      * @return $this
      */
     public function toBeTotalMemory(?float $from = null, ?float $till = null): static
@@ -183,7 +175,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in percentages.
      * @param  float|null  $till  End value is specified in percentages.
-     *
      * @return $this
      */
     public function toBeDeviationTime(?float $from = null, ?float $till = null): static
@@ -207,7 +198,6 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in percentages.
      * @param  float|null  $till  End value is specified in percentages.
-     *
      * @return $this
      */
     public function toBeDeviationMemory(?float $from = null, ?float $till = null): static
@@ -275,8 +265,6 @@ class AssertService
      *
      * @param  float|null  $from  The start value of the range.
      * @param  float|null  $till  The end value of the range.
-     *
-     * @return float|null
      */
     protected function resolveFrom(?float $from, ?float $till): ?float
     {
