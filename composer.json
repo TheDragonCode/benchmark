@@ -66,6 +66,8 @@
         "sort-packages": true
     },
     "scripts": {
-        "test": "vendor/bin/pest"
+        "test": "php -d xdebug.mode=off -d xdebug.start_with_request=no vendor/bin/pest",
+        "test:coverage": "php -d xdebug.mode=coverage -d xdebug.start_with_request=no vendor/bin/pest --coverage",
+        "test:profile": "php -d xdebug.mode=profile -d xdebug.start_with_request=no vendor/bin/pest"
     }
 }
