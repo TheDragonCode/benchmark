@@ -15,6 +15,10 @@ use function sqrt;
 
 class DeviationService
 {
+    protected const MetricKeys  = ['min', 'max', 'avg', 'total'];
+    protected const TimeIndex   = 0;
+    protected const MemoryIndex = 1;
+
     public function __construct(
         protected ResultService $result = new ResultService,
     ) {}
@@ -23,24 +27,14 @@ class DeviationService
      * Calculates final results with deviations based on multiple runs.
      *
      * @param  array<int, array<int|string, ResultData>>  $collection  A collection of results from multiple runs.
+     *
      * @return array<int|string, ResultData>
      */
     public function calculate(array $collection): array
     {
-        return $this->map(
-            $this->flatten($collection)
-        );
-    }
+        $grouped = $this->group($collection);
 
-    /**
-     * Transforms grouped data into an array of ResultData.
-     *
-     * @param  array  $collection  Grouped measurement data.
-     * @return array<int|string, ResultData>
-     */
-    protected function map(array $collection): array
-    {
-        return array_map(fn (array $item): ResultData => $this->make($item), $collection);
+        return array_map(fn (array $item): ResultData => $this->buildResultData($item), $grouped);
     }
 
     /**
@@ -48,14 +42,14 @@ class DeviationService
      *
      * @param  array  $item  Grouped data for a single callback.
      */
-    protected function make(array $item): ResultData
+    protected function buildResultData(array $item): ResultData
     {
         return new ResultData(
-            min      : $this->metric($item, 'min'),
-            max      : $this->metric($item, 'max'),
-            avg      : $this->metric($item, 'avg'),
-            total    : $this->metric($item, 'total'),
-            deviation: $this->deviationMetric($item),
+            min      : $this->buildMetric($item, 'min'),
+            max      : $this->buildMetric($item, 'max'),
+            avg      : $this->buildMetric($item, 'avg'),
+            total    : $this->buildMetric($item, 'total'),
+            deviation: $this->buildDeviation($item),
         );
     }
 
@@ -65,12 +59,25 @@ class DeviationService
      * @param  array  $item  Grouped data for a single callback.
      * @param  string  $key  The metric key (min, max, avg, total).
      */
-    protected function metric(array $item, string $key): MetricData
+    protected function buildMetric(array $item, string $key): MetricData
     {
         return $this->result->$key(
-            $this->result->values($item[$key], 0, false),
-            $this->result->values($item[$key], 1, false),
+            $this->extract($item[$key], self::TimeIndex),
+            $this->extract($item[$key], self::MemoryIndex),
         );
+    }
+
+    /**
+     * Extracts time or memory values from grouped metric data.
+     *
+     * @param  array  $data  Grouped metric entries.
+     * @param  int  $index  The index to extract (TIME_INDEX or MEMORY_INDEX).
+     *
+     * @return array<float>
+     */
+    protected function extract(array $data, int $index): array
+    {
+        return $this->result->values($data, $index, false);
     }
 
     /**
@@ -78,47 +85,37 @@ class DeviationService
      *
      * @param  array  $item  Grouped data for a single callback.
      */
-    protected function deviationMetric(array $item): DeviationData
+    protected function buildDeviation(array $item): DeviationData
     {
-        $time   = $this->result->values($item['avg'], 0, false);
-        $memory = $this->result->values($item['avg'], 1, false);
+        $timeValues   = $this->extract($item['avg'], self::TimeIndex);
+        $memoryValues = $this->extract($item['avg'], self::MemoryIndex);
 
-        $avg = $this->metric($item, 'avg');
+        $avg = $this->buildMetric($item, 'avg');
 
         return new DeviationData(
-            percent: $this->metricData(
-                $this->percentage($avg->time, $this->deviation($time)),
-                $this->percentage($avg->memory, $this->deviation($memory)),
+            percent: new MetricData(
+                $this->percentage($avg->time, $this->deviation($timeValues)),
+                $this->percentage($avg->memory, $this->deviation($memoryValues)),
             ),
         );
     }
 
     /**
-     * Creates a MetricData object with the specified values.
-     *
-     * @param  float  $time  Time value is specified in milliseconds.
-     * @param  float  $memory  Memory value is specified in bytes.
-     */
-    protected function metricData(float $time, float $memory): MetricData
-    {
-        return new MetricData($time, $memory);
-    }
-
-    /**
      * Groups results from multiple runs by callback names and metric types.
      *
-     * @param  array  $collection  A collection of results from multiple runs.
+     * @param  array<int, array<int|string, ResultData>>  $collection  A collection of results from multiple runs.
+     *
+     * @return array<int|string, array<string, array<int, array{float, float}>>>
      */
-    protected function flatten(array $collection): array
+    protected function group(array $collection): array
     {
         $result = [];
 
         foreach ($collection as $items) {
             foreach ($items as $key => $item) {
-                $result[$key]['min'][]   = [$item->min->time, $item->min->memory];
-                $result[$key]['max'][]   = [$item->max->time, $item->max->memory];
-                $result[$key]['avg'][]   = [$item->avg->time, $item->avg->memory];
-                $result[$key]['total'][] = [$item->total->time, $item->total->memory];
+                foreach (self::MetricKeys as $metric) {
+                    $result[$key][$metric][] = [$item->$metric->time, $item->$metric->memory];
+                }
             }
         }
 
@@ -128,17 +125,16 @@ class DeviationService
     /**
      * Calculates the standard deviation for an array of values.
      *
-     * @param  array  $values  An array of numeric values.
+     * @param  array<float>  $values  An array of numeric values.
      */
     protected function deviation(array $values): float
     {
-        $avg = array_sum($values) / count($values);
+        $count = count($values);
+        $avg   = array_sum($values) / $count;
 
-        foreach ($values as &$value) {
-            $value = ($value - $avg) ** 2;
-        }
+        $squared = array_map(static fn (float $value): float => ($value - $avg) ** 2, $values);
 
-        return sqrt(array_sum($values) / count($values));
+        return sqrt(array_sum($squared) / $count);
     }
 
     /**
@@ -146,6 +142,7 @@ class DeviationService
      *
      * @param  float  $value1  The base value.
      * @param  float  $value2  The compared value.
+     *
      * @return float The result is specified in percentages.
      */
     protected function percentage(float $value1, float $value2): float
