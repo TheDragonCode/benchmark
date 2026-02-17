@@ -6,6 +6,8 @@ namespace Tests\Unit;
 
 use DragonCode\Benchmark\Benchmark;
 
+use function DragonCode\Benchmark\bench;
+
 test('dynamic', function () {
     expect(new Benchmark)->toBeInstanceOf(Benchmark::class);
 });
@@ -15,5 +17,5 @@ test('static', function () {
 });
 
 test('helper', function () {
-    expect(benchmark())->toBeInstanceOf(Benchmark::class);
+    expect(bench())->toBeInstanceOf(Benchmark::class);
 });
