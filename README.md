@@ -52,8 +52,6 @@ bench()
 You can use both the `bench()` function and the `Benchmark` class.
 
 ```php
-use DragonCode\Benchmark\Benchmark;
-
 use function DragonCode\Benchmark\bench;
 
 bench()->compare([
