@@ -4,17 +4,32 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use DragonCode\Benchmark\Contracts\ProgressBar;
 use DragonCode\Benchmark\View\LineView;
 use DragonCode\Benchmark\View\ProgressBarView;
+use DragonCode\Benchmark\View\SilentProgressBarView;
 use DragonCode\Benchmark\View\TableView;
 
 class ViewService
 {
+    protected bool $enabled = true;
+
     public function __construct(
         protected TableView $table = new TableView,
-        protected ProgressBarView $progressBar = new ProgressBarView,
         protected LineView $line = new LineView,
+        protected ProgressBarView $progressBar = new ProgressBarView,
+        protected SilentProgressBarView $silentProgressBar = new SilentProgressBarView,
     ) {}
+
+    /**
+     * @return $this
+     */
+    public function disable(): static
+    {
+        $this->enabled = false;
+
+        return $this;
+    }
 
     /**
      * Displays a table with benchmark results.
@@ -29,9 +44,11 @@ class ViewService
     /**
      * Returns the progress bar instance.
      */
-    public function progressBar(): ProgressBarView
+    public function progressBar(): ProgressBar
     {
-        return $this->progressBar;
+        return $this->enabled
+            ? $this->progressBar
+            : $this->silentProgressBar;
     }
 
     /**
@@ -41,7 +58,9 @@ class ViewService
      */
     public function line(string $text): void
     {
-        $this->line->line($text);
+        if ($this->enabled) {
+            $this->line->line($text);
+        }
     }
 
     /**
@@ -51,6 +70,8 @@ class ViewService
      */
     public function emptyLine(int $count = 1): void
     {
-        $this->line->newLine($count);
+        if ($this->enabled) {
+            $this->line->newLine($count);
+        }
     }
 }

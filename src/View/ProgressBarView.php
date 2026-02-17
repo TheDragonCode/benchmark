@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\View;
 
+use DragonCode\Benchmark\Contracts\ProgressBar;
+
 use function floor;
 use function max;
 use function str_repeat;
 
-class ProgressBarView extends View
+class ProgressBarView extends View implements ProgressBar
 {
-    protected bool $enabled = true;
-
     protected int $current = 0;
 
     protected int $barWidth = 28;
@@ -19,21 +19,10 @@ class ProgressBarView extends View
     protected int $total = 100;
 
     /**
-     * Disables the progress bar display.
-     *
-     * @return $this
-     */
-    public function disable(): static
-    {
-        $this->enabled = false;
-
-        return $this;
-    }
-
-    /**
      * Creates a progress bar with the specified total number of steps.
      *
      * @param  int  $total  The total number of steps.
+     *
      * @return $this
      */
     public function create(int $total): static
@@ -66,9 +55,7 @@ class ProgressBarView extends View
 
         $this->display();
 
-        if ($this->enabled) {
-            $this->write(PHP_EOL);
-        }
+        $this->write(PHP_EOL);
     }
 
     /**
@@ -76,10 +63,6 @@ class ProgressBarView extends View
      */
     protected function display(): void
     {
-        if (! $this->enabled) {
-            return;
-        }
-
         $percent  = $this->current / $this->total;
         $filled   = (int) floor($percent * $this->barWidth);
         $empty    = $this->barWidth - $filled;

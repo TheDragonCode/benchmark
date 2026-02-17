@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DragonCode\Benchmark;
 
 use Closure;
+use DragonCode\Benchmark\Contracts\ProgressBar;
 use DragonCode\Benchmark\Exceptions\NoComparisonsException;
 use DragonCode\Benchmark\Services\AssertService;
 use DragonCode\Benchmark\Services\CallbacksService;
@@ -14,7 +15,6 @@ use DragonCode\Benchmark\Services\ResultService;
 use DragonCode\Benchmark\Services\RunnerService;
 use DragonCode\Benchmark\Services\ViewService;
 use DragonCode\Benchmark\Transformers\ResultTransformer;
-use DragonCode\Benchmark\View\ProgressBarView;
 
 use function abs;
 use function count;
@@ -48,6 +48,7 @@ class Benchmark
      * Sets a callback to be executed before all iterations for each comparison.
      *
      * @param  Closure(int|string $name): mixed  $callback
+     *
      * @return $this
      */
     public function before(Closure $callback): static
@@ -61,6 +62,7 @@ class Benchmark
      * Sets a callback to be executed before each iteration.
      *
      * @param  Closure(int|string $name, int<1, max> $iteration): mixed  $callback
+     *
      * @return $this
      */
     public function beforeEach(Closure $callback): static
@@ -74,6 +76,7 @@ class Benchmark
      * Sets a callback to be executed after all iterations for each comparison.
      *
      * @param  Closure(int|string $name): mixed  $callback
+     *
      * @return $this
      */
     public function after(Closure $callback): static
@@ -87,6 +90,7 @@ class Benchmark
      * Sets a callback to be executed after each iteration.
      *
      * @param  Closure(int|string $name, int<1, max> $iteration, float $time, float $memory): mixed  $callback
+     *
      * @return $this
      */
     public function afterEach(Closure $callback): static
@@ -100,6 +104,7 @@ class Benchmark
      * Sets the number of iterations for each comparison.
      *
      * @param  int<1, max>  $count
+     *
      * @return $this
      */
     public function iterations(int $count): static
@@ -113,6 +118,7 @@ class Benchmark
      * Enables deviation calculation and sets the number of runs.
      *
      * @param  int<2, max>  $count
+     *
      * @return $this
      */
     public function deviations(int $count = 2): static
@@ -128,6 +134,7 @@ class Benchmark
      * Sets the rounding precision for time values.
      *
      * @param  int<0, max>|null  $precision  The number of decimal places. Null means no rounding.
+     *
      * @return $this
      */
     public function round(?int $precision): static
@@ -144,7 +151,7 @@ class Benchmark
      */
     public function disableProgressBar(): static
     {
-        $this->view->progressBar()->disable();
+        $this->view->disable();
 
         return $this;
     }
@@ -153,6 +160,7 @@ class Benchmark
      * Registers callback functions for comparison.
      *
      * @param  array|Closure  ...$callbacks  Callback functions or an array of callback functions for comparison.
+     *
      * @return $this
      */
     public function compare(array|Closure ...$callbacks): static
@@ -234,7 +242,7 @@ class Benchmark
         $callbacks = $this->callbacks->compare;
 
         $this->withProgress(
-            callback: fn (ProgressBarView $bar) => $this->chunks($callbacks, $bar),
+            callback: fn (ProgressBar $bar) => $this->chunks($callbacks, $bar),
             total   : $this->steps($callbacks)
         );
     }
@@ -248,7 +256,7 @@ class Benchmark
 
         $callbacks = $this->callbacks->compare;
 
-        $this->withProgress(function (ProgressBarView $bar) use (&$results, $callbacks) {
+        $this->withProgress(function (ProgressBar $bar) use (&$results, $callbacks) {
             for ($i = 1; $i <= $this->deviations; $i++) {
                 $this->clear();
 
@@ -298,9 +306,9 @@ class Benchmark
      * Executes all callback functions with before/after hooks.
      *
      * @param  array  $callbacks  An array of callback functions.
-     * @param  ProgressBarView  $progressBar  The progress bar.
+     * @param  ProgressBar  $progressBar  The progress bar.
      */
-    protected function chunks(array $callbacks, ProgressBarView $progressBar): void
+    protected function chunks(array $callbacks, ProgressBar $progressBar): void
     {
         foreach ($callbacks as $name => $callback) {
             $this->callbacks->performBefore($name);
@@ -316,9 +324,9 @@ class Benchmark
      *
      * @param  mixed  $name  The callback name.
      * @param  Closure  $callback  The callback function to execute.
-     * @param  ProgressBarView  $progressBar  The progress bar.
+     * @param  ProgressBar  $progressBar  The progress bar.
      */
-    protected function run(mixed $name, Closure $callback, ProgressBarView $progressBar): void
+    protected function run(mixed $name, Closure $callback, ProgressBar $progressBar): void
     {
         for ($i = 1; $i <= $this->iterations; $i++) {
             $result = $this->callbacks->performBeforeEach($name, $i);
@@ -338,6 +346,7 @@ class Benchmark
      *
      * @param  Closure  $callback  The callback function to execute.
      * @param  array  $parameters  Parameters to pass to the callback.
+     *
      * @return array An array [time in milliseconds, memory in bytes].
      */
     protected function call(Closure $callback, array $parameters = []): array
