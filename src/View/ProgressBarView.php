@@ -8,6 +8,7 @@ use DragonCode\Benchmark\Contracts\ProgressBar;
 
 use function floor;
 use function max;
+use function number_format;
 use function str_repeat;
 use function vsprintf;
 
