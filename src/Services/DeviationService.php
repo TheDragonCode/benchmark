@@ -27,7 +27,6 @@ class DeviationService
      * Calculates final results with deviations based on multiple runs.
      *
      * @param  array<int, array<int|string, ResultData>>  $collection  A collection of results from multiple runs.
-     *
      * @return array<int|string, ResultData>
      */
     public function calculate(array $collection): array
@@ -72,7 +71,6 @@ class DeviationService
      *
      * @param  array  $data  Grouped metric entries.
      * @param  int  $index  The index to extract (TIME_INDEX or MEMORY_INDEX).
-     *
      * @return array<float>
      */
     protected function extract(array $data, int $index): array
@@ -104,7 +102,6 @@ class DeviationService
      * Groups results from multiple runs by callback names and metric types.
      *
      * @param  array<int, array<int|string, ResultData>>  $collection  A collection of results from multiple runs.
-     *
      * @return array<int|string, array<string, array<int, array{float, float}>>>
      */
     protected function group(array $collection): array
@@ -142,7 +139,6 @@ class DeviationService
      *
      * @param  float  $value1  The base value.
      * @param  float  $value2  The compared value.
-     *
      * @return float The result is specified in percentages.
      */
     protected function percentage(float $value1, float $value2): float
