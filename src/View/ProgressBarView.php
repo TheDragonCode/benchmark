@@ -77,8 +77,8 @@ class ProgressBarView extends View implements ProgressBar
     protected function buildLine(int $filled, int $empty, float $percent): string
     {
         return vsprintf(' %s/%s [%s] %s%%', [
-            $this->current,
-            $this->total,
+            $this->numberFormat($this->current),
+            $this->numberFormat($this->total),
             $this->buildBar($filled, $empty),
             $this->percentText($percent),
         ]);
@@ -86,7 +86,7 @@ class ProgressBarView extends View implements ProgressBar
 
     protected function buildBar(int $filled, int $empty): string
     {
-        return str_repeat('█', $filled) . str_repeat('░', $empty);
+        return str_repeat('▓', $filled) . str_repeat('░', $empty);
     }
 
     protected function percent(): float
@@ -107,5 +107,10 @@ class ProgressBarView extends View implements ProgressBar
     protected function percentText(float $percent): int
     {
         return (int) floor($percent * 100);
+    }
+
+    protected function numberFormat(int $number): string
+    {
+        return number_format($number, thousands_separator: "'");
     }
 }
