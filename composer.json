@@ -50,7 +50,9 @@
         "psr-4": {
             "DragonCode\\Benchmark\\": "src/"
         },
-        "files": ["src/helpers.php"]
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
