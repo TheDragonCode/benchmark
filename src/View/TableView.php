@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\View;
 
+use function array_first;
 use function array_keys;
 use function array_map;
 use function array_values;
@@ -22,23 +23,24 @@ class TableView extends View
     public function show(array $data): void
     {
         $headers = $this->headers($data);
-        $widths  = $this->columnWidths($headers, $data);
+        $widths  = $this->widths($headers, $data);
 
         $this->writeLine($this->separator($widths));
-        $this->writeLine($this->formatRow($headers, $widths));
+        $this->writeLine($this->row($headers, $widths));
         $this->writeLine($this->separator($widths));
 
+        $this->writeData($data, $widths);
+
+        $this->writeLine($this->separator($widths));
+    }
+
+    protected function writeData(array $data, array $widths): void
+    {
         foreach ($data as $row) {
-            if ($row === [null]) {
-                $this->writeLine($this->separator($widths));
-
-                continue;
-            }
-
-            $this->writeLine($this->formatRow(array_values($row), $widths));
+            $row === [null]
+                ? $this->writeLine($this->separator($widths))
+                : $this->writeLine($this->row($row, $widths));
         }
-
-        $this->writeLine($this->separator($widths));
     }
 
     /**
@@ -48,7 +50,7 @@ class TableView extends View
      */
     protected function headers(array $data): array
     {
-        return array_keys(array_values($data)[0]);
+        return array_keys(array_first($data));
     }
 
     /**
@@ -57,7 +59,7 @@ class TableView extends View
      * @param  array  $headers  The column headers.
      * @param  array  $data  An array of table rows.
      */
-    protected function columnWidths(array $headers, array $data): array
+    protected function widths(array $headers, array $data): array
     {
         $widths = array_map(static fn ($header) => mb_strlen((string) $header), $headers);
 
@@ -77,7 +79,7 @@ class TableView extends View
      */
     protected function separator(array $widths): string
     {
-        $parts = array_map(fn (int $w) => str_repeat('-', $w + 2), $widths);
+        $parts = array_map(static fn (int $w) => str_repeat('-', $w + 2), $widths);
 
         return '+' . implode('+', $parts) . '+';
     }
@@ -88,11 +90,11 @@ class TableView extends View
      * @param  array  $values  The cell values of the row.
      * @param  array  $widths  An array of column widths.
      */
-    protected function formatRow(array $values, array $widths): string
+    protected function row(array $values, array $widths): string
     {
         $cells = [];
 
-        foreach ($values as $i => $value) {
+        foreach (array_values($values) as $i => $value) {
             $cells[] = ' ' . mb_str_pad((string) $value, $widths[$i]) . ' ';
         }
 
