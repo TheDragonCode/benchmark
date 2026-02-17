@@ -19,7 +19,7 @@ abstract class View
      */
     protected function writeLine(string $line): void
     {
-        fwrite($this->stream(), $line . PHP_EOL);
+        $this->write($line . PHP_EOL);
     }
 
     /**
