@@ -37,9 +37,9 @@ Or manually update `require-dev` block of `composer.json` and run `composer upda
 ### Quick Start
 
 ```php
-use DragonCode\Benchmark\Benchmark;
+use function DragonCode\Benchmark\bench;
 
-new Benchmark()
+bench()
     ->compare(
         static fn () => true,
         static fn () => true
@@ -48,6 +48,56 @@ new Benchmark()
 ```
 
 ### How To Use
+
+You can use both the `bench()` function and the `Benchmark` class.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+use function DragonCode\Benchmark\bench;
+
+bench()->compare([
+    fn () => /* some code */,
+    fn () => /* some code */,
+])->toConsole();
+
+new Benchmark()->compare([
+    fn () => /* some code */,
+    fn () => /* some code */,
+])->toConsole();
+```
+
+#### As a function
+
+```php
+use function DragonCode\Benchmark\bench;
+
+// Array without named keys
+bench()->compare([
+    fn () => /* some code */,
+    fn () => /* some code */,
+])->toConsole();
+
+// Array with named keys
+bench()->compare([
+    'foo' => fn () => /* some code */,
+    'bar' => fn () => /* some code */,
+])->toConsole();
+
+// Callbacks without named parameters
+bench()->compare(
+    fn () => /* some code */,
+    fn () => /* some code */,
+)->toConsole();
+
+// Callbacks with named parameters
+bench()->compare(
+    foo: fn () => /* some code */,
+    bar: fn () => /* some code */,
+)->toConsole();
+```
+
+#### As a class
 
 ```php
 use DragonCode\Benchmark\Benchmark;
