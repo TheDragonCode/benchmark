@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\View;
 
+use function array_fill;
+use function implode;
+use function max;
+
 class LineView extends View
 {
     /**
@@ -23,8 +27,8 @@ class LineView extends View
      */
     public function newLine(int $count = 1): void
     {
-        for ($i = 0; $i < $count; $i++) {
-            $this->writeLine('');
-        }
+        $lines = implode('', array_fill(0, max(1, $count), PHP_EOL));
+
+        $this->writeLine($lines);
     }
 }
