@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace DragonCode\Benchmark\Services;
 
 use AssertionError;
+use Closure;
+use DragonCode\Benchmark\Data\ResultData;
 use DragonCode\Benchmark\Exceptions\DeviationsNotCalculatedException;
 
 class AssertService
@@ -23,18 +25,12 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
+     *
      * @return $this
      */
     public function toBeMinTime(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $item) {
-            $this->assertGreaterThan($item->min->time, $from, 'minimum time');
-            $this->assertLessThan($item->min->time, $till, 'minimum time');
-        }
-
-        return $this;
+        return $this->assertRange($from, $till, static fn (ResultData $item) => $item->min->time, 'minimum time');
     }
 
     /**
@@ -42,18 +38,12 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
+     *
      * @return $this
      */
     public function toBeMaxTime(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $item) {
-            $this->assertGreaterThan($item->max->time, $from, 'maximum time');
-            $this->assertLessThan($item->max->time, $till, 'maximum time');
-        }
-
-        return $this;
+        return $this->assertRange($from, $till, static fn (ResultData $item) => $item->max->time, 'maximum time');
     }
 
     /**
@@ -61,18 +51,12 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
+     *
      * @return $this
      */
     public function toBeAvgTime(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $item) {
-            $this->assertGreaterThan($item->avg->time, $from, 'average time');
-            $this->assertLessThan($item->avg->time, $till, 'average time');
-        }
-
-        return $this;
+        return $this->assertRange($from, $till, static fn (ResultData $item) => $item->avg->time, 'average time');
     }
 
     /**
@@ -80,18 +64,12 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
+     *
      * @return $this
      */
     public function toBeTotalTime(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $item) {
-            $this->assertGreaterThan($item->total->time, $from, 'total time');
-            $this->assertLessThan($item->total->time, $till, 'total time');
-        }
-
-        return $this;
+        return $this->assertRange($from, $till, static fn (ResultData $item) => $item->total->time, 'total time');
     }
 
     /**
@@ -99,18 +77,12 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
+     *
      * @return $this
      */
     public function toBeMinMemory(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $item) {
-            $this->assertGreaterThan($item->min->memory, $from, 'minimum memory');
-            $this->assertLessThan($item->min->memory, $till, 'minimum memory');
-        }
-
-        return $this;
+        return $this->assertRange($from, $till, static fn (ResultData $item) => $item->min->memory, 'minimum memory');
     }
 
     /**
@@ -118,18 +90,12 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
+     *
      * @return $this
      */
     public function toBeMaxMemory(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $item) {
-            $this->assertGreaterThan($item->max->memory, $from, 'maximum memory');
-            $this->assertLessThan($item->max->memory, $till, 'maximum memory');
-        }
-
-        return $this;
+        return $this->assertRange($from, $till, static fn (ResultData $item) => $item->max->memory, 'maximum memory');
     }
 
     /**
@@ -137,18 +103,12 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
+     *
      * @return $this
      */
     public function toBeAvgMemory(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $item) {
-            $this->assertGreaterThan($item->avg->memory, $from, 'average memory');
-            $this->assertLessThan($item->avg->memory, $till, 'average memory');
-        }
-
-        return $this;
+        return $this->assertRange($from, $till, static fn (ResultData $item) => $item->avg->memory, 'average memory');
     }
 
     /**
@@ -156,18 +116,12 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
+     *
      * @return $this
      */
     public function toBeTotalMemory(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $item) {
-            $this->assertGreaterThan($item->total->memory, $from, 'total memory');
-            $this->assertLessThan($item->total->memory, $till, 'total memory');
-        }
-
-        return $this;
+        return $this->assertRange($from, $till, static fn (ResultData $item) => $item->total->memory, 'total memory');
     }
 
     /**
@@ -175,22 +129,18 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in percentages.
      * @param  float|null  $till  End value is specified in percentages.
+     *
      * @return $this
      */
     public function toBeDeviationTime(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $key => $item) {
+        return $this->assertRange($from, $till, static function (ResultData $item, int|string $key) {
             if (! $item->deviation) {
                 throw new DeviationsNotCalculatedException($key);
             }
 
-            $this->assertGreaterThan($item->deviation->percent->time, $from, 'deviation time');
-            $this->assertLessThan($item->deviation->percent->time, $till, 'deviation time');
-        }
-
-        return $this;
+            return $item->deviation->percent->time;
+        }, 'deviation time');
     }
 
     /**
@@ -198,19 +148,39 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in percentages.
      * @param  float|null  $till  End value is specified in percentages.
+     *
      * @return $this
      */
     public function toBeDeviationMemory(?float $from = null, ?float $till = null): static
     {
-        $from = $this->resolveFrom($from, $till);
-
-        foreach ($this->result as $name => $item) {
+        return $this->assertRange($from, $till, static function (ResultData $item, int|string $key) {
             if (! $item->deviation) {
-                throw new DeviationsNotCalculatedException($name);
+                throw new DeviationsNotCalculatedException($key);
             }
 
-            $this->assertGreaterThan($item->deviation->percent->memory, $from, 'deviation memory');
-            $this->assertLessThan($item->deviation->percent->memory, $till, 'deviation memory');
+            return $item->deviation->percent->memory;
+        }, 'deviation memory');
+    }
+
+    /**
+     * Asserts that the value extracted by the callback is within the specified range for all results.
+     *
+     * @param  float|null  $from  The start value of the range.
+     * @param  float|null  $till  The end value of the range.
+     * @param  callable  $callback  Callback to extract the value from a result item.
+     * @param  string  $name  The name of the metric being checked.
+     *
+     * @return $this
+     */
+    protected function assertRange(?float $from, ?float $till, Closure $callback, string $name): static
+    {
+        $from = $this->resolveFrom($from, $till);
+
+        foreach ($this->result as $key => $item) {
+            $value = $callback($item, $key);
+
+            $this->assertGreaterThan($value, $from, $name);
+            $this->assertLessThan($value, $till, $name);
         }
 
         return $this;
