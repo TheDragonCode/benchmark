@@ -27,8 +27,13 @@ class LineView extends View
      */
     public function newLine(int $count = 1): void
     {
-        $lines = implode('', array_fill(0, max(1, $count), PHP_EOL));
+        $this->writeLine(
+            $this->buildLine(max(1, $count))
+        );
+    }
 
-        $this->writeLine($lines);
+    protected function buildLine(int $count): string
+    {
+        return implode('', array_fill(0, max(1, $count), PHP_EOL));
     }
 }
