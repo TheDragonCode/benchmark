@@ -14,7 +14,7 @@ function benchmark(bool|CollectorService $collector = true): Benchmark
         default                                => new CollectorService,
     };
 
-    return (new Benchmark(
-        collector: $instance
-    ))->iterations(3);
+    return (new Benchmark(collector: $instance))
+        ->iterations(3)
+        ->disableProgressBar();
 }
