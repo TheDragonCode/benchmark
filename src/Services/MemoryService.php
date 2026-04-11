@@ -39,9 +39,7 @@ class MemoryService
         return memory_get_peak_usage(true) - $memory;
     }
 
-    /**
-     * Resets peak memory usage and runs the garbage collector.
-     */
+    /** Resets peak memory usage and runs the garbage collector. */
     public function reset(): void
     {
         gc_collect_cycles();

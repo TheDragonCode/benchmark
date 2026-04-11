@@ -22,17 +22,13 @@ class CollectorService
         return $this;
     }
 
-    /**
-     * Returns all collected measurement data.
-     */
+    /** Returns all collected measurement data. */
     public function all(): array
     {
         return $this->data;
     }
 
-    /**
-     * Clears all collected data.
-     */
+    /** Clears all collected data. */
     public function clear(): void
     {
         $this->data = [];

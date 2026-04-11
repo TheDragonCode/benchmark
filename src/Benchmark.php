@@ -36,9 +36,7 @@ class Benchmark
         protected DeviationService $deviation = new DeviationService,
     ) {}
 
-    /**
-     * Creates a new benchmark instance.
-     */
+    /** Creates a new benchmark instance. */
     public static function make(): static
     {
         return new static;
@@ -178,9 +176,7 @@ class Benchmark
         return $this->mapResult();
     }
 
-    /**
-     * Outputs benchmark results to the console as a table.
-     */
+    /** Outputs benchmark results to the console as a table. */
     public function toConsole(): void
     {
         if (! $data = $this->toData()) {
@@ -194,9 +190,7 @@ class Benchmark
         );
     }
 
-    /**
-     * Returns the assertion service for performing result checks.
-     */
+    /** Returns the assertion service for performing result checks. */
     public function toAssert(): AssertService
     {
         if (! $data = $this->toData()) {
@@ -206,9 +200,7 @@ class Benchmark
         return new AssertService($data);
     }
 
-    /**
-     * Performs the benchmark: simple comparison or with deviation calculation.
-     */
+    /** Performs the benchmark: simple comparison or with deviation calculation. */
     protected function perform(): void
     {
         $this->deviations === 1
@@ -216,9 +208,7 @@ class Benchmark
             : $this->performDeviation();
     }
 
-    /**
-     * Transforms collected data into an array of results.
-     */
+    /** Transforms collected data into an array of results. */
     protected function mapResult(): array
     {
         return $this->result->get(
@@ -226,9 +216,7 @@ class Benchmark
         );
     }
 
-    /**
-     * Performs a simple comparison of callback functions.
-     */
+    /** Performs a simple comparison of callback functions. */
     protected function performCompare(): void
     {
         $callbacks = $this->callbacks->compare;
@@ -239,9 +227,7 @@ class Benchmark
         );
     }
 
-    /**
-     * Performs a comparison with deviation calculation through multiple runs.
-     */
+    /** Performs a comparison with deviation calculation through multiple runs. */
     protected function performDeviation(): void
     {
         $results = [];
@@ -357,9 +343,7 @@ class Benchmark
         $this->collector->push($name, [$time, $memory]);
     }
 
-    /**
-     * Clears results and collected data.
-     */
+    /** Clears results and collected data. */
     protected function clear(): void
     {
         $this->result->clear();

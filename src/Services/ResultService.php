@@ -22,9 +22,7 @@ class ResultService
         protected MeasurementErrorService $measurement = new MeasurementErrorService,
     ) {}
 
-    /**
-     * Checks whether results have already been calculated.
-     */
+    /** Checks whether results have already been calculated. */
     public function has(): bool
     {
         return $this->data !== null;
@@ -51,9 +49,7 @@ class ResultService
         return $this->data ??= $this->map($collections);
     }
 
-    /**
-     * Clears the stored results.
-     */
+    /** Clears the stored results. */
     public function clear(): void
     {
         $this->data = null;

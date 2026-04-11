@@ -47,9 +47,7 @@ class ProgressBarView extends View implements ProgressBar
         $this->display();
     }
 
-    /**
-     * Finishes the progress bar by setting the current value equal to the total.
-     */
+    /** Finishes the progress bar by setting the current value equal to the total. */
     public function finish(): void
     {
         $this->current = $this->total;
@@ -59,9 +57,7 @@ class ProgressBarView extends View implements ProgressBar
         $this->write(PHP_EOL);
     }
 
-    /**
-     * Renders the current state of the progress bar.
-     */
+    /** Renders the current state of the progress bar. */
     protected function display(): void
     {
         $percent = $this->percent();
