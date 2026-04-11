@@ -155,10 +155,10 @@ You can register callbacks to run before/after the entire benchmark loop or befo
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->before(fn (int|string $name) => /* runs once before each callback's loop */)
-    ->beforeEach(fn (int|string $name, int $iteration) => /* runs before each iteration */)
-    ->after(fn (int|string $name) => /* runs once after each callback's loop */)
-    ->afterEach(fn (int|string $name, int $iteration) => /* runs after each iteration */)
+    ->before(fn (int|string $name) => /* once before all iterations of a callback */)
+    ->beforeEach(fn (int|string $name, int $iteration) => /* before each iteration */)
+    ->after(fn (int|string $name) => /* once after all iterations of a callback */)
+    ->afterEach(fn (int|string $name, int $iteration) => /* after each iteration */)
     ->compare(
         fn () => /* some code */,
         fn () => /* some code */,
