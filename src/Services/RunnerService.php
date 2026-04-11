@@ -28,9 +28,7 @@ class RunnerService
         return $this->run($callback, $parameters);
     }
 
-    /**
-     * Resets the memory state before measurement.
-     */
+    /** Resets the memory state before measurement. */
     protected function clean(): void
     {
         $this->memory->reset();

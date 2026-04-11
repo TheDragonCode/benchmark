@@ -21,9 +21,7 @@ class ViewService
         protected SilentProgressBarView $silentProgressBar = new SilentProgressBarView,
     ) {}
 
-    /**
-     * @return $this
-     */
+    /** @return $this */
     public function disable(): static
     {
         $this->enabled = false;
@@ -41,9 +39,7 @@ class ViewService
         $this->table->show($data);
     }
 
-    /**
-     * Returns the progress bar instance.
-     */
+    /** Returns the progress bar instance. */
     public function progressBar(): ProgressBar
     {
         return $this->enabled
