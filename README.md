@@ -99,6 +99,16 @@ bench()->compare(
 
 #### As a class
 
+> [!TIP]
+>
+> You can also use a call to the `make` static method:
+>
+> ```php
+> use DragonCode\Benchmark\Benchmark;
+>
+> Benchmark::make()->compare(...);
+> ```
+
 ```php
 use DragonCode\Benchmark\Benchmark;
 
