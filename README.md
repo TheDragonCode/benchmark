@@ -23,8 +23,6 @@ composer require dragon-code/benchmark --dev
 > When more than 9 iterations are used, the top and bottom 10% of results are excluded from the average calculation,
 > producing cleaner data less dependent on external factors.
 
-### Quick Start
-
 ```php
 use function DragonCode\Benchmark\bench;
 
@@ -123,7 +121,6 @@ times, and the output will include a `deviation` row:
 ```php
 new Benchmark()
     ->deviations(4)
-    ->iterations(5)
     ->compare(
         foo: fn () => /* some code */,
         bar: fn () => /* some code */,
@@ -211,7 +208,7 @@ With deviation values:
 
 ```bash
 +------------------+-----------------------+---------------------+
-| #                | 0                     | 1                   |
+| #                | foo                   | bar                 |
 +------------------+-----------------------+---------------------+
 | min              | 15.68 ms - 202 bytes  | 2.35 ms - 102 bytes |
 | max              | 112.79 ms - 209 bytes | 9.76 ms - 109 bytes |
@@ -230,15 +227,66 @@ With deviation values:
 Returns results as an array of `DragonCode\Benchmark\Data\ResultData` DTO objects:
 
 ```php
-$results = new Benchmark()
+return new Benchmark()
+    ->deviations()
     ->compare(
         foo: fn () => /* some code */,
         bar: fn () => /* some code */,
     )
     ->toData();
+```
 
-// Each entry contains: min, max, avg, total (MetricData with ->time and ->memory)
-// When using deviations(), entries also include: deviation (DeviationData with ->percent)
+```bash
+array:2 [
+  "foo" => DragonCode\Benchmark\Data\ResultData {#23
+    +min: DragonCode\Benchmark\Data\MetricData {#64
+      +time: 0.001
+      +memory: 0.0
+    }
+    +max: DragonCode\Benchmark\Data\MetricData {#65
+      +time: 0.0036
+      +memory: 0.0
+    }
+    +avg: DragonCode\Benchmark\Data\MetricData {#66
+      +time: 0.0024209375
+      +memory: 0.0
+    }
+    +total: DragonCode\Benchmark\Data\MetricData {#67
+      +time: 0.7747
+      +memory: 0.0
+    }
+    +deviation: DragonCode\Benchmark\Data\DeviationData {#68
+      +percent: DragonCode\Benchmark\Data\MetricData {#69
+        +time: 0.0007048383984778
+        +memory: 0.0
+      }
+    }
+  }
+  "bar" => DragonCode\Benchmark\Data\ResultData {#70
+    +min: DragonCode\Benchmark\Data\MetricData {#71
+      +time: 0.001
+      +memory: 0.0
+    }
+    +max: DragonCode\Benchmark\Data\MetricData {#72
+      +time: 0.0032
+      +memory: 0.0
+    }
+    +avg: DragonCode\Benchmark\Data\MetricData {#73
+      +time: 0.00242875
+      +memory: 0.0
+    }
+    +total: DragonCode\Benchmark\Data\MetricData {#74
+      +time: 0.7772
+      +memory: 0.0
+    }
+    +deviation: DragonCode\Benchmark\Data\DeviationData {#75
+      +percent: DragonCode\Benchmark\Data\MetricData {#76
+        +time: 0.00061642429076895
+        +memory: 0.0
+      }
+    }
+  }
+]
 ```
 
 #### toAssert
