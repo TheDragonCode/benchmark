@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 test('success less than', function () {
     benchmark()
-        ->snapshots(__DIR__ . '/../../.benchmarks/time_less_than')
+        ->snapshots(__DIR__ . '/../../.benchmarks')
         ->toAssert()
         ->toBeRegressionTime(15);
 
@@ -13,7 +13,7 @@ test('success less than', function () {
 
 test('success equals', function () {
     benchmark()
-        ->snapshots(__DIR__ . '/../../.benchmarks/time_equals')
+        ->snapshots(__DIR__ . '/../../.benchmarks')
         ->toAssert()
         ->toBeRegressionTime(15);
 
@@ -22,10 +22,10 @@ test('success equals', function () {
 
 test('failure greater than', function () {
     benchmark()
-        ->snapshots(__DIR__ . '/../../.benchmarks/time_greater_than')
+        ->snapshots(__DIR__ . '/../../.benchmarks')
         ->toAssert()
         ->toBeRegressionTime(15);
 })->throws(
     AssertionError::class,
-    'The time regression value must be less than or equal to 15%. Current value: 2518.21%.'
+    'The time regression value must be less than or equal to 15%. Current value: 209913.87%.'
 );

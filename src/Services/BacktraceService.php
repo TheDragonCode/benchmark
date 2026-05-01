@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
+use RuntimeException;
+
 use function debug_backtrace;
 use function getcwd;
 use function in_array;
@@ -49,7 +51,7 @@ class BacktraceService
             return $this->normalize($file) . '_' . $line;
         }
 
-        return 'unknown';
+        throw new RuntimeException('Unable to resolve the script path.');
     }
 
     protected function callPath(): string

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 test('success less than', function () {
     benchmark()
-        ->snapshots(__DIR__ . '/../../.benchmarks/memory_less_than')
+        ->snapshots(__DIR__ . '/../../.benchmarks')
         ->toAssert()
         ->toBeRegressionMemory(15);
 
@@ -13,7 +13,7 @@ test('success less than', function () {
 
 test('success equals', function () {
     benchmark()
-        ->snapshots(__DIR__ . '/../../.benchmarks/memory_equals')
+        ->snapshots(__DIR__ . '/../../.benchmarks')
         ->toAssert()
         ->toBeRegressionMemory(15);
 
@@ -22,7 +22,7 @@ test('success equals', function () {
 
 test('failure greater than', function () {
     benchmark()
-        ->snapshots(__DIR__ . '/../../.benchmarks/memory_greater_than')
+        ->snapshots(__DIR__ . '/../../.benchmarks')
         ->toAssert()
         ->toBeRegressionMemory(15);
 })->throws(
