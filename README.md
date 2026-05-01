@@ -316,29 +316,21 @@ new Benchmark()
 
 ### Snapshot Regression Testing
 
-Snapshot regression testing allows you to detect performance regressions over time by comparing the current benchmark
-results against a previously saved baseline (snapshot). On the **first run**, the results are saved to disk as
-snapshots. On **subsequent runs**, the current results are compared against those snapshots and an `AssertionError` is
-thrown if the regression exceeds the allowed threshold.
+Detects performance regressions by comparing current results to a saved baseline (snapshot).
 
 #### How Snapshots Work
 
-- **First run:** snapshot files (`.snap`) do not exist yet, so no regression check is performed and the current
-  results are saved to the configured directory.
-- **Subsequent runs:** the current results are compared against the saved snapshots. If a regression exceeds the
-  allowed `$max` percentage, an `AssertionError` is thrown.
-- **Snapshot location:** each benchmark call stores its snapshots in a subdirectory derived from the source file
-  path and line number, ensuring snapshots are unique per call site.
+- **First run:** no `.snap` files exist — results are written to disk, no check is performed.
+- **Next runs:** results are compared to the snapshot; exceeding `$max` percent throws an `AssertionError`.
+- **Location:** snapshots are stored per call site (subdirectory derived from the caller file and line).
 
 > [!NOTE]
 >
-> To reset a baseline, simply delete the corresponding `.snap` files. The next run will save fresh snapshots.
-
+> Delete the corresponding `.snap` files to reset the baseline — the next run will recreate them.
 
 #### Configuring the Snapshot Directory
 
-Use the `snapshots()` method to specify the directory where snapshot files will be stored.
-By default, snapshots are stored in `./.benchmarks`:
+Set the snapshot directory via `snapshots()`. Default: `./.benchmarks`.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -356,14 +348,11 @@ new Benchmark()
 
 > [!TIP]
 >
-> It is recommended to commit the generated snapshot files to your version control system so that regressions
-> are detected consistently across different environments and CI runs.
+> Commit the generated snapshot files to version control to keep regression checks consistent across environments and CI.
 
 #### toBeRegressionTime
 
-Asserts that the execution time has not regressed by more than `$max` percent compared to the saved snapshot.
-
-The `$max` parameter is specified as a percentage:
+Fails if execution time exceeds the snapshot by more than `$max` percent.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
@@ -380,9 +369,7 @@ new Benchmark()
 
 #### toBeRegressionMemory
 
-Asserts that memory usage has not regressed by more than `$max` percent compared to the saved snapshot.
-
-The `$max` parameter is specified as a percentage:
+Fails if memory usage exceeds the snapshot by more than `$max` percent.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
