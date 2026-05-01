@@ -194,7 +194,9 @@ class AssertService
     protected function assertRegression(float $max, Closure $callback, string $title): static
     {
         foreach ($this->result as $key => $current) {
-            $previous = $this->snapshot->read($key);
+            if (! $previous = $this->snapshot->read($key)) {
+                continue;
+            }
 
             $value = $callback($previous, $current);
 

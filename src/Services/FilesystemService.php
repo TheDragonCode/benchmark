@@ -12,6 +12,7 @@ use function file_put_contents;
 use function is_dir;
 use function mkdir;
 use function sprintf;
+use function vsprintf;
 
 class FilesystemService
 {
@@ -19,6 +20,7 @@ class FilesystemService
 
     public function __construct(
         protected string $location,
+        protected BacktraceService $backtrace = new BacktraceService,
     ) {}
 
     public function ensureDirectoryExists(): void
@@ -26,7 +28,6 @@ class FilesystemService
         if ($this->exists()) {
             return;
         }
-
         $this->createDirectory();
     }
 
@@ -47,7 +48,7 @@ class FilesystemService
 
     protected function createDirectory(): void
     {
-        $created = mkdir($path = $this->location, $this->permission, true);
+        $created = mkdir($path = $this->path(null), $this->permission, true);
 
         if (! $created && ! is_dir($path)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $path));
@@ -57,9 +58,13 @@ class FilesystemService
     protected function path(int|string|null $name): string
     {
         if ($name === null) {
-            return $this->location;
+            return $this->location . '/' . $this->backtrace->path();
         }
 
-        return $this->location . '/' . $name . '.snap';
+        return vsprintf('%s/%s/%s.snap', [
+            $this->location,
+            $this->backtrace->path(),
+            $name,
+        ]);
     }
 }
