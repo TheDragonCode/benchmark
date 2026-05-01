@@ -26,20 +26,6 @@ class BacktraceService
 
     protected function scriptPath(): string
     {
-        return $this->normalize(
-            path: $this->findPath()
-        );
-    }
-
-    protected function callPath(): string
-    {
-        return $this->normalize(
-            path: getcwd() ?: '.'
-        );
-    }
-
-    protected function findPath(): string
-    {
         foreach (array_reverse($this->trace()) as $item) {
             if (! $path = $item['file'] ?? false) {
                 continue;
@@ -49,10 +35,19 @@ class BacktraceService
                 continue;
             }
 
-            return $path;
+            $line = $item['line'] ?? 0;
+
+            return $this->normalize($path) . '_' . $line;
         }
 
         return 'unknown';
+    }
+
+    protected function callPath(): string
+    {
+        return $this->normalize(
+            path: getcwd() ?: '.'
+        );
     }
 
     protected function normalize(string $path): string

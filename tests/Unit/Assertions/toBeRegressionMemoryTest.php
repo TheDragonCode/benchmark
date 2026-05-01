@@ -27,5 +27,5 @@ test('failure greater than', function () {
         ->toBeRegressionMemory(15);
 })->throws(
     AssertionError::class,
-    'The memory regression value must be less than or equal to 15%. Current value: 13600%.'
+    'The memory regression value must be less than or equal to 15%. Current value: 8120%.'
 );

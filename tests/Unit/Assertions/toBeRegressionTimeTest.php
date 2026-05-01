@@ -27,5 +27,5 @@ test('failure greater than', function () {
         ->toBeRegressionTime(15);
 })->throws(
     AssertionError::class,
-    'The time regression value must be less than or equal to 15%. Current value: 209913.87%.'
+    'The time regression value must be less than or equal to 15%. Current value: 2518.21%.'
 );

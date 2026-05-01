@@ -214,8 +214,6 @@ class Benchmark
             throw new NoComparisonsException;
         }
 
-        $this->snapshot->create($data);
-
         return new AssertService($data, $this->snapshot);
     }
 

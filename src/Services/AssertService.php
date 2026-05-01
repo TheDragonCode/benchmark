@@ -174,6 +174,8 @@ class AssertService
      */
     public function toBeRegressionTime(float $max): static
     {
+        $this->snapshot->create($this->result);
+
         return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
             return 100 - $current->avg->time / $previous->avg->time * 100;
         }, 'time');
@@ -186,6 +188,8 @@ class AssertService
      */
     public function toBeRegressionMemory(float $max): static
     {
+        $this->snapshot->create($this->result);
+
         return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
             return 100 - $current->avg->memory / $previous->avg->memory * 100;
         }, 'memory');
