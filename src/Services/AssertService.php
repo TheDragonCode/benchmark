@@ -9,6 +9,9 @@ use Closure;
 use DragonCode\Benchmark\Data\ResultData;
 use DragonCode\Benchmark\Exceptions\DeviationsNotCalculatedException;
 
+use function abs;
+use function round;
+
 class AssertService
 {
     /**
@@ -173,7 +176,7 @@ class AssertService
     {
         return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
             return 100 - $current->avg->time / $previous->avg->time * 100;
-        }, 'regression time');
+        }, 'time');
     }
 
     /**
@@ -185,24 +188,24 @@ class AssertService
     {
         return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
             return 100 - $current->avg->memory / $previous->avg->memory * 100;
-        }, 'regression memory');
+        }, 'memory');
     }
 
     protected function assertRegression(float $max, Closure $callback, string $title): static
     {
-        $max *= -1;
-
         foreach ($this->result as $key => $current) {
             $previous = $this->snapshot->read($key);
 
             $value = $callback($previous, $current);
 
-            if ($value >= $max) {
+            if ($value >= $max * -1) {
                 continue;
             }
 
+            $value = abs(round($value, 2));
+
             throw new AssertionError(
-                "The $title value must be less than $max% for the current result."
+                "The $title regression value must be less than or equal to $max%. Current value: $value%."
             );
         }
 
