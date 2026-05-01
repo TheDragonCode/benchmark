@@ -55,7 +55,6 @@ class Benchmark
      * Sets a callback to be executed before all iterations for each comparison.
      *
      * @param  Closure(int|string $name): mixed  $callback
-     *
      * @return $this
      */
     public function before(Closure $callback): static
@@ -69,7 +68,6 @@ class Benchmark
      * Sets a callback to be executed before each iteration.
      *
      * @param  Closure(int|string $name, int<1, max> $iteration): mixed  $callback
-     *
      * @return $this
      */
     public function beforeEach(Closure $callback): static
@@ -83,7 +81,6 @@ class Benchmark
      * Sets a callback to be executed after all iterations for each comparison.
      *
      * @param  Closure(int|string $name): mixed  $callback
-     *
      * @return $this
      */
     public function after(Closure $callback): static
@@ -97,7 +94,6 @@ class Benchmark
      * Sets a callback to be executed after each iteration.
      *
      * @param  Closure(int|string $name, int<1, max> $iteration, float $time, float $memory): mixed  $callback
-     *
      * @return $this
      */
     public function afterEach(Closure $callback): static
@@ -111,7 +107,6 @@ class Benchmark
      * Sets the number of iterations for each comparison.
      *
      * @param  int<1, max>  $count
-     *
      * @return $this
      */
     public function iterations(int $count): static
@@ -125,7 +120,6 @@ class Benchmark
      * Enables deviation calculation and sets the number of runs.
      *
      * @param  int<2, max>  $count
-     *
      * @return $this
      */
     public function deviations(int $count = 2): static
@@ -141,7 +135,6 @@ class Benchmark
      * Sets the rounding precision for time values.
      *
      * @param  int<0, max>|null  $precision  The number of decimal places. Null means no rounding.
-     *
      * @return $this
      */
     public function round(?int $precision): static
@@ -167,7 +160,6 @@ class Benchmark
      * Registers callback functions for comparison.
      *
      * @param  array|Closure  ...$callbacks  Callback functions or an array of callback functions for comparison.
-     *
      * @return $this
      */
     public function compare(array|Closure ...$callbacks): static
@@ -341,7 +333,6 @@ class Benchmark
      *
      * @param  Closure  $callback  The callback function to execute.
      * @param  array  $parameters  Parameters to pass to the callback.
-     *
      * @return array An array [time in milliseconds, memory in bytes].
      */
     protected function call(Closure $callback, array $parameters = []): array

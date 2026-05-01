@@ -12,6 +12,8 @@
 *.clover
 *.orig
 
-composer.lock
+/composer.lock
+
+/pint.json
 
 /playground.php

@@ -16,7 +16,7 @@ use function vsprintf;
 
 class FilesystemService
 {
-    protected int $permission = 0777;
+    protected int $permission = 0o777;
 
     public function __construct(
         protected string $location,
