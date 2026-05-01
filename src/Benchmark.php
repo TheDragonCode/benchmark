@@ -49,6 +49,8 @@ class Benchmark
     /**
      * Sets the directory for storing benchmark snapshots.
      *
+     * @param  string  $directory
+     *
      * @return $this
      */
     public function snapshots(string $directory): static
