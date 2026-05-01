@@ -13,6 +13,7 @@ use DragonCode\Benchmark\Services\CollectorService;
 use DragonCode\Benchmark\Services\DeviationService;
 use DragonCode\Benchmark\Services\ResultService;
 use DragonCode\Benchmark\Services\RunnerService;
+use DragonCode\Benchmark\Services\SnapshotService;
 use DragonCode\Benchmark\Services\ViewService;
 use DragonCode\Benchmark\Transformers\ResultTransformer;
 
@@ -34,12 +35,20 @@ class Benchmark
         protected ResultService $result = new ResultService,
         protected ResultTransformer $transformer = new ResultTransformer,
         protected DeviationService $deviation = new DeviationService,
+        protected SnapshotService $snapshot = new SnapshotService,
     ) {}
 
     /** Creates a new benchmark instance. */
     public static function make(): static
     {
         return new static;
+    }
+
+    public function snapshots(string $directory): static
+    {
+        $this->snapshot->location($directory);
+
+        return $this;
     }
 
     /**
@@ -197,7 +206,7 @@ class Benchmark
             throw new NoComparisonsException;
         }
 
-        return new AssertService($data);
+        return new AssertService($data, $this->snapshot);
     }
 
     /** Performs the benchmark: simple comparison or with deviation calculation. */

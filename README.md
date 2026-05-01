@@ -200,7 +200,7 @@ new Benchmark()
 | avg   | 15.13 ms - 0 bytes   | 15.07 ms - 0 bytes   |
 | total | 1210.38 ms - 0 bytes | 1205.26 ms - 0 bytes |
 +-------+----------------------+----------------------+
-| order | 2                    | 1                    |
+| order | 2                    | 1                     |
 +-------+----------------------+----------------------+
 ```
 
@@ -312,6 +312,76 @@ new Benchmark()
 
     ->toBeDeviationTime(from: -0.5, till: 0.5)   // deviation between -0.5% and 0.5%
     ->toBeDeviationMemory(from: -2.5, till: 2.5); // deviation between -2.5% and 2.5%
+```
+
+### Snapshot Regression Testing
+
+Detects performance regressions by comparing current results to a saved baseline (snapshot).
+
+#### How Snapshots Work
+
+- **First run:** no `.snap` files exist — results are written to disk, no check is performed.
+- **Next runs:** results are compared to the snapshot; exceeding `$max` percent throws an `AssertionError`.
+- **Location:** snapshots are stored per call site (subdirectory derived from the caller file and line).
+
+> [!NOTE]
+>
+> Delete the corresponding `.snap` files to reset the baseline — the next run will recreate them.
+
+#### Configuring the Snapshot Directory
+
+Set the snapshot directory via `snapshots()`. Default: `./.benchmarks`.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->snapshots(directory: __DIR__ . '/.benchmarks')
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    )
+    ->toAssert()
+    ->toBeRegressionTime(max: 10)
+    ->toBeRegressionMemory(max: 10);
+```
+
+> [!TIP]
+>
+> Commit the generated snapshot files to version control to keep regression checks consistent across environments and CI.
+
+#### toBeRegressionTime
+
+Fails if execution time exceeds the snapshot by more than `$max` percent.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->snapshots(__DIR__ . '/.benchmarks')
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    )
+    ->toAssert()
+    ->toBeRegressionTime(max: 15); // allow up to 15% time regression
+```
+
+#### toBeRegressionMemory
+
+Fails if memory usage exceeds the snapshot by more than `$max` percent.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->snapshots(__DIR__ . '/.benchmarks')
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    )
+    ->toAssert()
+    ->toBeRegressionMemory(max: 15); // allow up to 15% memory regression
 ```
 
 ### Disable Progress Bar

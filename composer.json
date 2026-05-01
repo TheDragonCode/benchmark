@@ -41,6 +41,7 @@
         "symfony/polyfill-php85": "^1.33"
     },
     "require-dev": {
+        "laravel/pint": "^1.29",
         "pestphp/pest": "^3.8 || ^4.0",
         "symfony/var-dumper": "^7.0 || ^8.0"
     },
@@ -69,6 +70,7 @@
         "sort-packages": true
     },
     "scripts": {
+        "style": "vendor/bin/pint --parallel",
         "test": "php -d xdebug.mode=off -d xdebug.start_with_request=no vendor/bin/pest",
         "test:coverage": "php -d xdebug.mode=coverage -d xdebug.start_with_request=no vendor/bin/pest --coverage",
         "test:profile": "php -d xdebug.mode=profile -d xdebug.start_with_request=no vendor/bin/pest"

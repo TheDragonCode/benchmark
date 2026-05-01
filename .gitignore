@@ -3,6 +3,7 @@
 
 /.cache
 /.DS_Store
+/.benchmarks
 
 /.output.txt
 
@@ -11,6 +12,6 @@
 *.clover
 *.orig
 
-composer.lock
+/composer.lock
 
 /playground.php

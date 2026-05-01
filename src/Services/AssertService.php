@@ -9,6 +9,9 @@ use Closure;
 use DragonCode\Benchmark\Data\ResultData;
 use DragonCode\Benchmark\Exceptions\DeviationsNotCalculatedException;
 
+use function abs;
+use function round;
+
 class AssertService
 {
     /**
@@ -17,7 +20,8 @@ class AssertService
      * @param  ResultData[]  $result
      */
     public function __construct(
-        protected array $result
+        protected array $result,
+        protected SnapshotService $snapshot,
     ) {}
 
     /**
@@ -150,6 +154,55 @@ class AssertService
 
             return $item->deviation->percent->memory;
         }, 'deviation memory');
+    }
+
+    /**
+     * @param  float  $max  The value is specified as a percentage.
+     * @return $this
+     */
+    public function toBeRegressionTime(float $max): static
+    {
+        $this->snapshot->create($this->result);
+
+        return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
+            return 100 - $current->avg->time / $previous->avg->time * 100;
+        }, 'time');
+    }
+
+    /**
+     * @param  float  $max  The value is specified as a percentage.
+     * @return $this
+     */
+    public function toBeRegressionMemory(float $max): static
+    {
+        $this->snapshot->create($this->result);
+
+        return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
+            return 100 - $current->avg->memory / $previous->avg->memory * 100;
+        }, 'memory');
+    }
+
+    protected function assertRegression(float $max, Closure $callback, string $title): static
+    {
+        foreach ($this->result as $key => $current) {
+            if (! $previous = $this->snapshot->read($key)) {
+                continue;
+            }
+
+            $value = $callback($previous, $current);
+
+            if ($value >= $max * -1) {
+                continue;
+            }
+
+            $value = abs(round($value, 2));
+
+            throw new AssertionError(
+                "The $title regression value must be less than or equal to $max%. Current value: $value%."
+            );
+        }
+
+        return $this;
     }
 
     /**
