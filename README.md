@@ -86,6 +86,27 @@ new Benchmark()
     ->toConsole();
 ```
 
+### Warm-up
+
+Use the `warmup` method to run each callback a few times before the measured iterations. Warm-up runs behave
+identically to regular ones (`beforeEach` / `afterEach` are invoked, the progress bar advances), but their
+time and memory are not included in the final statistics.
+
+This stabilizes results by absorbing one-time costs such as cold caches, JIT/opcache priming and lazy autoloading.
+
+Disabled by default.
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->warmup(3) // run 3 warm-up iterations per callback before measuring
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    );
+```
+
 ### Round Precision
 
 Use the `round` method to set the number of decimal places in console output:
