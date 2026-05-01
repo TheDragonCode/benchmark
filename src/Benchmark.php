@@ -339,7 +339,7 @@ class Benchmark
      */
     protected function run(mixed $name, Closure $callback, ProgressBar $progressBar): void
     {
-        $warmedUp = $this->warmup === 0;
+        $warmedUp = $this->warmup;
 
         for ($i = 1; $i <= $this->iterations + $this->warmup; $i++) {
             $result = $this->callbacks->performBeforeEach($name, $i);
@@ -348,8 +348,10 @@ class Benchmark
 
             $this->callbacks->performAfterEach($name, $i, $time, $memory);
 
-            if ($warmedUp) {
+            if ($warmedUp <= 0) {
                 $this->push($name, $time, $memory);
+            } else {
+                $warmedUp--;
             }
 
             $progressBar->advance();
