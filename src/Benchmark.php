@@ -49,7 +49,6 @@ class Benchmark
     /**
      * Sets the directory for storing benchmark snapshots.
      *
-     *
      * @return $this
      */
     public function snapshots(string $directory): static
@@ -59,6 +58,12 @@ class Benchmark
         return $this;
     }
 
+    /**
+     * Specifies the number of warm-up iterations for each callback.
+     *
+     * @param  int<1, max>  $count
+     * @return $this
+     */
     public function warmup(int $count = 1): static
     {
         $this->warmup = max(1, abs($count));
