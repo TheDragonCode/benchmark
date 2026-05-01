@@ -200,7 +200,7 @@ new Benchmark()
 | avg   | 15.13 ms - 0 bytes   | 15.07 ms - 0 bytes   |
 | total | 1210.38 ms - 0 bytes | 1205.26 ms - 0 bytes |
 +-------+----------------------+----------------------+
-| order | 2                    | 1                    |
+| order | 2                    | 1                     |
 +-------+----------------------+----------------------+
 ```
 
@@ -312,6 +312,89 @@ new Benchmark()
 
     ->toBeDeviationTime(from: -0.5, till: 0.5)   // deviation between -0.5% and 0.5%
     ->toBeDeviationMemory(from: -2.5, till: 2.5); // deviation between -2.5% and 2.5%
+```
+
+### Snapshot Regression Testing
+
+Snapshot regression testing allows you to detect performance regressions over time by comparing the current benchmark
+results against a previously saved baseline (snapshot). On the **first run**, the results are saved to disk as
+snapshots. On **subsequent runs**, the current results are compared against those snapshots and an `AssertionError` is
+thrown if the regression exceeds the allowed threshold.
+
+#### How Snapshots Work
+
+- **First run:** snapshot files (`.snap`) do not exist yet, so no regression check is performed and the current
+  results are saved to the configured directory.
+- **Subsequent runs:** the current results are compared against the saved snapshots. If a regression exceeds the
+  allowed `$max` percentage, an `AssertionError` is thrown.
+- **Snapshot location:** each benchmark call stores its snapshots in a subdirectory derived from the source file
+  path and line number, ensuring snapshots are unique per call site.
+
+> [!NOTE]
+>
+> To reset a baseline, simply delete the corresponding `.snap` files. The next run will save fresh snapshots.
+
+
+#### Configuring the Snapshot Directory
+
+Use the `snapshots()` method to specify the directory where snapshot files will be stored.
+By default, snapshots are stored in `./.benchmarks`:
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->snapshots(directory: __DIR__ . '/.benchmarks')
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    )
+    ->toAssert()
+    ->toBeRegressionTime(max: 10)
+    ->toBeRegressionMemory(max: 10);
+```
+
+> [!TIP]
+>
+> It is recommended to commit the generated snapshot files to your version control system so that regressions
+> are detected consistently across different environments and CI runs.
+
+#### toBeRegressionTime
+
+Asserts that the execution time has not regressed by more than `$max` percent compared to the saved snapshot.
+
+The `$max` parameter is specified as a percentage:
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->snapshots(__DIR__ . '/.benchmarks')
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    )
+    ->toAssert()
+    ->toBeRegressionTime(max: 15); // allow up to 15% time regression
+```
+
+#### toBeRegressionMemory
+
+Asserts that memory usage has not regressed by more than `$max` percent compared to the saved snapshot.
+
+The `$max` parameter is specified as a percentage:
+
+```php
+use DragonCode\Benchmark\Benchmark;
+
+new Benchmark()
+    ->snapshots(__DIR__ . '/.benchmarks')
+    ->compare(
+        foo: fn () => /* some code */,
+        bar: fn () => /* some code */,
+    )
+    ->toAssert()
+    ->toBeRegressionMemory(max: 15); // allow up to 15% memory regression
 ```
 
 ### Disable Progress Bar
