@@ -27,6 +27,8 @@ class Benchmark
 
     protected int $deviations = 1;
 
+    protected int $warmup = 0;
+
     public function __construct(
         protected RunnerService $runner = new RunnerService,
         protected ViewService $view = new ViewService,
@@ -47,13 +49,19 @@ class Benchmark
     /**
      * Sets the directory for storing benchmark snapshots.
      *
-     * @param  string  $directory
      *
      * @return $this
      */
     public function snapshots(string $directory): static
     {
         $this->snapshot->location($directory);
+
+        return $this;
+    }
+
+    public function warmup(int $count = 1): static
+    {
+        $this->warmup = max(1, abs($count));
 
         return $this;
     }
@@ -293,7 +301,10 @@ class Benchmark
      */
     protected function steps(array $callbacks, int $multiplier = 1): int
     {
-        return count($callbacks) * $this->iterations * $multiplier;
+        $count  = count($callbacks);
+        $warmup = $count * $this->warmup;
+
+        return $count * $this->iterations * $multiplier + $warmup;
     }
 
     /**
@@ -322,14 +333,18 @@ class Benchmark
      */
     protected function run(mixed $name, Closure $callback, ProgressBar $progressBar): void
     {
-        for ($i = 1; $i <= $this->iterations; $i++) {
+        $warmedUp = $this->warmup === 0;
+
+        for ($i = 1; $i <= $this->iterations + $this->warmup; $i++) {
             $result = $this->callbacks->performBeforeEach($name, $i);
 
             [$time, $memory] = $this->call($callback, [$i, $result]);
 
             $this->callbacks->performAfterEach($name, $i, $time, $memory);
 
-            $this->push($name, $time, $memory);
+            if ($warmedUp) {
+                $this->push($name, $time, $memory);
+            }
 
             $progressBar->advance();
         }
