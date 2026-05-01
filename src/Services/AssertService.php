@@ -172,7 +172,7 @@ class AssertService
     public function toBeRegressionTime(float $max): static
     {
         return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
-            return 100 - ($previous->avg->time / $current->avg->time) * 100;
+            return 100 - $current->avg->time / $previous->avg->time * 100;
         }, 'regression time');
     }
 
@@ -184,17 +184,29 @@ class AssertService
     public function toBeRegressionMemory(float $max): static
     {
         return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
-            return 100 - ($previous->avg->memory / $current->avg->memory) * 100;
+            return 100 - $current->avg->memory / $previous->avg->memory * 100;
         }, 'regression memory');
     }
 
     protected function assertRegression(float $max, Closure $callback, string $title): static
     {
-        return $this->assertRange(0, $max, function (ResultData $current, int|string $key) use ($callback) {
+        $max *= -1;
+
+        foreach ($this->result as $key => $current) {
             $previous = $this->snapshot->read($key);
 
-            return $callback($previous, $current);
-        }, $title);
+            $value = $callback($previous, $current);
+
+            if ($value >= $max) {
+                continue;
+            }
+
+            throw new AssertionError(
+                "The $title value must be less than $max% for the current result."
+            );
+        }
+
+        return $this;
     }
 
     /**
