@@ -3,6 +3,7 @@
 
 /.cache
 /.DS_Store
+/.benchmarks
 
 /.output.txt
 
