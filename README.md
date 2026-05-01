@@ -88,14 +88,13 @@ new Benchmark()
 
 ### Warm-up
 
-Use the `warmup` method to perform a number of "warm-up" iterations for each callback before the measured run.
-Warm-up iterations are executed exactly like regular ones (including `beforeEach` / `afterEach` callbacks and progress bar advancement),
-but their time and memory results are excluded from the final statistics.
+Use the `warmup` method to run each callback a few times before the measured iterations. Warm-up runs behave
+identically to regular ones (`beforeEach` / `afterEach` are invoked, the progress bar advances), but their
+time and memory are not included in the final statistics.
 
-This is useful for stabilizing measurements by mitigating the effects of cold caches, JIT/opcache priming, lazy autoloading
-and other one-time initialization costs.
+This stabilizes results by absorbing one-time costs such as cold caches, JIT/opcache priming and lazy autoloading.
 
-By default, no warm-up is performed. Passing a value less than `1` is normalized to `1`.
+Disabled by default.
 
 ```php
 use DragonCode\Benchmark\Benchmark;
