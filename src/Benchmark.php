@@ -44,7 +44,7 @@ class Benchmark
         return new static;
     }
 
-    public function cacheDirectory(string $directory): static
+    public function snapshots(string $directory): static
     {
         $this->snapshot->location($directory);
 

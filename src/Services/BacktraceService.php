@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace DragonCode\Benchmark\Services;
 
-use function array_last;
+use function array_reverse;
 use function debug_backtrace;
 use function getcwd;
 use function realpath;
+use function str_contains;
 use function str_replace;
 use function trim;
 
@@ -25,10 +26,8 @@ class BacktraceService
 
     protected function scriptPath(): string
     {
-        $last = array_last($this->trace());
-
         return $this->normalize(
-            path: $last['file'] ?? 'unknown'
+            path: $this->findPath()
         );
     }
 
@@ -37,6 +36,23 @@ class BacktraceService
         return $this->normalize(
             path: getcwd() ?: '.'
         );
+    }
+
+    protected function findPath(): string
+    {
+        foreach (array_reverse($this->trace()) as $item) {
+            if (! $path = $item['file'] ?? false) {
+                continue;
+            }
+
+            if (str_contains($path, 'vendor')) {
+                continue;
+            }
+
+            return $path;
+        }
+
+        return 'unknown';
     }
 
     protected function normalize(string $path): string
