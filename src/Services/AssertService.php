@@ -15,9 +15,11 @@ class AssertService
      * Creates a benchmark result assertion service.
      *
      * @param  ResultData[]  $result
+     * @param  SnapshotService  $snapshot
      */
     public function __construct(
-        protected array $result
+        protected array $result,
+        protected SnapshotService $snapshot,
     ) {}
 
     /**
@@ -25,6 +27,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
+     *
      * @return $this
      */
     public function toBeMinTime(?float $from = null, ?float $till = null): static
@@ -37,6 +40,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
+     *
      * @return $this
      */
     public function toBeMaxTime(?float $from = null, ?float $till = null): static
@@ -49,6 +53,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
+     *
      * @return $this
      */
     public function toBeAvgTime(?float $from = null, ?float $till = null): static
@@ -61,6 +66,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in milliseconds.
      * @param  float|null  $till  End value is specified in milliseconds.
+     *
      * @return $this
      */
     public function toBeTotalTime(?float $from = null, ?float $till = null): static
@@ -73,6 +79,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
+     *
      * @return $this
      */
     public function toBeMinMemory(?float $from = null, ?float $till = null): static
@@ -85,6 +92,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
+     *
      * @return $this
      */
     public function toBeMaxMemory(?float $from = null, ?float $till = null): static
@@ -97,6 +105,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
+     *
      * @return $this
      */
     public function toBeAvgMemory(?float $from = null, ?float $till = null): static
@@ -109,6 +118,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in bytes.
      * @param  float|null  $till  End value is specified in bytes.
+     *
      * @return $this
      */
     public function toBeTotalMemory(?float $from = null, ?float $till = null): static
@@ -121,6 +131,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in percentages.
      * @param  float|null  $till  End value is specified in percentages.
+     *
      * @return $this
      */
     public function toBeDeviationTime(?float $from = null, ?float $till = null): static
@@ -139,6 +150,7 @@ class AssertService
      *
      * @param  float|null  $from  Start value is specified in percentages.
      * @param  float|null  $till  End value is specified in percentages.
+     *
      * @return $this
      */
     public function toBeDeviationMemory(?float $from = null, ?float $till = null): static
@@ -153,12 +165,46 @@ class AssertService
     }
 
     /**
+     * @param  float  $max  The value is specified as a percentage.
+     *
+     * @return $this
+     */
+    public function toBeRegressionTime(float $max): static
+    {
+        return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
+            return 100 - ($previous->avg->time / $current->avg->time) * 100;
+        }, 'regression time');
+    }
+
+    /**
+     * @param  float  $max  The value is specified as a percentage.
+     *
+     * @return $this
+     */
+    public function toBeRegressionMemory(float $max): static
+    {
+        return $this->assertRegression($max, static function (ResultData $previous, ResultData $current) {
+            return 100 - ($previous->avg->memory / $current->avg->memory) * 100;
+        }, 'regression memory');
+    }
+
+    protected function assertRegression(float $max, Closure $callback, string $title): static
+    {
+        return $this->assertRange(0, $max, function (ResultData $current, int|string $key) use ($callback) {
+            $previous = $this->snapshot->read($key);
+
+            return $callback($previous, $current);
+        }, $title);
+    }
+
+    /**
      * Asserts that the value extracted by the callback is within the specified range for all results.
      *
      * @param  float|null  $from  The start value of the range.
      * @param  float|null  $till  The end value of the range.
      * @param  callable  $callback  Callback to extract the value from a result item.
      * @param  string  $name  The name of the metric being checked.
+     *
      * @return $this
      */
     protected function assertRange(?float $from, ?float $till, Closure $callback, string $name): static
