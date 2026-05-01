@@ -335,11 +335,11 @@ new Benchmark()
     ->toBeDeviationMemory(from: -2.5, till: 2.5); // deviation between -2.5% and 2.5%
 ```
 
-### Snapshot Regression Testing
+### Regression Testing
 
 Detects performance regressions by comparing current results to a saved baseline (snapshot).
 
-#### How Snapshots Work
+#### How To Work
 
 - **First run:** no `.snap` files exist — results are written to disk, no check is performed.
 - **Next runs:** results are compared to the snapshot; exceeding `$max` percent throws an `AssertionError`.
@@ -358,10 +358,7 @@ use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
     ->snapshots(directory: __DIR__ . '/.benchmarks')
-    ->compare(
-        foo: fn () => /* some code */,
-        bar: fn () => /* some code */,
-    )
+    // ...
     ->toAssert()
     ->toBeRegressionTime(max: 10)
     ->toBeRegressionMemory(max: 10);
@@ -379,11 +376,7 @@ Fails if execution time exceeds the snapshot by more than `$max` percent.
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->snapshots(__DIR__ . '/.benchmarks')
-    ->compare(
-        foo: fn () => /* some code */,
-        bar: fn () => /* some code */,
-    )
+    // ...
     ->toAssert()
     ->toBeRegressionTime(max: 15); // allow up to 15% time regression
 ```
@@ -396,11 +389,7 @@ Fails if memory usage exceeds the snapshot by more than `$max` percent.
 use DragonCode\Benchmark\Benchmark;
 
 new Benchmark()
-    ->snapshots(__DIR__ . '/.benchmarks')
-    ->compare(
-        foo: fn () => /* some code */,
-        bar: fn () => /* some code */,
-    )
+    // ...
     ->toAssert()
     ->toBeRegressionMemory(max: 15); // allow up to 15% memory regression
 ```
